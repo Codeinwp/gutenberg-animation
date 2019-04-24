@@ -69,26 +69,6 @@ export const animation = [
 		value: 'bounceInUp'
 	},
 	{
-		label: __( 'Bounce Out' ),
-		value: 'bounceOut'
-	},
-	{
-		label: __( 'Bounce Out Down' ),
-		value: 'bounceOutDown'
-	},
-	{
-		label: __( 'Bounce Out Left' ),
-		value: 'bounceOutLeft'
-	},
-	{
-		label: __( 'Bounce Out Right' ),
-		value: 'bounceOutRight'
-	},
-	{
-		label: __( 'Bounce Out Up' ),
-		value: 'bounceOutUp'
-	},
-	{
 		label: __( 'Fade In' ),
 		value: 'fadeIn'
 	},
@@ -125,42 +105,6 @@ export const animation = [
 		value: 'fadeInUpBig'
 	},
 	{
-		label: __( 'Fade Out' ),
-		value: 'fadeOut'
-	},
-	{
-		label: __( 'Fade Out Down' ),
-		value: 'fadeOutDown'
-	},
-	{
-		label: __( 'Fade Out Down Big' ),
-		value: 'fadeOutDownBig'
-	},
-	{
-		label: __( 'Fade Out Left' ),
-		value: 'fadeOutLeft'
-	},
-	{
-		label: __( 'Fade Out Left Big' ),
-		value: 'fadeOutLeftBig'
-	},
-	{
-		label: __( 'Fade Out Right' ),
-		value: 'fadeOutRight'
-	},
-	{
-		label: __( 'Fade Out Right Big' ),
-		value: 'fadeOutRightBig'
-	},
-	{
-		label: __( 'Fade Out Up' ),
-		value: 'fadeOutUp'
-	},
-	{
-		label: __( 'Fade Out Up Big' ),
-		value: 'fadeOutUpBig'
-	},
-	{
 		label: __( 'Flip In X' ),
 		value: 'flipInX'
 	},
@@ -169,20 +113,8 @@ export const animation = [
 		value: 'flipInY'
 	},
 	{
-		label: __( 'Flip Out X' ),
-		value: 'flipOutX'
-	},
-	{
-		label: __( 'Flip Out Y' ),
-		value: 'flipOutY'
-	},
-	{
 		label: __( 'Light Speed In' ),
 		value: 'lightSpeedIn'
-	},
-	{
-		label: __( 'Light Speed Out' ),
-		value: 'lightSpeedOut'
 	},
 	{
 		label: __( 'Rotate In' ),
@@ -205,26 +137,6 @@ export const animation = [
 		value: 'rotateInUpRight'
 	},
 	{
-		label: __( 'Rotate Out' ),
-		value: 'rotateOut'
-	},
-	{
-		label: __( 'Rotate Out Down Left' ),
-		value: 'rotateOutDownLeft'
-	},
-	{
-		label: __( 'Rotate Out Down Right' ),
-		value: 'rotateOutDownRight'
-	},
-	{
-		label: __( 'Rotate Out Up Left' ),
-		value: 'rotateOutUpLeft'
-	},
-	{
-		label: __( 'Rotate Out Up Right' ),
-		value: 'rotateOutUpRight'
-	},
-	{
 		label: __( 'Hinge' ),
 		value: 'hinge'
 	},
@@ -235,10 +147,6 @@ export const animation = [
 	{
 		label: __( 'Roll In' ),
 		value: 'rollIn'
-	},
-	{
-		label: __( 'Roll Out' ),
-		value: 'rollOut'
 	},
 	{
 		label: __( 'Zoom In' ),
@@ -261,26 +169,6 @@ export const animation = [
 		value: 'zoomInUp'
 	},
 	{
-		label: __( 'Zoom Out' ),
-		value: 'zoomOut'
-	},
-	{
-		label: __( 'Zoom Out Down' ),
-		value: 'zoomOutDown'
-	},
-	{
-		label: __( 'Zoom Out Left' ),
-		value: 'zoomOutLeft'
-	},
-	{
-		label: __( 'Zoom Out Right' ),
-		value: 'zoomOutRight'
-	},
-	{
-		label: __( 'Zoom Out Up' ),
-		value: 'zoomOutUp'
-	},
-	{
 		label: __( 'Slide In Down' ),
 		value: 'slideInDown'
 	},
@@ -295,22 +183,6 @@ export const animation = [
 	{
 		label: __( 'Slide In Up' ),
 		value: 'slideInUp'
-	},
-	{
-		label: __( 'Slide Out Down' ),
-		value: 'slideOutDown'
-	},
-	{
-		label: __( 'Slide Out Left' ),
-		value: 'slideOutLeft'
-	},
-	{
-		label: __( 'Slide Out Right' ),
-		value: 'slideOutRight'
-	},
-	{
-		label: __( 'Slide Out Up' ),
-		value: 'slideOutUp'
 	},
 	{
 		label: __( 'Heart Beat' ),
