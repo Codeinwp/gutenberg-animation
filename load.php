@@ -8,7 +8,7 @@
  * @since       1.0.0
  */
 
-define( 'THEMEISLE_GUTENBERG_ANIMATION_VERSION', '1.0.0' );
+define( 'THEMEISLE_GUTENBERG_ANIMATION_VERSION', '1.0.1' );
 define( 'THEMEISLE_GUTENBERG_ANIMATION_DEV', false );
 
 add_action(
