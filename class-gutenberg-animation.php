@@ -53,11 +53,6 @@ if ( ! class_exists( '\ThemeIsle\GutenbergAnimation' ) ) {
 			);
 
 			wp_set_script_translations( 'themeisle-gutenberg-animation', 'textdomain' );
-
-			wp_enqueue_style(
-				'themeisle-gutenberg-animation',
-				plugin_dir_url( $this->get_dir() ) . $this->slug . '/build/build.css'
-			);
 		}
 
 		/**
