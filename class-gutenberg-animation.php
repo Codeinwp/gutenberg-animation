@@ -62,6 +62,10 @@ if ( ! class_exists( '\ThemeIsle\GutenbergAnimation' ) ) {
 		 * @access  public
 		 */
 		public function enqueue_block_frontend_assets() {
+			if ( function_exists( 'is_amp_endpoint' ) && is_amp_endpoint() ) {
+				return;
+			}
+
 			wp_enqueue_style(
 				'animate-css',
 				plugin_dir_url( $this->get_dir() ) . $this->slug . '/assets/css/animate.min.css'
