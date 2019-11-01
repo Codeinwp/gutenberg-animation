@@ -16,9 +16,10 @@ const {
  * Internal dependencies.
  */
 import {
-	animation,
-	delay,
-	speed
+	animationsList,
+	outAnimation,
+	delayList,
+	speedList
 } from './data.js';
 
 class AnimationControls extends Component {
@@ -43,15 +44,15 @@ class AnimationControls extends Component {
 			classes = this.props.attributes.className;
 			classes = classes.split( ' ' );
 
-			const animationClass = Array.from( animation ).find( i => {
+			const animationClass = Array.from( animationsList ).find( i => {
 				return classes.find( o => o === i.value );
 			});
 
-			const delayClass = Array.from( delay ).find( i => {
+			const delayClass = Array.from( delayList ).find( i => {
 				return classes.find( o => o === i.value );
 			});
 
-			const speedClass = Array.from( speed ).find( i => {
+			const speedClass = Array.from( speedList ).find( i => {
 				return classes.find( o => o === i.value );
 			});
 
@@ -63,7 +64,7 @@ class AnimationControls extends Component {
 		}
 	}
 
-	updateAnimation( e ) {
+	async updateAnimation( e ) {
 		let classes;
 		let animationValue = 'none' !== e ? e : '';
 
@@ -99,7 +100,23 @@ class AnimationControls extends Component {
 		classes = classes.replace( /\s+/g, ' ' );
 
 		this.setState({ animation: e });
-		this.props.setAttributes({ className: classes });
+		await this.props.setAttributes({ className: classes });
+
+		const block = document.querySelector( `#block-${ this.props.clientId } .animated` );
+
+		outAnimation.forEach( i => {
+			const isOut = block.className.includes( i );
+
+			if ( isOut ) {
+				block.addEventListener( 'animationend', () => {
+					block.classList.remove( i );
+
+					block.addEventListener( 'animationstart', () => {
+						block.classList.remove( i );
+					});
+				});
+			}
+		});
 	}
 
 	updateDelay( e ) {
@@ -158,7 +175,7 @@ class AnimationControls extends Component {
 				<SelectControl
 					label={ __( 'Animation' ) }
 					value={ this.state.animation || 'none' }
-					options={ animation }
+					options={ animationsList }
 					onChange={ this.updateAnimation }
 				/>
 
@@ -167,14 +184,14 @@ class AnimationControls extends Component {
 						<SelectControl
 							label={ __( 'Delay' ) }
 							value={ this.state.delay || 'default' }
-							options={ delay }
+							options={ delayList }
 							onChange={ this.updateDelay }
 						/>
 
 						<SelectControl
 							label={ __( 'Speed' ) }
 							value={ this.state.speed || 'default' }
-							options={ speed }
+							options={ speedList }
 							onChange={ this.updateSpeed }
 						/>
 					</Fragment>

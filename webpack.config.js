@@ -3,10 +3,14 @@ const NODE_ENV = process.env.NODE_ENV || 'development';
 
 module.exports = {
 	mode: NODE_ENV,
-	entry: './src/index.js',
+	entry: {
+		build: './src/index.js',
+		animate: './src/frontend.js'
+	},
 	output: {
 		path: __dirname,
-		filename: './build/build.js'
+		filename: './build/[name].js',
+		chunkFilename: './build/[name].js'
 	},
 	module: {
 		rules: [
@@ -31,6 +35,18 @@ module.exports = {
 				exclude: /node_modules/
 			}
 		]
+	},
+	optimization: {
+		splitChunks: {
+			cacheGroups: {
+				animate: {
+					name: 'animate',
+					test: /frontend\.js$/,
+					chunks: 'all',
+					reuseExistingChunk: true
+				}
+			}
+		}
 	},
 	plugins: [
 		new webpack.DefinePlugin({

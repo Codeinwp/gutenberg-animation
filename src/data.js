@@ -3,7 +3,7 @@
  */
 const { __ } = wp.i18n;
 
-export const animation = [
+export const animationsList = [
 	{
 		label: __( 'None' ),
 		value: 'none'
@@ -49,6 +49,18 @@ export const animation = [
 		value: 'jello'
 	},
 	{
+		label: __( 'Heart Beat' ),
+		value: 'heartBeat'
+	},
+	{
+		label: __( 'Hinge' ),
+		value: 'hinge'
+	},
+	{
+		label: __( 'Jack In The Box' ),
+		value: 'jackInTheBox'
+	},
+	{
 		label: __( 'Bounce In' ),
 		value: 'bounceIn'
 	},
@@ -67,6 +79,26 @@ export const animation = [
 	{
 		label: __( 'Bounce In Up' ),
 		value: 'bounceInUp'
+	},
+	{
+		label: __( 'Bounce Out' ),
+		value: 'bounceOut'
+	},
+	{
+		label: __( 'Bounce Out Down' ),
+		value: 'bounceOutDown'
+	},
+	{
+		label: __( 'Bounce Out Left' ),
+		value: 'bounceOutLeft'
+	},
+	{
+		label: __( 'Bounce Out Right' ),
+		value: 'bounceOutRight'
+	},
+	{
+		label: __( 'Bounce Out Up' ),
+		value: 'bounceOutUp'
 	},
 	{
 		label: __( 'Fade In' ),
@@ -101,8 +133,44 @@ export const animation = [
 		value: 'fadeInUp'
 	},
 	{
-		label: __( 'Fade In Up Big' ),
-		value: 'fadeInUpBig'
+		label: __( 'Fade Out' ),
+		value: 'fadeOut'
+	},
+	{
+		label: __( 'Fade Out Down' ),
+		value: 'fadeOutDown'
+	},
+	{
+		label: __( 'Fade Out Down Big' ),
+		value: 'fadeOutDownBig'
+	},
+	{
+		label: __( 'Fade Out Left' ),
+		value: 'fadeOutLeft'
+	},
+	{
+		label: __( 'Fade Out Left Big' ),
+		value: 'fadeOutLeftBig'
+	},
+	{
+		label: __( 'Fade Out Right' ),
+		value: 'fadeOutRight'
+	},
+	{
+		label: __( 'Fade In Left Big' ),
+		value: 'fadeOutRightBig'
+	},
+	{
+		label: __( 'Fade Out Up' ),
+		value: 'fadeOutUp'
+	},
+	{
+		label: __( 'Fade Out Up Big' ),
+		value: 'fadeOutUpBig'
+	},
+	{
+		label: __( 'Flip' ),
+		value: 'flip'
 	},
 	{
 		label: __( 'Flip In X' ),
@@ -113,8 +181,20 @@ export const animation = [
 		value: 'flipInY'
 	},
 	{
+		label: __( 'Flip Out X' ),
+		value: 'flipOutX'
+	},
+	{
+		label: __( 'Flip Out Y' ),
+		value: 'flipOutY'
+	},
+	{
 		label: __( 'Light Speed In' ),
 		value: 'lightSpeedIn'
+	},
+	{
+		label: __( 'Light Speed Out' ),
+		value: 'lightSpeedOut'
 	},
 	{
 		label: __( 'Rotate In' ),
@@ -137,16 +217,56 @@ export const animation = [
 		value: 'rotateInUpRight'
 	},
 	{
-		label: __( 'Hinge' ),
-		value: 'hinge'
+		label: __( 'Rotate Out' ),
+		value: 'rotateOut'
 	},
 	{
-		label: __( 'Jack In The Box' ),
-		value: 'jackInTheBox'
+		label: __( 'Rotate Out Down Left' ),
+		value: 'rotateOutDownLeft'
 	},
 	{
-		label: __( 'Roll In' ),
-		value: 'rollIn'
+		label: __( 'Rotate Out Down Right' ),
+		value: 'rotateOutDownRight'
+	},
+	{
+		label: __( 'Rotate Out Up Left' ),
+		value: 'rotateOutUpLeft'
+	},
+	{
+		label: __( 'Rotate Out Up Right' ),
+		value: 'rotateOutUpRight'
+	},
+	{
+		label: __( 'Slide In Down' ),
+		value: 'slideInDown'
+	},
+	{
+		label: __( 'Slide In Left' ),
+		value: 'slideInLeft'
+	},
+	{
+		label: __( 'Slide In Right' ),
+		value: 'slideInRight'
+	},
+	{
+		label: __( 'Slide In Up' ),
+		value: 'slideInUp'
+	},
+	{
+		label: __( 'Slide Out Down' ),
+		value: 'slideOutDown'
+	},
+	{
+		label: __( 'Slide Out Left' ),
+		value: 'slideOutLeft'
+	},
+	{
+		label: __( 'Slide Out Right' ),
+		value: 'slideOutRight'
+	},
+	{
+		label: __( 'Slide Out Up' ),
+		value: 'slideOutUp'
 	},
 	{
 		label: __( 'Zoom In' ),
@@ -169,28 +289,71 @@ export const animation = [
 		value: 'zoomInUp'
 	},
 	{
-		label: __( 'Slide In Down' ),
-		value: 'slideInDown'
+		label: __( 'Zoom Out' ),
+		value: 'zoomOut'
 	},
 	{
-		label: __( 'Slide In Left' ),
-		value: 'slideInLeft'
+		label: __( 'Zoom Out Down' ),
+		value: 'zoomOutDown'
 	},
 	{
-		label: __( 'Slide In Right' ),
-		value: 'slideInRight'
+		label: __( 'Zoom Out Left' ),
+		value: 'zoomOutLeft'
 	},
 	{
-		label: __( 'Slide In Up' ),
-		value: 'slideInUp'
+		label: __( 'Zoom Out Right' ),
+		value: 'zoomOutRight'
 	},
 	{
-		label: __( 'Heart Beat' ),
-		value: 'heartBeat'
+		label: __( 'Zoom Out Up' ),
+		value: 'zoomOutUp'
+	},
+	{
+		label: __( 'Roll In' ),
+		value: 'rollIn'
+	},
+	{
+		label: __( 'Roll Out' ),
+		value: 'rollOut'
 	}
 ];
 
-export const delay = [
+export const outAnimation = [
+	'bounceOut',
+	'bounceOutDown',
+	'bounceOutLeft',
+	'bounceOutRight',
+	'bounceOutUp',
+	'fadeOut',
+	'fadeOutDown',
+	'fadeOutDownBig',
+	'fadeOutLeft',
+	'fadeOutLeftBig',
+	'fadeOutRight',
+	'fadeOutRightBig',
+	'fadeOutUp',
+	'fadeOutUpBig',
+	'flipOutX',
+	'flipOutY',
+	'lightSpeedOut',
+	'rotateOut',
+	'rotateOutDownLeft',
+	'rotateOutDownRight',
+	'rotateOutUpLeft',
+	'rotateOutUpRight',
+	'slideOutDown',
+	'slideOutLeft',
+	'slideOutRight',
+	'slideOutUp',
+	'zoomOut',
+	'zoomOutDown',
+	'zoomOutLeft',
+	'zoomOutRight',
+	'zoomOutUp',
+	'rollOut'
+];
+
+export const delayList = [
 	{
 		label: __( 'Default' ),
 		value: 'none'
@@ -213,7 +376,7 @@ export const delay = [
 	}
 ];
 
-export const speed = [
+export const speedList = [
 	{
 		label: __( 'Default' ),
 		value: 'none'

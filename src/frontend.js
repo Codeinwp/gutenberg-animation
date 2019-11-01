@@ -1,4 +1,4 @@
-const animation = [
+const animations = [
 	'none',
 	'bounce',
 	'flash',
@@ -10,11 +10,19 @@ const animation = [
 	'tada',
 	'wobble',
 	'jello',
+	'heartBeat',
+	'hinge',
+	'jackInTheBox',
 	'bounceIn',
 	'bounceInDown',
 	'bounceInLeft',
 	'bounceInRight',
 	'bounceInUp',
+	'bounceOut',
+	'bounceOutDown',
+	'bounceOutLeft',
+	'bounceOutRight',
+	'bounceOutUp',
 	'fadeIn',
 	'fadeInDown',
 	'fadeInDownBig',
@@ -23,28 +31,87 @@ const animation = [
 	'fadeInRight',
 	'fadeInRightBig',
 	'fadeInUp',
-	'fadeInUpBig',
+	'fadeOut',
+	'fadeOutDown',
+	'fadeOutDownBig',
+	'fadeOutLeft',
+	'fadeOutLeftBig',
+	'fadeOutRight',
+	'fadeOutRightBig',
+	'fadeOutUp',
+	'fadeOutUpBig',
+	'flip',
 	'flipInX',
 	'flipInY',
+	'flipOutX',
+	'flipOutY',
 	'lightSpeedIn',
+	'lightSpeedOut',
 	'rotateIn',
 	'rotateInDownLeft',
 	'rotateInDownRight',
 	'rotateInUpLeft',
 	'rotateInUpRight',
-	'hinge',
-	'jackInTheBox',
-	'rollIn',
+	'rotateOut',
+	'rotateOutDownLeft',
+	'rotateOutDownRight',
+	'rotateOutUpLeft',
+	'rotateOutUpRight',
+	'slideInDown',
+	'slideInLeft',
+	'slideInRight',
+	'slideInUp',
+	'slideOutDown',
+	'slideOutLeft',
+	'slideOutRight',
+	'slideOutUp',
 	'zoomIn',
 	'zoomInDown',
 	'zoomInLeft',
 	'zoomInRight',
 	'zoomInUp',
-	'slideInDown',
-	'slideInLeft',
-	'slideInRight',
-	'slideInUp',
-	'heartBeat'
+	'zoomOut',
+	'zoomOutDown',
+	'zoomOutLeft',
+	'zoomOutRight',
+	'zoomOutUp',
+	'rollIn',
+	'rollOut'
+];
+
+const outAnimation = [
+	'bounceOut',
+	'bounceOutDown',
+	'bounceOutLeft',
+	'bounceOutRight',
+	'bounceOutUp',
+	'fadeOut',
+	'fadeOutDown',
+	'fadeOutDownBig',
+	'fadeOutLeft',
+	'fadeOutLeftBig',
+	'fadeOutRight',
+	'fadeOutRightBig',
+	'fadeOutUp',
+	'fadeOutUpBig',
+	'flipOutX',
+	'flipOutY',
+	'lightSpeedOut',
+	'rotateOut',
+	'rotateOutDownLeft',
+	'rotateOutDownRight',
+	'rotateOutUpLeft',
+	'rotateOutUpRight',
+	'slideOutDown',
+	'slideOutLeft',
+	'slideOutRight',
+	'slideOutUp',
+	'zoomOut',
+	'zoomOutDown',
+	'zoomOutLeft',
+	'zoomOutRight',
+	'zoomOutUp',
+	'rollOut'
 ];
 
 const delay = [
@@ -63,7 +130,6 @@ const speed = [
 	'faster'
 ];
 
-
 window.onload = () => {
 	const elements = document.querySelectorAll( '.animated' );
 	for ( const element of elements ) {
@@ -71,7 +137,7 @@ window.onload = () => {
 		element.animationClasses = [];
 
 		if ( ! isElementInViewport( element ) ) {
-			const animationClass = animation.find( i => {
+			const animationClass = animations.find( i => {
 				return Array.from( classes ).find( o => o === i );
 			});
 
@@ -100,6 +166,16 @@ window.onload = () => {
 				element.classList.remove( speedClass );
 			}
 		}
+
+		outAnimation.forEach( i => {
+			const isOut = element.className.includes( i );
+
+			if ( isOut ) {
+				element.addEventListener( 'animationend', () => {
+					element.classList.remove( i );
+				});
+			}
+		});
 	}
 
 	window.onscroll = () => {

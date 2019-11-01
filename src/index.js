@@ -9,7 +9,7 @@ const { PanelBody } = wp.components;
 
 const { createHigherOrderComponent } = wp.compose;
 
-const { InspectorControls } = wp.editor;
+const { InspectorControls } = wp.blockEditor || wp.editor;
 
 const { Fragment } = wp.element;
 
@@ -33,6 +33,7 @@ const withInspectorControls = createHigherOrderComponent( ( BlockEdit ) => {
 							initialOpen={ false }
 						>
 							<AnimationControls
+								clientId={ props.clientId }
 								setAttributes={ props.setAttributes }
 								attributes={ props.attributes }
 							/>
