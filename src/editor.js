@@ -102,21 +102,23 @@ class AnimationControls extends Component {
 		this.setState({ animation: e });
 		await this.props.setAttributes({ className: classes });
 
-		const block = document.querySelector( `#block-${ this.props.clientId } .animated` );
+		let block = document.querySelector( `#block-${ this.props.clientId } .animated` );
 
-		outAnimation.forEach( i => {
-			const isOut = block.className.includes( i );
+		if ( block ) {
+			outAnimation.forEach( i => {
+				const isOut = block.className.includes( i );
 
-			if ( isOut ) {
-				block.addEventListener( 'animationend', () => {
-					block.classList.remove( i );
-
-					block.addEventListener( 'animationstart', () => {
+				if ( isOut ) {
+					block.addEventListener( 'animationend', () => {
 						block.classList.remove( i );
+
+						block.addEventListener( 'animationstart', () => {
+							block.classList.remove( i );
+						});
 					});
-				});
-			}
-		});
+				}
+			});
+		}
 	}
 
 	updateDelay( e ) {
