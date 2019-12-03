@@ -29,7 +29,7 @@ class GutenbergAnimation {
 	public function init() {
 		add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_editor_assets' ) );
 		add_action( 'enqueue_block_assets', array( $this, 'enqueue_block_frontend_assets' ) );
-		add_action( 'wp_loaded', array( $this, 'add_attributes_to_registered_blocks' ), 100 );
+		add_action( 'init', array( $this, 'add_attributes_to_blocks' ), 11 );
 	}
 
 	/**
@@ -96,6 +96,29 @@ class GutenbergAnimation {
 	}
 
 	/**
+	 * Adds the `hasCustomCSS` and `customCSS` attributes to all blocks, to avoid `Invalid parameter(s): attributes`
+	 * error in Gutenberg.
+	 *
+	 * @since   1.0.3
+	 * @access  public
+	 */
+	public function add_attributes_to_blocks() {
+		$registered_blocks = \WP_Block_Type_Registry::get_instance()->get_all_registered();
+
+		foreach( $registered_blocks as $name => $block ) {
+			$block->attributes['hasCustomCSS'] = array(
+				'type'    => 'boolean',
+				'default' => false
+			);
+
+			$block->attributes['customCSS']    = array(
+				'type'    => 'string',
+				'default' => ''
+			);
+		}
+	}
+
+	/**
 	 * Method to return path to child class in a Reflective Way.
 	 *
 	 * @since   1.0.0
@@ -104,28 +127,6 @@ class GutenbergAnimation {
 	 */
 	protected function get_dir() {
 		return dirname( __FILE__ );
-	}
-
-	/**
-	 * Adds the `hasCustomCSS` and `customCSS` attributes to all blocks, to avoid `Invalid parameter(s): attributes`
-	 * error in Gutenberg.
-	 *
-	 * @hooked wp_loaded, 100
-	 */
-	public function add_attributes_to_registered_blocks() {
-
-		$registered_blocks = WP_Block_Type_Registry::get_instance()->get_all_registered();
-
-		foreach( $registered_blocks as $name => $block ) {
-			$block->attributes['hasCustomCSS'] = array(
-				'type'    => 'boolean',
-				'default' => false,
-			);
-			$block->attributes['customCSS']    = array(
-				'type'    => 'string',
-				'default' => '',
-			);
-		}
 	}
 
 	/**
