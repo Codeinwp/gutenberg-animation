@@ -1,4 +1,9 @@
 <?php
+/**
+ * Class for Animation logic.
+ *
+ * @package gutenberg-animation
+ */
 
 namespace ThemeIsle;
 
@@ -42,14 +47,15 @@ class GutenbergAnimation {
 		if ( THEMEISLE_GUTENBERG_ANIMATION_DEV ) {
 			$version = time();
 		} else {
-			$version = THEMEISLE_GUTENBERG_ANIMATION_DEV;
+			$version = THEMEISLE_GUTENBERG_ANIMATION_VERSION;
 		}
 
 		wp_enqueue_script(
 			'themeisle-gutenberg-animation',
 			plugin_dir_url( $this->get_dir() ) . $this->slug . '/build/build.js',
 			array( 'wp-i18n', 'wp-blocks', 'wp-components', 'wp-compose', 'wp-editor', 'wp-element', 'wp-hooks' ),
-			$version
+			$version,
+			true
 		);
 
 		wp_set_script_translations( 'themeisle-gutenberg-animation', 'textdomain' );
@@ -65,21 +71,23 @@ class GutenbergAnimation {
 		if ( function_exists( 'is_amp_endpoint' ) && is_amp_endpoint() ) {
 			return;
 		}
-
+		if ( THEMEISLE_GUTENBERG_ANIMATION_DEV ) {
+			$version = time();
+		} else {
+			$version = THEMEISLE_GUTENBERG_ANIMATION_DEV;
+		}
 		wp_enqueue_style(
 			'animate-css',
-			plugin_dir_url( $this->get_dir() ) . $this->slug . '/assets/css/animate.min.css'
+			plugin_dir_url( $this->get_dir() ) . $this->slug . '/assets/css/animate.min.css',
+			array(),
+			$version
 		);
 
 		if ( is_admin() ) {
 			return;
 		}
 
-		if ( THEMEISLE_GUTENBERG_ANIMATION_DEV ) {
-			$version = time();
-		} else {
-			$version = THEMEISLE_GUTENBERG_ANIMATION_DEV;
-		}
+
 
 		wp_enqueue_script(
 			'themeisle-gutenberg-animation-frontend',
@@ -91,7 +99,9 @@ class GutenbergAnimation {
 
 		wp_enqueue_style(
 			'themeisle-gutenberg-animation-style',
-			plugin_dir_url( $this->get_dir() ) . $this->slug . '/assets/css/style.css'
+			plugin_dir_url( $this->get_dir() ) . $this->slug . '/assets/css/style.css',
+			array(),
+			$version
 		);
 	}
 
@@ -105,15 +115,15 @@ class GutenbergAnimation {
 	public function add_attributes_to_blocks() {
 		$registered_blocks = \WP_Block_Type_Registry::get_instance()->get_all_registered();
 
-		foreach( $registered_blocks as $name => $block ) {
+		foreach ( $registered_blocks as $name => $block ) {
 			$block->attributes['hasCustomCSS'] = array(
 				'type'    => 'boolean',
-				'default' => false
+				'default' => false,
 			);
 
-			$block->attributes['customCSS']    = array(
+			$block->attributes['customCSS'] = array(
 				'type'    => 'string',
-				'default' => ''
+				'default' => '',
 			);
 		}
 	}
