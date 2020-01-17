@@ -125,7 +125,7 @@ export const animationsList = [
 		value: 'fadeInRight'
 	},
 	{
-		label: __( 'Fade In Left Big' ),
+		label: __( 'Fade In Right Big' ),
 		value: 'fadeInRightBig'
 	},
 	{
