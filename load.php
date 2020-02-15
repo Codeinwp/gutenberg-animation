@@ -10,6 +10,7 @@
 
 define( 'THEMEISLE_GUTENBERG_ANIMATION_VERSION', '1.0.4' );
 define( 'THEMEISLE_GUTENBERG_ANIMATION_DEV', false );
+
 if ( function_exists( 'add_action' ) ) {
 	add_action(
 		'plugins_loaded',

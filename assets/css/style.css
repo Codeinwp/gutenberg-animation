@@ -1,3 +1,18 @@
 .hidden-animated {
 	visibility: hidden;
 }
+
+.animated.delay-100ms {
+	-webkit-animation-delay: 100ms;
+	animation-delay: 100ms;
+}
+
+.animated.delay-200ms {
+	-webkit-animation-delay: 200ms;
+	animation-delay: 200ms;
+}
+
+.animated.delay-500ms {
+	-webkit-animation-delay: 500ms;
+	animation-delay: 500ms;
+}

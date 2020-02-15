@@ -125,7 +125,7 @@ export const animationsList = [
 		value: 'fadeInRight'
 	},
 	{
-		label: __( 'Fade In Left Big' ),
+		label: __( 'Fade In Right Big' ),
 		value: 'fadeInRightBig'
 	},
 	{
@@ -355,8 +355,24 @@ export const outAnimation = [
 
 export const delayList = [
 	{
-		label: __( 'Default' ),
+		label: __( 'None' ),
 		value: 'none'
+	},
+	{
+		label: __( '100 Milliseconds' ),
+		value: 'delay-100ms'
+	},
+	{
+		label: __( '200 Milliseconds' ),
+		value: 'delay-200ms'
+	},
+	{
+		label: __( '500 Milliseconds' ),
+		value: 'delay-500ms'
+	},
+	{
+		label: __( 'One Second' ),
+		value: 'delay-1s'
 	},
 	{
 		label: __( 'Two Second' ),
