@@ -83,11 +83,16 @@ class GutenbergAnimation {
 			$version
 		);
 
+		wp_enqueue_style(
+			'themeisle-gutenberg-animation-style',
+			plugin_dir_url( $this->get_dir() ) . $this->slug . '/assets/css/style.css',
+			array(),
+			$version
+		);
+
 		if ( is_admin() ) {
 			return;
 		}
-
-
 
 		wp_enqueue_script(
 			'themeisle-gutenberg-animation-frontend',
@@ -95,13 +100,6 @@ class GutenbergAnimation {
 			array(),
 			$version,
 			true
-		);
-
-		wp_enqueue_style(
-			'themeisle-gutenberg-animation-style',
-			plugin_dir_url( $this->get_dir() ) . $this->slug . '/assets/css/style.css',
-			array(),
-			$version
 		);
 	}
 
