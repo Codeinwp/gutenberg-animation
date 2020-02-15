@@ -116,6 +116,10 @@ const outAnimation = [
 
 const delay = [
 	'none',
+	'delay-100ms',
+	'delay-200ms',
+	'delay-500ms',
+	'delay-1s',
 	'delay-2s',
 	'delay-3s',
 	'delay-4s',
