@@ -22,7 +22,7 @@
 		"grunt-version": "^2.0.0",
 		"semantic-release": "^17.0.4",
 		"@babel/core": "^7.9.0",
-		"@babel/plugin-proposal-object-rest-spread": "^7.9.0",
+		"@babel/plugin-proposal-object-rest-spread": "^7.9.5",
 		"@babel/plugin-transform-async-to-generator": "^7.8.3",
 		"@babel/plugin-transform-react-jsx": "^7.9.4",
 		"@babel/preset-env": "^7.9.0",
