@@ -20,7 +20,7 @@
 		"conventional-changelog-simple-preset": "^1.0.13",
 		"grunt": "^1.1.0",
 		"grunt-version": "^2.0.0",
-		"semantic-release": "^17.0.4",
+		"semantic-release": "^17.0.6",
 		"@babel/core": "^7.9.0",
 		"@babel/plugin-proposal-object-rest-spread": "^7.9.0",
 		"@babel/plugin-transform-async-to-generator": "^7.8.3",
