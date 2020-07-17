@@ -9,7 +9,7 @@
  */
 
 define( 'THEMEISLE_GUTENBERG_ANIMATION_VERSION', '1.0.6' );
-define( 'THEMEISLE_GUTENBERG_ANIMATION_DEV', false );
+define( 'THEMEISLE_GUTENBERG_ANIMATION_DEV', true );
 
 if ( function_exists( 'add_action' ) ) {
 	add_action(

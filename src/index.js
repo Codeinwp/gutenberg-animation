@@ -15,27 +15,29 @@ const { Fragment } = wp.element;
 
 const { addFilter } = wp.hooks;
 
+
 /**
  * Internal dependencies.
  */
 import AnimationControls from './editor.js';
 
-const withInspectorControls = createHigherOrderComponent( ( BlockEdit ) => {
-	return ( props ) => {
-		const hasCustomClassName = hasBlockSupport( props.name, 'customClassName', true );
-		if ( hasCustomClassName && props.isSelected ) {
+const withInspectorControls = createHigherOrderComponent((BlockEdit) => {
+	return (props) => {
+		const hasCustomClassName = hasBlockSupport(props.name, 'customClassName', true);
+		if (hasCustomClassName && props.isSelected) {
 			return (
 				<Fragment>
-					<BlockEdit { ...props } />
+					<BlockEdit {...props} />
 					<InspectorControls>
 						<PanelBody
-							title={ __( 'Animations' ) }
-							initialOpen={ false }
+							title={__('Animations')}
+							initialOpen={false}
 						>
 							<AnimationControls
-								clientId={ props.clientId }
-								setAttributes={ props.setAttributes }
-								attributes={ props.attributes }
+								clientId={props.clientId}
+								setAttributes={props.setAttributes}
+								attributes={props.attributes}
+
 							/>
 						</PanelBody>
 					</InspectorControls>
@@ -43,8 +45,8 @@ const withInspectorControls = createHigherOrderComponent( ( BlockEdit ) => {
 			);
 		}
 
-		return <BlockEdit { ...props } />;
+		return <BlockEdit {...props} />;
 	};
-}, 'withInspectorControl' );
+}, 'withInspectorControl');
 
-addFilter( 'editor.BlockEdit', 'themeisle-custom-css/with-inspector-controls', withInspectorControls );
+addFilter('editor.BlockEdit', 'themeisle-custom-css/with-inspector-controls', withInspectorControls);
