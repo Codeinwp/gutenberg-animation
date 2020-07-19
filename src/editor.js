@@ -24,6 +24,8 @@ import {
 	delayList,
 	speedList
 } from './data.js';
+import { data } from 'autoprefixer';
+
 
 class AnimationControls extends Component {
 	constructor() {
@@ -39,7 +41,18 @@ class AnimationControls extends Component {
 			speed: 'default',
 			isVisible: false,
 			currentInput: ''
+
 		};
+		this.categories = [
+			{ label: 'Bouncing', value: 'bounce' },
+			{ label: 'Fading', value: 'fadeIn' },
+			{ label: 'Flipping', value: 'flip' },
+			{ label: 'Rotating', value: 'rotateIn' },
+			{ label: 'Sliding', value: 'slideInDown' },
+			{ label: 'Zooming', value: 'zoomIn' },
+			{ label: 'Rolling', value: 'rollIn' },
+			{ label: 'Other', value: 'lightSpeedIn' }
+		]
 	}
 
 	componentDidMount() {
@@ -180,59 +193,74 @@ class AnimationControls extends Component {
 		this.setState({ isVisible: !state.isVisible });
 	}
 
+
+
 	render() {
 		return (
 			<Fragment>
 				<p>Animation</p>
 				<Button isSecondary className="animationButton"
-
-					//label={__('Animation')}
-
-					//options={animationsList}
-					//onChange={this.updateAnimation}
 					onClick={() => this.toggleVisible(this.state)}
 				>{this.state.animation || 'none'}
 					{
 						this.state.isVisible && (
-							<Popover className="animationPopover">
-								<TextControl
-									//value={className}
-									onChange={(currentInput) => {
-										this.setState({ currentInput })
-									}}
-								/>
-								{animationsList.map((animation) => {
-									return (
-										animation.label.toLowerCase().includes(this.state.currentInput.toLowerCase()) &&
-										<div>
-											<Button onClick={() => this.updateAnimation(animation.value)}>{animation.label}</Button>
-										</div>
-									)
-								})}
-							</Popover>
+							<div className='container'>
+
+								<Popover className="animationPopover">
+									<TextControl className='textControl'
+										onChange={(currentInput) => {
+											this.setState({ currentInput })
+										}}
+									/>
+									{animationsList.map((animation) => {
+										return (
+											this.state.currentInput !== '' && animation.label.toLowerCase().includes(this.state.currentInput.toLowerCase()) ?
+												<div>
+													<Button onClick={() => this.updateAnimation(animation.value)}>{animation.label}</Button>
+												</div> :
+												this.state.currentInput === '' &&
+												<Fragment>
+													{this.categories.map(category => {
+														return category.value === animation.value ?
+															<div className="category">
+																{category.label}
+															</div> : ''
+													})}
+													<div>
+														<Button onClick={() => this.updateAnimation(animation.value)}>{animation.label}</Button>
+													</div>
+												</Fragment>
+										)
+									})
+
+									}
+								</Popover>
+							</div>
 						)
 					}
 				</Button>
 
 
-				{'none' !== this.state.animation && (
-					<Fragment>
-						<SelectControl
-							label={__('Delay')}
-							value={this.state.delay || 'default'}
-							options={delayList}
-							onChange={this.updateDelay}
-						/>
+				{
+					'none' !== this.state.animation && (
+						<Fragment>
+							<SelectControl
+								label={__('Delay')}
+								value={this.state.delay || 'default'}
+								options={delayList}
+								onChange={this.updateDelay}
+							/>
 
-						<SelectControl
-							label={__('Speed')}
-							value={this.state.speed || 'default'}
-							options={speedList}
-							onChange={this.updateSpeed}
-						/>
-					</Fragment>
-				)}
-			</Fragment>
+							<SelectControl
+								label={__('Speed')}
+								value={this.state.speed || 'default'}
+								options={speedList}
+								onChange={this.updateSpeed}
+							/>
+						</Fragment>
+					)
+				}
+			</Fragment >
 		);
 	}
 }

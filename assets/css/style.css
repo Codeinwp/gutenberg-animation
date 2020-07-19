@@ -26,6 +26,12 @@
     width: 100%;
 }
 
+.animationPopover .components-popover__content div.category {
+    font-weight: 800;
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+
 .animationPopover .components-popover__content div button {
     width: 100%;
     padding: 10px;

@@ -9,6 +9,10 @@ export const animationsList = [
 		value: 'none'
 	},
 	{
+		label: __('Bounce'),
+		value: 'bounce'
+	},
+	{
 		label: __('Bounce In'),
 		value: 'bounceIn'
 	},
@@ -263,10 +267,6 @@ export const animationsList = [
 	{
 		label: __('Light Speed Out'),
 		value: 'lightSpeedOut'
-	},
-	{
-		label: __('Bounce'),
-		value: 'bounce'
 	},
 	{
 		label: __('Flash'),
