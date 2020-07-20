@@ -21,16 +21,16 @@ const { addFilter } = wp.hooks;
  */
 import AnimationControls from './editor.js';
 
-const withInspectorControls = createHigherOrderComponent((BlockEdit) => {
-	return (props) => {
-		const hasCustomClassName = hasBlockSupport(props.name, 'customClassName', true);
-		if (hasCustomClassName && props.isSelected) {
+const withInspectorControls = createHigherOrderComponent( ( BlockEdit ) => {
+	return ( props ) => {
+		const hasCustomClassName = hasBlockSupport( props.name, 'customClassName', true );
+		if ( hasCustomClassName && props.isSelected ) {
 			return (
 				<Fragment>
 					<BlockEdit {...props} />
 					<InspectorControls>
 						<PanelBody
-							title={__('Animations')}
+							title={__( 'Animations' )}
 							initialOpen={false}
 						>
 							<AnimationControls
@@ -47,6 +47,6 @@ const withInspectorControls = createHigherOrderComponent((BlockEdit) => {
 
 		return <BlockEdit {...props} />;
 	};
-}, 'withInspectorControl');
+}, 'withInspectorControl' );
 
-addFilter('editor.BlockEdit', 'themeisle-custom-css/with-inspector-controls', withInspectorControls);
+addFilter( 'editor.BlockEdit', 'themeisle-custom-css/with-inspector-controls', withInspectorControls );

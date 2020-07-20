@@ -20,6 +20,7 @@
 .animationPopover .components-popover__content {
     max-height: 300px;
     overflow-x: hidden;
+    margin-left: 10px;
 }
 
 .animationPopover .components-popover__content div {
@@ -27,7 +28,7 @@
 }
 
 .animationPopover .components-popover__content div.category {
-    font-weight: 800;
+    font-weight: 600;
     padding-top: 3px;
     padding-bottom: 3px;
 }

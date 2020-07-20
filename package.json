@@ -35,5 +35,8 @@
 		"eslint-plugin-react": "^7.20.0",
 		"webpack": "^4.43.0",
 		"webpack-cli": "^3.3.11"
+	},
+	"dependencies": {
+		"react-wordpress-hooks": "^3.1.0"
 	}
 }
