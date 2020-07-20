@@ -11,7 +11,6 @@ const {
 } = wp.components;
 
 const {
-	Component,
 	useState,
 	useEffect,
 	Fragment
