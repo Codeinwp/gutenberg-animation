@@ -2,13 +2,17 @@
  * WordPress dependencies.
  */
 const { __ } = wp.i18n;
+const { Button, Popover } = wp.components;
 
 const {
-	SelectControl
+	SelectControl,
+	TextControl
+
 } = wp.components;
 
 const {
-	Component,
+	useState,
+	useEffect,
 	Fragment
 } = wp.element;
 
@@ -22,26 +26,31 @@ import {
 	speedList
 } from './data.js';
 
-class AnimationControls extends Component {
-	constructor() {
-		super( ...arguments );
 
-		this.updateAnimation = this.updateAnimation.bind( this );
-		this.updateDelay = this.updateDelay.bind( this );
-		this.updateSpeed = this.updateSpeed.bind( this );
+function AnimationControls({ clientId, setAttributes, attributes }) {
 
-		this.state = {
-			animation: 'none',
-			delay: 'default',
-			speed: 'default'
-		};
-	}
+	const [ animation, setAnimation ] = useState( 'none' );
+	const [ delay, setDelay ] = useState( 'default' );
+	const [ speed, setSpeed ] = useState( 'default' );
+	const [ isVisible, setIsVisible ] = useState( false );
+	const [ currentInput, setCurrentInput ] = useState( '' );
 
-	componentDidMount() {
+	const categories = [
+		{ label: 'Bouncing', value: 'bounce' },
+		{ label: 'Fading', value: 'fade' },
+		{ label: 'Flipping', value: 'flip' },
+		{ label: 'Rotating', value: 'rotate' },
+		{ label: 'Sliding', value: 'slide' },
+		{ label: 'Zooming', value: 'zoom' },
+		{ label: 'Rolling', value: 'roll' },
+		{ label: 'Other', value: 'light' }
+	];
+
+	useEffect( () => {
 		let classes;
 
-		if ( this.props.attributes.className ) {
-			classes = this.props.attributes.className;
+		if ( attributes.className ) {
+			classes = attributes.className;
 			classes = classes.split( ' ' );
 
 			const animationClass = Array.from( animationsList ).find( i => {
@@ -56,22 +65,20 @@ class AnimationControls extends Component {
 				return classes.find( o => o === i.value );
 			});
 
-			this.setState({
-				animation: animationClass ? animationClass.value : 'none',
-				delay: delayClass ? delayClass.value : 'default',
-				speed: speedClass ? speedClass.value : 'default'
-			});
+			setAnimation( animationClass ? animationClass.value : 'none' );
+			setDelay( delayClass ? delayClass.value : 'default' );
+			setSpeed( speedClass ? speedClass.value : 'default' );
 		}
-	}
+	});
 
-	async updateAnimation( e ) {
+	const updateAnimation = e => {
 		let classes;
 		let animationValue = 'none' !== e ? e : '';
 
-		if ( this.props.attributes.className ) {
-			classes = this.props.attributes.className;
+		if ( attributes.className ) {
+			classes = attributes.className;
 			classes = classes.split( ' ' );
-			const exists = classes.find( i => i === this.state.animation );
+			const exists = classes.find( i => i === animation );
 			const animatedExists = classes.find( i => 'animated' === i );
 
 			if ( ! animatedExists ) {
@@ -79,30 +86,28 @@ class AnimationControls extends Component {
 			}
 
 			if ( exists ) {
-				classes = classes.join( ' ' ).replace( this.state.animation, animationValue );
+				classes = classes.join( ' ' ).replace( animation, animationValue );
 			} else {
 				classes.push( animationValue );
 				classes = classes.join( ' ' );
 			}
 		} else {
-			classes = `animated ${ animationValue }`;
+			classes = `animated ${animationValue}`;
 		}
 
 		if ( 'none' === e ) {
-			classes = classes.replace( 'animated', '' ).replace( this.state.delay, '' ).replace( this.state.speed, '' );
+			classes = classes.replace( 'animated', '' ).replace( delay, '' ).replace( speed, '' );
 
-			this.setState({
-				delay: 'default',
-				speed: 'defualt'
-			});
+			setDelay( 'default' );
+			setSpeed( 'default' );
 		}
 
 		classes = classes.replace( /\s+/g, ' ' );
 
-		this.setState({ animation: e });
-		await this.props.setAttributes({ className: classes });
+		setAnimation( e );
+		setAttributes({ className: classes });
 
-		let block = document.querySelector( `#block-${ this.props.clientId } .animated` );
+		let block = document.querySelector( `#block-${clientId} .animated` );
 
 		if ( block ) {
 			outAnimation.forEach( i => {
@@ -119,19 +124,19 @@ class AnimationControls extends Component {
 				}
 			});
 		}
-	}
+	};
 
-	updateDelay( e ) {
+	const updateDelay = e => {
 		let classes;
 		let delayValue = 'none' !== e ? e : '';
 
-		if ( this.props.attributes.className ) {
-			classes = this.props.attributes.className;
+		if ( attributes.className ) {
+			classes = attributes.className;
 			classes = classes.split( ' ' );
-			const exists = classes.find( i => i === this.state.delay );
+			const exists = classes.find( i => i === delay );
 
 			if ( exists ) {
-				classes = classes.join( ' ' ).replace( this.state.delay, delayValue );
+				classes = classes.join( ' ' ).replace( delay, delayValue );
 			} else {
 				classes.push( delayValue );
 				classes = classes.join( ' ' );
@@ -142,21 +147,21 @@ class AnimationControls extends Component {
 
 		classes = classes.replace( /\s+/g, ' ' );
 
-		this.setState({ delay: e });
-		this.props.setAttributes({ className: classes });
-	}
+		setDelay( e );
+		setAttributes({ className: classes });
+	};
 
-	updateSpeed( e ) {
+	const updateSpeed = ( e ) => {
 		let classes;
 		let speedValue = 'none' !== e ? e : '';
 
-		if ( this.props.attributes.className ) {
-			classes = this.props.attributes.className;
+		if ( attributes.className ) {
+			classes = attributes.className;
 			classes = classes.split( ' ' );
-			const exists = classes.find( i => i === this.state.speed );
+			const exists = classes.find( i => i === speed );
 
 			if ( exists ) {
-				classes = classes.join( ' ' ).replace( this.state.speed, speedValue );
+				classes = classes.join( ' ' ).replace( speed, speedValue );
 			} else {
 				classes.push( speedValue );
 				classes = classes.join( ' ' );
@@ -167,40 +172,105 @@ class AnimationControls extends Component {
 
 		classes = classes.replace( /\s+/g, ' ' );
 
-		this.setState({ speed: e });
-		this.props.setAttributes({ className: classes });
-	}
+		setSpeed( e );
+		setAttributes({ className: classes });
+	};
 
-	render() {
-		return (
-			<Fragment>
-				<SelectControl
-					label={ __( 'Animation' ) }
-					value={ this.state.animation || 'none' }
-					options={ animationsList }
-					onChange={ this.updateAnimation }
-				/>
+	const toggleVisible = () => {
+		setIsVisible( ! isVisible );
+	};
 
-				{ 'none' !== this.state.animation && (
+	const getAnimations = () => {
+		let ret = [];
+		if ( currentInput ) {
+			animationsList.map( animation => {
+				if ( animation.label.toLowerCase().includes( currentInput.toLowerCase() ) ) {
+					ret.push(
+						<div>
+							<Button onClick={() => updateAnimation( animation.value )}>{animation.label}</Button>
+						</div> );
+				}
+			}
+			);
+		}
+
+		if ( ! currentInput ) {
+			let categoryIndex = 0;
+			animationsList.map( animation => {
+				if ( categoryIndex < categories.length && animation.value.includes( categories[categoryIndex].value ) ) {
+					categoryIndex++;
+					ret.push(
+						<Fragment>
+							<div className="category">
+								{categories[categoryIndex - 1].label}
+							</div>
+							<div>
+								<Button onClick={() => updateAnimation( animation.value )}>{animation.label}</Button>
+							</div>
+						</Fragment> );
+				} else {
+					ret.push(
+						<div>
+							<Button onClick={() => updateAnimation( animation.value )}>{animation.label}</Button>
+						</div>
+					);
+				}
+			});
+		}
+		return ret;
+	};
+
+
+	return (
+		<Fragment>
+			<div id="hello">hello</div>
+			<p>Animation</p>
+			<Button isSecondary className="animationButton"
+				onClick={toggleVisible}
+			>{animation || 'none'}
+				{
+					isVisible && (
+						<div className='container'>
+
+							<Popover className="animationPopover">
+								<TextControl className='textControl'
+									onChange={( currentInput ) => {
+										setCurrentInput( currentInput );
+									}}
+								/>
+								<div>
+									{getAnimations().map( animation => {
+										return <div>{animation}</div>;
+									})}
+								</div>
+							</Popover>
+						</div>
+					)
+				}
+			</Button>
+
+
+			{
+				'none' !== animation && (
 					<Fragment>
 						<SelectControl
-							label={ __( 'Delay' ) }
-							value={ this.state.delay || 'default' }
-							options={ delayList }
-							onChange={ this.updateDelay }
+							label={__( 'Delay' )}
+							value={delay || 'default'}
+							options={delayList}
+							onChange={updateDelay}
 						/>
 
 						<SelectControl
-							label={ __( 'Speed' ) }
-							value={ this.state.speed || 'default' }
-							options={ speedList }
-							onChange={ this.updateSpeed }
+							label={__( 'Speed' )}
+							value={speed || 'default'}
+							options={speedList}
+							onChange={updateSpeed}
 						/>
 					</Fragment>
-				) }
-			</Fragment>
-		);
-	}
+				)
+			}
+		</Fragment >
+	);
 }
 
 export default AnimationControls;
