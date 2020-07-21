@@ -223,7 +223,6 @@ function AnimationControls({ clientId, setAttributes, attributes }) {
 
 	return (
 		<Fragment>
-			<div id="hello">hello</div>
 			<p>Animation</p>
 			<Button isSecondary className="animationButton"
 				onClick={toggleVisible}
