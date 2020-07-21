@@ -13,54 +13,6 @@ export const animationsList = [
 		value: 'bounce'
 	},
 	{
-		label: __( 'Flash' ),
-		value: 'flash'
-	},
-	{
-		label: __( 'Pulse' ),
-		value: 'pulse'
-	},
-	{
-		label: __( 'Rubber Band' ),
-		value: 'rubberBand'
-	},
-	{
-		label: __( 'Shake' ),
-		value: 'shake'
-	},
-	{
-		label: __( 'Head Shake' ),
-		value: 'headShake'
-	},
-	{
-		label: __( 'Swing' ),
-		value: 'swing'
-	},
-	{
-		label: __( 'TaDa' ),
-		value: 'tada'
-	},
-	{
-		label: __( 'Wobble' ),
-		value: 'wobble'
-	},
-	{
-		label: __( 'Jello' ),
-		value: 'jello'
-	},
-	{
-		label: __( 'Heart Beat' ),
-		value: 'heartBeat'
-	},
-	{
-		label: __( 'Hinge' ),
-		value: 'hinge'
-	},
-	{
-		label: __( 'Jack In The Box' ),
-		value: 'jackInTheBox'
-	},
-	{
 		label: __( 'Bounce In' ),
 		value: 'bounceIn'
 	},
@@ -189,14 +141,6 @@ export const animationsList = [
 		value: 'flipOutY'
 	},
 	{
-		label: __( 'Light Speed In' ),
-		value: 'lightSpeedIn'
-	},
-	{
-		label: __( 'Light Speed Out' ),
-		value: 'lightSpeedOut'
-	},
-	{
 		label: __( 'Rotate In' ),
 		value: 'rotateIn'
 	},
@@ -315,6 +259,62 @@ export const animationsList = [
 	{
 		label: __( 'Roll Out' ),
 		value: 'rollOut'
+	},
+	{
+		label: __( 'Light Speed In' ),
+		value: 'lightSpeedIn'
+	},
+	{
+		label: __( 'Light Speed Out' ),
+		value: 'lightSpeedOut'
+	},
+	{
+		label: __( 'Flash' ),
+		value: 'flash'
+	},
+	{
+		label: __( 'Pulse' ),
+		value: 'pulse'
+	},
+	{
+		label: __( 'Rubber Band' ),
+		value: 'rubberBand'
+	},
+	{
+		label: __( 'Shake' ),
+		value: 'shake'
+	},
+	{
+		label: __( 'Head Shake' ),
+		value: 'headShake'
+	},
+	{
+		label: __( 'Swing' ),
+		value: 'swing'
+	},
+	{
+		label: __( 'TaDa' ),
+		value: 'tada'
+	},
+	{
+		label: __( 'Wobble' ),
+		value: 'wobble'
+	},
+	{
+		label: __( 'Jello' ),
+		value: 'jello'
+	},
+	{
+		label: __( 'Heart Beat' ),
+		value: 'heartBeat'
+	},
+	{
+		label: __( 'Hinge' ),
+		value: 'hinge'
+	},
+	{
+		label: __( 'Jack In The Box' ),
+		value: 'jackInTheBox'
 	}
 ];
 
