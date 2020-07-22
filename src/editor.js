@@ -184,7 +184,17 @@ function AnimationControls({ clientId, setAttributes, attributes }) {
 		let ret = [];
 		if ( currentInput ) {
 			animationsList.map( animation => {
-				if ( animation.label.toLowerCase().includes( currentInput.toLowerCase() ) ) {
+
+				//if ( animation.label.toLowerCase().includes( currentInput.toLowerCase() ) ) {
+				let found = true;
+				let inputWords = currentInput.toLowerCase().split( ' ' );
+				inputWords.forEach( word => {
+					if ( ! animation.label.toLowerCase().includes( word ) ) {
+						found = false;
+					}
+				});
+
+				if ( found ) {
 					ret.push(
 						<div>
 							<Button onClick={() => updateAnimation( animation.value )}>{animation.label}</Button>
@@ -223,7 +233,6 @@ function AnimationControls({ clientId, setAttributes, attributes }) {
 
 	return (
 		<Fragment>
-			<div id="hello">hello</div>
 			<p>Animation</p>
 			<Button isSecondary className="animationButton"
 				onClick={toggleVisible}
