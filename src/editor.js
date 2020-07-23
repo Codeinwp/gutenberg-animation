@@ -2,18 +2,20 @@
  * WordPress dependencies.
  */
 const { __ } = wp.i18n;
-const { Button, Popover } = wp.components;
 
 const {
+	BaseControl,
+	Button,
+	Popover,
 	SelectControl,
 	TextControl
 
 } = wp.components;
 
 const {
+	Fragment,
 	useState,
-	useEffect,
-	Fragment
+	useEffect
 } = wp.element;
 
 /**
@@ -21,31 +23,18 @@ const {
  */
 import {
 	animationsList,
-	outAnimation,
+	categories,
 	delayList,
-	speedList
+	speedList,
+	outAnimation
 } from './data.js';
 
 
-function AnimationControls({ clientId, setAttributes, attributes }) {
-
-	const [ animation, setAnimation ] = useState( 'none' );
-	const [ delay, setDelay ] = useState( 'default' );
-	const [ speed, setSpeed ] = useState( 'default' );
-	const [ isVisible, setIsVisible ] = useState( false );
-	const [ currentInput, setCurrentInput ] = useState( '' );
-
-	const categories = [
-		{ label: 'Bouncing', value: 'bounce' },
-		{ label: 'Fading', value: 'fade' },
-		{ label: 'Flipping', value: 'flip' },
-		{ label: 'Rotating', value: 'rotate' },
-		{ label: 'Sliding', value: 'slide' },
-		{ label: 'Zooming', value: 'zoom' },
-		{ label: 'Rolling', value: 'roll' },
-		{ label: 'Other', value: 'light' }
-	];
-
+function AnimationControls({
+	attributes,
+	clientId,
+	setAttributes
+}) {
 	useEffect( () => {
 		let classes;
 
@@ -69,7 +58,14 @@ function AnimationControls({ clientId, setAttributes, attributes }) {
 			setDelay( delayClass ? delayClass.value : 'default' );
 			setSpeed( speedClass ? speedClass.value : 'default' );
 		}
-	});
+	}, []);
+
+	const [ animation, setAnimation ] = useState( 'none' );
+	const [ delay, setDelay ] = useState( 'default' );
+	const [ speed, setSpeed ] = useState( 'default' );
+	const [ isVisible, setIsVisible ] = useState( false );
+	const [ currentInput, setCurrentInput ] = useState( '' );
+
 
 	const updateAnimation = e => {
 		let classes;
@@ -151,7 +147,7 @@ function AnimationControls({ clientId, setAttributes, attributes }) {
 		setAttributes({ className: classes });
 	};
 
-	const updateSpeed = ( e ) => {
+	const updateSpeed =  e  => {
 		let classes;
 		let speedValue = 'none' !== e ? e : '';
 
@@ -176,26 +172,22 @@ function AnimationControls({ clientId, setAttributes, attributes }) {
 		setAttributes({ className: classes });
 	};
 
-	const toggleVisible = () => {
-		setIsVisible( ! isVisible );
-	};
-
 	const getAnimations = () => {
-		let ret = [];
+		let filteredAnimations = [];
 		if ( currentInput ) {
 			animationsList.map( animation => {
 
 				//if ( animation.label.toLowerCase().includes( currentInput.toLowerCase() ) ) {
-				let found = true;
+				let match = true;
 				let inputWords = currentInput.toLowerCase().split( ' ' );
 				inputWords.forEach( word => {
 					if ( ! animation.label.toLowerCase().includes( word ) ) {
-						found = false;
+						match = false;
 					}
 				});
 
-				if ( found ) {
-					ret.push(
+				if ( match ) {
+					filteredAnimations.push(
 						<div>
 							<Button onClick={() => updateAnimation( animation.value )}>{animation.label}</Button>
 						</div> );
@@ -209,7 +201,7 @@ function AnimationControls({ clientId, setAttributes, attributes }) {
 			animationsList.map( animation => {
 				if ( categoryIndex < categories.length && animation.value.includes( categories[categoryIndex].value ) ) {
 					categoryIndex++;
-					ret.push(
+					filteredAnimations.push(
 						<Fragment>
 							<div className="category">
 								{categories[categoryIndex - 1].label}
@@ -219,7 +211,7 @@ function AnimationControls({ clientId, setAttributes, attributes }) {
 							</div>
 						</Fragment> );
 				} else {
-					ret.push(
+					filteredAnimations.push(
 						<div>
 							<Button onClick={() => updateAnimation( animation.value )}>{animation.label}</Button>
 						</div>
@@ -227,25 +219,37 @@ function AnimationControls({ clientId, setAttributes, attributes }) {
 				}
 			});
 		}
-		return ret;
+		if ( ! filteredAnimations.length ) {
+			filteredAnimations.push(
+				<div>
+					No animations found
+				</div>
+			);
+		}
+		return filteredAnimations;
 	};
 
 
 	return (
-		<Fragment>
-			<p>Animation</p>
-			<Button isSecondary className="animationButton"
-				onClick={toggleVisible}
-			>{animation || 'none'}
-				{
-					isVisible && (
-						<div className='container'>
-
-							<Popover className="animationPopover">
-								<TextControl className='textControl'
-									onChange={( currentInput ) => {
-										setCurrentInput( currentInput );
-									}}
+		<div className="themeisle-animations-control">
+			<BaseControl
+				label="Animation">
+				<Button
+					isSecondary
+					className="animationButton"
+					onClick={! isVisible ? ()=>setIsVisible( true ) : ''}
+				>{animation || 'none'}
+					{
+						isVisible && (
+							<Popover
+								className="themeisle-animationPopover"
+								noArrow={true}
+								position='middle'
+								onFocusOutside={()=>setIsVisible( false )}>
+								<TextControl
+									placeholder="search"
+									value={currentInput}
+									onChange={ setCurrentInput }
 								/>
 								<div>
 									{getAnimations().map( animation => {
@@ -253,10 +257,10 @@ function AnimationControls({ clientId, setAttributes, attributes }) {
 									})}
 								</div>
 							</Popover>
-						</div>
-					)
-				}
-			</Button>
+						)
+					}
+				</Button>
+			</BaseControl>
 
 
 			{
@@ -278,7 +282,7 @@ function AnimationControls({ clientId, setAttributes, attributes }) {
 					</Fragment>
 				)
 			}
-		</Fragment >
+		</div >
 	);
 }
 
