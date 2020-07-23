@@ -109,7 +109,7 @@ export const animationsList = [
 		value: 'fadeOutRight'
 	},
 	{
-		label: __( 'Fade In Left Big' ),
+		label: __( 'Fade Out Right Big' ),
 		value: 'fadeOutRightBig'
 	},
 	{
@@ -316,6 +316,17 @@ export const animationsList = [
 		label: __( 'Jack In The Box' ),
 		value: 'jackInTheBox'
 	}
+];
+
+export const categories = [
+	{ label: 'Bouncing', value: 'bounce' },
+	{ label: 'Fading', value: 'fade' },
+	{ label: 'Flipping', value: 'flip' },
+	{ label: 'Rotating', value: 'rotate' },
+	{ label: 'Sliding', value: 'slide' },
+	{ label: 'Zooming', value: 'zoom' },
+	{ label: 'Rolling', value: 'roll' },
+	{ label: 'Other', value: 'light' }
 ];
 
 export const outAnimation = [
