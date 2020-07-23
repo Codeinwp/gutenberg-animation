@@ -237,7 +237,7 @@ function AnimationControls({
 				<Button
 					isSecondary
 					className="animationButton"
-					onClick={! isVisible ? ()=>setIsVisible( true ) : ''}
+					onClick={ ()=>setIsVisible( true )}
 				>{animation || 'none'}
 					{
 						isVisible && (
