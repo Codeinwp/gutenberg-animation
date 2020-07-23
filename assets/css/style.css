@@ -17,10 +17,11 @@
      animation-delay: 500ms;
  }
 
-
  .components-popover.themeisle-animationPopover .components-popover__content {
      max-height: 300px !important;
+     max-width: 260px !important;
      overflow-x: hidden;
+     margin-top: 10px;
  }
 
  .components-popover.themeisle-animationPopover .components-popover__content .category {
@@ -35,8 +36,17 @@
      border: 1px solid gray;
      font-size: 14px;
      color: #32373c;
+     margin-bottom: 16px;
+     height: 30px;
  }
 
- .components-popover.themeisle-animationPopover .components-popover__content .components-button{
+
+ .components-popover.themeisle-animationPopover .components-popover__content .components-button {
      width: 100%;
+     color:#3d6979;
+ }
+
+
+ .components-popover.themeisle-animationPopover .components-popover__content .animation-is-selected button {
+     background-color: #b1b3cfa4;
  }

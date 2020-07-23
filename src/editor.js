@@ -4,12 +4,7 @@
 const { __ } = wp.i18n;
 
 const {
-	BaseControl,
-	Button,
-	Popover,
-	SelectControl,
-	TextControl
-
+	SelectControl
 } = wp.components;
 
 const {
@@ -23,11 +18,12 @@ const {
  */
 import {
 	animationsList,
-	categories,
 	delayList,
 	speedList,
 	outAnimation
 } from './data.js';
+
+import AnimationPopover from './components/animation-popover';
 
 
 function AnimationControls({
@@ -57,14 +53,14 @@ function AnimationControls({
 			setAnimation( animationClass ? animationClass.value : 'none' );
 			setDelay( delayClass ? delayClass.value : 'default' );
 			setSpeed( speedClass ? speedClass.value : 'default' );
+			setCurrentAnimationLabel( animationClass ? animationClass.label : 'none' );
 		}
 	}, []);
 
 	const [ animation, setAnimation ] = useState( 'none' );
 	const [ delay, setDelay ] = useState( 'default' );
 	const [ speed, setSpeed ] = useState( 'default' );
-	const [ isVisible, setIsVisible ] = useState( false );
-	const [ currentInput, setCurrentInput ] = useState( '' );
+	const [ currentAnimationLabel, setCurrentAnimationLabel ] = useState( 'none' );
 
 
 	const updateAnimation = e => {
@@ -172,97 +168,15 @@ function AnimationControls({
 		setAttributes({ className: classes });
 	};
 
-	const getAnimations = () => {
-		let filteredAnimations = [];
-		if ( currentInput ) {
-			animationsList.map( animation => {
-
-				//if ( animation.label.toLowerCase().includes( currentInput.toLowerCase() ) ) {
-				let match = true;
-				let inputWords = currentInput.toLowerCase().split( ' ' );
-				inputWords.forEach( word => {
-					if ( ! animation.label.toLowerCase().includes( word ) ) {
-						match = false;
-					}
-				});
-
-				if ( match ) {
-					filteredAnimations.push(
-						<div>
-							<Button onClick={() => updateAnimation( animation.value )}>{animation.label}</Button>
-						</div> );
-				}
-			}
-			);
-		}
-
-		if ( ! currentInput ) {
-			let categoryIndex = 0;
-			animationsList.map( animation => {
-				if ( categoryIndex < categories.length && animation.value.includes( categories[categoryIndex].value ) ) {
-					categoryIndex++;
-					filteredAnimations.push(
-						<Fragment>
-							<div className="category">
-								{categories[categoryIndex - 1].label}
-							</div>
-							<div>
-								<Button onClick={() => updateAnimation( animation.value )}>{animation.label}</Button>
-							</div>
-						</Fragment> );
-				} else {
-					filteredAnimations.push(
-						<div>
-							<Button onClick={() => updateAnimation( animation.value )}>{animation.label}</Button>
-						</div>
-					);
-				}
-			});
-		}
-		if ( ! filteredAnimations.length ) {
-			filteredAnimations.push(
-				<div>
-					No animations found
-				</div>
-			);
-		}
-		return filteredAnimations;
-	};
-
-
 	return (
 		<div className="themeisle-animations-control">
-			<BaseControl
-				label="Animation">
-				<Button
-					isSecondary
-					className="animationButton"
-					onClick={ ()=>setIsVisible( true )}
-				>{animation || 'none'}
-					{
-						isVisible && (
-							<Popover
-								className="themeisle-animationPopover"
-								noArrow={true}
-								position='middle'
-								onFocusOutside={()=>setIsVisible( false )}>
-								<TextControl
-									placeholder="search"
-									value={currentInput}
-									onChange={ setCurrentInput }
-								/>
-								<div>
-									{getAnimations().map( animation => {
-										return <div>{animation}</div>;
-									})}
-								</div>
-							</Popover>
-						)
-					}
-				</Button>
-			</BaseControl>
-
-
+			<div>
+				{<AnimationPopover
+					animationsList={animationsList}
+					updateAnimation={updateAnimation}
+					currentAnimationLabel={currentAnimationLabel}
+					setCurrentAnimationLabel={setCurrentAnimationLabel}/>
+				}</div>
 			{
 				'none' !== animation && (
 					<Fragment>

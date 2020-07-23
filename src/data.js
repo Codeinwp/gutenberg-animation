@@ -320,13 +320,13 @@ export const animationsList = [
 
 export const categories = [
 	{ label: 'Bouncing', value: 'bounce' },
-	{ label: 'Fading', value: 'fade' },
+	{ label: 'Fading', value: 'fadeIn' },
 	{ label: 'Flipping', value: 'flip' },
-	{ label: 'Rotating', value: 'rotate' },
-	{ label: 'Sliding', value: 'slide' },
-	{ label: 'Zooming', value: 'zoom' },
-	{ label: 'Rolling', value: 'roll' },
-	{ label: 'Other', value: 'light' }
+	{ label: 'Rotating', value: 'rotateIn' },
+	{ label: 'Sliding', value: 'slideInDown' },
+	{ label: 'Zooming', value: 'zoomIn' },
+	{ label: 'Rolling', value: 'rollIn' },
+	{ label: 'Other', value: 'lightSpeedIn' }
 ];
 
 export const outAnimation = [
