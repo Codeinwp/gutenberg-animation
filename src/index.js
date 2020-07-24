@@ -15,7 +15,6 @@ const { Fragment } = wp.element;
 
 const { addFilter } = wp.hooks;
 
-
 /**
  * Internal dependencies.
  */

@@ -1,102 +1,125 @@
-import {categories} from '../data.js';
-
+/**
+ * WordPress dependencies.
+ */
 const { __ } = wp.i18n;
 
 const {
 	BaseControl,
 	Button,
-	Popover,
+	Dropdown,
+	MenuGroup,
+	MenuItem,
 	TextControl
 } = wp.components;
+
+const { useInstanceId } = wp.compose;
 
 const {
 	Fragment,
 	useState
 } = wp.element;
 
+/**
+ * Internal dependencies.
+ */
+import { categories } from '../data.js';
 
-function AnimationPopover({ animationsList, updateAnimation, currentAnimationLabel, setCurrentAnimationLabel}) {
-	const [ isVisible, setIsVisible ] = useState( false );
+function AnimationPopover({
+	animationsList,
+	updateAnimation,
+	currentAnimationLabel,
+	setCurrentAnimationLabel
+}) {
+	const instanceId = useInstanceId( AnimationPopover );
+
 	const [ currentInput, setCurrentInput ] = useState( '' );
 	const [ animationFound, setAnimationFound ] = useState( false );
 
-	const getAnimations =  animation  =>{
+	const getAnimations = ( animation, onToggle ) => {
 		let match = true;
+
 		if ( currentInput ) {
-			let inputWords = currentInput.toLowerCase().split( ' ' );
+			const inputWords = currentInput.toLowerCase().split( ' ' );
 			inputWords.forEach( word => {
 				if ( ! animation.label.toLowerCase().includes( word ) ) {
 					match = false;
 				}
 			});
 		}
+
 		if ( match && ! animationFound ) {
 			setAnimationFound( true );
 		}
+
 		return match && (
-			<Button onClick={() => {
-				setCurrentAnimationLabel( animation.label );
-				setIsVisible( false );
-				updateAnimation( animation.value );
-			}}>{animation.label}</Button>
+			<MenuItem
+				className={ currentAnimationLabel === animation.label ? 'is-selected' : '' }
+				onClick={ () => {
+					setCurrentAnimationLabel( animation.label );
+					updateAnimation( animation.value );
+					onToggle();
+				} }
+			>
+				{ animation.label }
+			</MenuItem>
 		);
 	};
 
+	const id = `inspector-themeisle-animations-control-${ instanceId }`;
+
 	return (
 		<BaseControl
-			label="Animation">
-			<Button
-				isSecondary
-				className="animationButton"
-				onClick={() => {
-					setIsVisible( ! isVisible );
-				}}
-			>{currentAnimationLabel}
-			</Button>
-			{
-				isVisible && (
-					<Popover
-						className="themeisle-animationPopover"
-						noArrow={true}
-						position='center'
-						onFocusOutside={e =>{
-							'components-button animationButton is-secondary' !== e.relatedTarget.className ?
-								setIsVisible( false ) :
-								'';
-						}}>
+			label={ __( 'Animation' ) }
+			id={ id }
+		>
+			<Dropdown
+				contentClassName="themeisle-animations-control__popover"
+				position="bottom center"
+				renderToggle={ ({ isOpen, onToggle }) => (
+					<Button
+						isLarge
+						className="themeisle-animations-control__button"
+						id={ id }
+						onClick={ onToggle }
+						aria-expanded={ isOpen }
+					>
+						{ currentAnimationLabel }
+					</Button>
+				) }
+				renderContent={ ({ onToggle }) => (
+					<MenuGroup label={ __( 'Animations' ) }>
 						<TextControl
-							placeholder="Search animations"
-							value={currentInput}
-							onChange={e=>{
-								setCurrentInput( e ); setAnimationFound( false );
+							placeholder={ __( 'Search' ) }
+							value={ currentInput }
+							onChange={ e => {
+								setCurrentInput( e );
+								setAnimationFound( false );
 							}}
 						/>
-						{animationsList.map( animation=>{
-							return (
-								<Fragment>
-									{
-										'' === currentInput ?
-											categories.map( category=>{
-												return category.value === animation.value ?
-													<div className="category">
-														{category.label}
-													</div> : '';
-											}) : ''
-									}
 
-									<div className={`${currentAnimationLabel === animation.label ? 'animation-is-selected' : ''}`}>
-										{getAnimations( animation )}
-									</div>
-								</Fragment>
-							);
-						})}
-						{
-							! animationFound &&
-                            <div>{__( 'No animations found' )}</div>
-						}
-					</Popover>
-				)
-			}
+						<div className="components-popover__items">
+							{ animationsList.map( animation => {
+								return (
+									<Fragment>
+										{ '' === currentInput &&
+											categories.map( category => {
+												return category.value === animation.value ?
+													<div className="themeisle-animations-control__category">
+														{ category.label }
+													</div> : '';
+											})
+										}
+
+										{ getAnimations( animation, onToggle ) }
+									</Fragment>
+								);
+							}) }
+
+							{ ! animationFound && <div>{ __( 'Nothing found. Try searching for something else!' ) }</div> }
+						</div>
+					</MenuGroup>
+				) }
+			/>
 		</BaseControl>
 	);
 }

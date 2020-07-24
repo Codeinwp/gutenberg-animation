@@ -3,9 +3,7 @@
  */
 const { __ } = wp.i18n;
 
-const {
-	SelectControl
-} = wp.components;
+const { SelectControl } = wp.components;
 
 const {
 	Fragment,
@@ -24,7 +22,6 @@ import {
 } from './data.js';
 
 import AnimationPopover from './components/animation-popover';
-
 
 function AnimationControls({
 	attributes,
@@ -62,7 +59,6 @@ function AnimationControls({
 	const [ speed, setSpeed ] = useState( 'default' );
 	const [ currentAnimationLabel, setCurrentAnimationLabel ] = useState( 'none' );
 
-
 	const updateAnimation = e => {
 		let classes;
 		let animationValue = 'none' !== e ? e : '';
@@ -84,7 +80,7 @@ function AnimationControls({
 				classes = classes.join( ' ' );
 			}
 		} else {
-			classes = `animated ${animationValue}`;
+			classes = `animated ${ animationValue }`;
 		}
 
 		if ( 'none' === e ) {
@@ -94,12 +90,16 @@ function AnimationControls({
 			setSpeed( 'default' );
 		}
 
-		classes = classes.replace( /\s+/g, ' ' );
+		classes = classes.replace( /\s+/g, ' ' ).trim();
+
+		if ( '' === classes ) {
+			classes = undefined;
+		}
 
 		setAnimation( e );
 		setAttributes({ className: classes });
 
-		let block = document.querySelector( `#block-${clientId} .animated` );
+		let block = document.querySelector( `#block-${ clientId } .animated` );
 
 		if ( block ) {
 			outAnimation.forEach( i => {
@@ -170,28 +170,27 @@ function AnimationControls({
 
 	return (
 		<div className="themeisle-animations-control">
-			<div>
-				{<AnimationPopover
-					animationsList={animationsList}
-					updateAnimation={updateAnimation}
-					currentAnimationLabel={currentAnimationLabel}
-					setCurrentAnimationLabel={setCurrentAnimationLabel}/>
-				}</div>
+			<AnimationPopover
+				animationsList={ animationsList }
+				updateAnimation={ updateAnimation }
+				currentAnimationLabel={ currentAnimationLabel }
+				setCurrentAnimationLabel={ setCurrentAnimationLabel }
+			/>
 			{
 				'none' !== animation && (
 					<Fragment>
 						<SelectControl
-							label={__( 'Delay' )}
-							value={delay || 'default'}
-							options={delayList}
-							onChange={updateDelay}
+							label={ __( 'Delay' ) }
+							value={ delay || 'default' }
+							options={ delayList }
+							onChange={ updateDelay }
 						/>
 
 						<SelectControl
-							label={__( 'Speed' )}
-							value={speed || 'default'}
-							options={speedList}
-							onChange={updateSpeed}
+							label={ __( 'Speed' ) }
+							value={ speed || 'default' }
+							options={ speedList }
+							onChange={ updateSpeed }
 						/>
 					</Fragment>
 				)
