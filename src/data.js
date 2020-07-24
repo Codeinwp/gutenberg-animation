@@ -13,54 +13,6 @@ export const animationsList = [
 		value: 'bounce'
 	},
 	{
-		label: __( 'Flash' ),
-		value: 'flash'
-	},
-	{
-		label: __( 'Pulse' ),
-		value: 'pulse'
-	},
-	{
-		label: __( 'Rubber Band' ),
-		value: 'rubberBand'
-	},
-	{
-		label: __( 'Shake' ),
-		value: 'shake'
-	},
-	{
-		label: __( 'Head Shake' ),
-		value: 'headShake'
-	},
-	{
-		label: __( 'Swing' ),
-		value: 'swing'
-	},
-	{
-		label: __( 'TaDa' ),
-		value: 'tada'
-	},
-	{
-		label: __( 'Wobble' ),
-		value: 'wobble'
-	},
-	{
-		label: __( 'Jello' ),
-		value: 'jello'
-	},
-	{
-		label: __( 'Heart Beat' ),
-		value: 'heartBeat'
-	},
-	{
-		label: __( 'Hinge' ),
-		value: 'hinge'
-	},
-	{
-		label: __( 'Jack In The Box' ),
-		value: 'jackInTheBox'
-	},
-	{
 		label: __( 'Bounce In' ),
 		value: 'bounceIn'
 	},
@@ -157,7 +109,7 @@ export const animationsList = [
 		value: 'fadeOutRight'
 	},
 	{
-		label: __( 'Fade In Left Big' ),
+		label: __( 'Fade Out Right Big' ),
 		value: 'fadeOutRightBig'
 	},
 	{
@@ -187,14 +139,6 @@ export const animationsList = [
 	{
 		label: __( 'Flip Out Y' ),
 		value: 'flipOutY'
-	},
-	{
-		label: __( 'Light Speed In' ),
-		value: 'lightSpeedIn'
-	},
-	{
-		label: __( 'Light Speed Out' ),
-		value: 'lightSpeedOut'
 	},
 	{
 		label: __( 'Rotate In' ),
@@ -315,7 +259,74 @@ export const animationsList = [
 	{
 		label: __( 'Roll Out' ),
 		value: 'rollOut'
+	},
+	{
+		label: __( 'Light Speed In' ),
+		value: 'lightSpeedIn'
+	},
+	{
+		label: __( 'Light Speed Out' ),
+		value: 'lightSpeedOut'
+	},
+	{
+		label: __( 'Flash' ),
+		value: 'flash'
+	},
+	{
+		label: __( 'Pulse' ),
+		value: 'pulse'
+	},
+	{
+		label: __( 'Rubber Band' ),
+		value: 'rubberBand'
+	},
+	{
+		label: __( 'Shake' ),
+		value: 'shake'
+	},
+	{
+		label: __( 'Head Shake' ),
+		value: 'headShake'
+	},
+	{
+		label: __( 'Swing' ),
+		value: 'swing'
+	},
+	{
+		label: __( 'TaDa' ),
+		value: 'tada'
+	},
+	{
+		label: __( 'Wobble' ),
+		value: 'wobble'
+	},
+	{
+		label: __( 'Jello' ),
+		value: 'jello'
+	},
+	{
+		label: __( 'Heart Beat' ),
+		value: 'heartBeat'
+	},
+	{
+		label: __( 'Hinge' ),
+		value: 'hinge'
+	},
+	{
+		label: __( 'Jack In The Box' ),
+		value: 'jackInTheBox'
 	}
+];
+
+export const categories = [
+	{ label: 'Bouncing', value: 'bounce' },
+	{ label: 'Fading', value: 'fadeIn' },
+	{ label: 'Flipping', value: 'flip' },
+	{ label: 'Rotating', value: 'rotateIn' },
+	{ label: 'Sliding', value: 'slideInDown' },
+	{ label: 'Zooming', value: 'zoomIn' },
+	{ label: 'Rolling', value: 'rollIn' },
+	{ label: 'Other', value: 'lightSpeedIn' }
 ];
 
 export const outAnimation = [

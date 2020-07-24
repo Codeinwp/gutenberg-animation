@@ -70,11 +70,13 @@ class GutenbergAnimation {
 		if ( function_exists( 'is_amp_endpoint' ) && is_amp_endpoint() ) {
 			return;
 		}
+
 		if ( THEMEISLE_GUTENBERG_ANIMATION_DEV ) {
 			$version = time();
 		} else {
 			$version = THEMEISLE_GUTENBERG_ANIMATION_DEV;
 		}
+
 		wp_enqueue_style(
 			'animate-css',
 			plugin_dir_url( $this->get_dir() ) . $this->slug . '/assets/css/animate.min.css',

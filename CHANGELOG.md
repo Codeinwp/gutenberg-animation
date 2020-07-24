@@ -1,3 +1,7 @@
+##### [Version 1.0.6](https://github.com/Codeinwp/gutenberg-animation/compare/v1.0.5...v1.0.6) (2020-06-13)
+
+- Remove used function
+
 ##### [Version 1.0.5](https://github.com/Codeinwp/gutenberg-animation/compare/v1.0.4...v1.0.5) (2020-02-15)
 
 - Adds additional animation delay options.
