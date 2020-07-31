@@ -1,0 +1,13 @@
+.wp-block-themeisle-inspector-src {
+    &.error {
+        .components-base-control__field {
+            input {
+                border-color: red;
+            }
+        }
+    }
+}
+
+.wp-block-themeisle-inspector-background {
+    margin: 5px;  
+}
