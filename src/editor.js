@@ -3,13 +3,12 @@
  */
 const { __ } = wp.i18n;
 
-const {
-	SelectControl
-} = wp.components;
+const { SelectControl } = wp.components;
 
 const {
-	Component,
-	Fragment
+	Fragment,
+	useState,
+	useEffect
 } = wp.element;
 
 /**
@@ -17,31 +16,23 @@ const {
  */
 import {
 	animationsList,
-	outAnimation,
 	delayList,
-	speedList
+	speedList,
+	outAnimation
 } from './data.js';
 
-class AnimationControls extends Component {
-	constructor() {
-		super( ...arguments );
+import AnimationPopover from './components/animation-popover';
 
-		this.updateAnimation = this.updateAnimation.bind( this );
-		this.updateDelay = this.updateDelay.bind( this );
-		this.updateSpeed = this.updateSpeed.bind( this );
-
-		this.state = {
-			animation: 'none',
-			delay: 'default',
-			speed: 'default'
-		};
-	}
-
-	componentDidMount() {
+function AnimationControls({
+	attributes,
+	clientId,
+	setAttributes
+}) {
+	useEffect( () => {
 		let classes;
 
-		if ( this.props.attributes.className ) {
-			classes = this.props.attributes.className;
+		if ( attributes.className ) {
+			classes = attributes.className;
 			classes = classes.split( ' ' );
 
 			const animationClass = Array.from( animationsList ).find( i => {
@@ -56,22 +47,26 @@ class AnimationControls extends Component {
 				return classes.find( o => o === i.value );
 			});
 
-			this.setState({
-				animation: animationClass ? animationClass.value : 'none',
-				delay: delayClass ? delayClass.value : 'default',
-				speed: speedClass ? speedClass.value : 'default'
-			});
+			setAnimation( animationClass ? animationClass.value : 'none' );
+			setDelay( delayClass ? delayClass.value : 'default' );
+			setSpeed( speedClass ? speedClass.value : 'default' );
+			setCurrentAnimationLabel( animationClass ? animationClass.label : 'none' );
 		}
-	}
+	}, []);
 
-	async updateAnimation( e ) {
+	const [ animation, setAnimation ] = useState( 'none' );
+	const [ delay, setDelay ] = useState( 'default' );
+	const [ speed, setSpeed ] = useState( 'default' );
+	const [ currentAnimationLabel, setCurrentAnimationLabel ] = useState( 'none' );
+
+	const updateAnimation = e => {
 		let classes;
 		let animationValue = 'none' !== e ? e : '';
 
-		if ( this.props.attributes.className ) {
-			classes = this.props.attributes.className;
+		if ( attributes.className ) {
+			classes = attributes.className;
 			classes = classes.split( ' ' );
-			const exists = classes.find( i => i === this.state.animation );
+			const exists = classes.find( i => i === animation );
 			const animatedExists = classes.find( i => 'animated' === i );
 
 			if ( ! animatedExists ) {
@@ -79,7 +74,7 @@ class AnimationControls extends Component {
 			}
 
 			if ( exists ) {
-				classes = classes.join( ' ' ).replace( this.state.animation, animationValue );
+				classes = classes.join( ' ' ).replace( animation, animationValue );
 			} else {
 				classes.push( animationValue );
 				classes = classes.join( ' ' );
@@ -89,20 +84,22 @@ class AnimationControls extends Component {
 		}
 
 		if ( 'none' === e ) {
-			classes = classes.replace( 'animated', '' ).replace( this.state.delay, '' ).replace( this.state.speed, '' );
+			classes = classes.replace( 'animated', '' ).replace( delay, '' ).replace( speed, '' );
 
-			this.setState({
-				delay: 'default',
-				speed: 'defualt'
-			});
+			setDelay( 'default' );
+			setSpeed( 'default' );
 		}
 
-		classes = classes.replace( /\s+/g, ' ' );
+		classes = classes.replace( /\s+/g, ' ' ).trim();
 
-		this.setState({ animation: e });
-		await this.props.setAttributes({ className: classes });
+		if ( '' === classes ) {
+			classes = undefined;
+		}
 
-		let block = document.querySelector( `#block-${ this.props.clientId } .animated` );
+		setAnimation( e );
+		setAttributes({ className: classes });
+
+		let block = document.querySelector( `#block-${ clientId } .animated` );
 
 		if ( block ) {
 			outAnimation.forEach( i => {
@@ -119,19 +116,19 @@ class AnimationControls extends Component {
 				}
 			});
 		}
-	}
+	};
 
-	updateDelay( e ) {
+	const updateDelay = e => {
 		let classes;
 		let delayValue = 'none' !== e ? e : '';
 
-		if ( this.props.attributes.className ) {
-			classes = this.props.attributes.className;
+		if ( attributes.className ) {
+			classes = attributes.className;
 			classes = classes.split( ' ' );
-			const exists = classes.find( i => i === this.state.delay );
+			const exists = classes.find( i => i === delay );
 
 			if ( exists ) {
-				classes = classes.join( ' ' ).replace( this.state.delay, delayValue );
+				classes = classes.join( ' ' ).replace( delay, delayValue );
 			} else {
 				classes.push( delayValue );
 				classes = classes.join( ' ' );
@@ -142,21 +139,21 @@ class AnimationControls extends Component {
 
 		classes = classes.replace( /\s+/g, ' ' );
 
-		this.setState({ delay: e });
-		this.props.setAttributes({ className: classes });
-	}
+		setDelay( e );
+		setAttributes({ className: classes });
+	};
 
-	updateSpeed( e ) {
+	const updateSpeed =  e  => {
 		let classes;
 		let speedValue = 'none' !== e ? e : '';
 
-		if ( this.props.attributes.className ) {
-			classes = this.props.attributes.className;
+		if ( attributes.className ) {
+			classes = attributes.className;
 			classes = classes.split( ' ' );
-			const exists = classes.find( i => i === this.state.speed );
+			const exists = classes.find( i => i === speed );
 
 			if ( exists ) {
-				classes = classes.join( ' ' ).replace( this.state.speed, speedValue );
+				classes = classes.join( ' ' ).replace( speed, speedValue );
 			} else {
 				classes.push( speedValue );
 				classes = classes.join( ' ' );
@@ -167,40 +164,39 @@ class AnimationControls extends Component {
 
 		classes = classes.replace( /\s+/g, ' ' );
 
-		this.setState({ speed: e });
-		this.props.setAttributes({ className: classes });
-	}
+		setSpeed( e );
+		setAttributes({ className: classes });
+	};
 
-	render() {
-		return (
-			<Fragment>
-				<SelectControl
-					label={ __( 'Animation' ) }
-					value={ this.state.animation || 'none' }
-					options={ animationsList }
-					onChange={ this.updateAnimation }
-				/>
-
-				{ 'none' !== this.state.animation && (
+	return (
+		<div className="themeisle-animations-control">
+			<AnimationPopover
+				animationsList={ animationsList }
+				updateAnimation={ updateAnimation }
+				currentAnimationLabel={ currentAnimationLabel }
+				setCurrentAnimationLabel={ setCurrentAnimationLabel }
+			/>
+			{
+				'none' !== animation && (
 					<Fragment>
 						<SelectControl
 							label={ __( 'Delay' ) }
-							value={ this.state.delay || 'default' }
+							value={ delay || 'default' }
 							options={ delayList }
-							onChange={ this.updateDelay }
+							onChange={ updateDelay }
 						/>
 
 						<SelectControl
 							label={ __( 'Speed' ) }
-							value={ this.state.speed || 'default' }
+							value={ speed || 'default' }
 							options={ speedList }
-							onChange={ this.updateSpeed }
+							onChange={ updateSpeed }
 						/>
 					</Fragment>
-				) }
-			</Fragment>
-		);
-	}
+				)
+			}
+		</div >
+	);
 }
 
 export default AnimationControls;
