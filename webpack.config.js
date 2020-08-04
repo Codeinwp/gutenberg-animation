@@ -1,5 +1,6 @@
 const webpack = require( 'webpack' );
 const NODE_ENV = process.env.NODE_ENV || 'development';
+const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
 
 module.exports = {
 	mode: NODE_ENV,
@@ -33,6 +34,22 @@ module.exports = {
 				},
 				'eslint-loader' ],
 				exclude: /node_modules/
+			},
+			{
+				test: /\.(css|scss)$/,
+				use: [ {
+					loader: MiniCssExtractPlugin.loader
+				},
+				'css-loader',
+				{
+					loader: 'postcss-loader',
+					options: {
+						plugins: [
+							require( 'autoprefixer' )
+						]
+					}
+				},
+				'sass-loader' ]
 			}
 		]
 	},

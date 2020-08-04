@@ -19,6 +19,7 @@ const { addFilter } = wp.hooks;
  * Internal dependencies.
  */
 import AnimationControls from './editor.js';
+import './blocks/lottie/index.js';
 
 const withInspectorControls = createHigherOrderComponent( ( BlockEdit ) => {
 	return ( props ) => {

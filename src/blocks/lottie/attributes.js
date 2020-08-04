@@ -13,9 +13,17 @@ const attributes = {
 		type: 'number',
 		default: 1
 	},
+	loopType: {
+		type: 'string',
+		default: 'none'
+	},
 	loop: {
 		type: 'boolean',
 		default: false
+	},
+	loopCount: {
+		type: 'number',
+		default: 0
 	},
 	renderer: {
 		type: 'string',
@@ -29,7 +37,7 @@ const attributes = {
 		type: 'boolean',
 		default: false
 	},
-	background: {
+	backgroundColor: {
 		type: 'string',
 		default: '#ffffff'
 	},

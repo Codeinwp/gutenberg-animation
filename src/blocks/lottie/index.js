@@ -1,3 +1,4 @@
+
 /**
  * WordPress dependencies
  */
@@ -13,10 +14,10 @@ import edit from './edit.js';
 import save from './save.js';
 import attributes from './attributes.js';
 
-registerBlockType( 'themeisle-blocks/lottie', {
-	title: __( 'Lottie - Experimental' ),
+registerBlockType( 'themeisle-blocks/lottie-animation', {
+	title: __( 'Lottie Animations - Experimental' ),
 	description: __( 'Embed Lottie content' ),
-	category: 'themeisle-blocks',
+	category: 'embed',
 	keywords: [
 		'embed',
 		'lottie',

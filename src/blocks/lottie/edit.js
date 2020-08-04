@@ -1,8 +1,10 @@
+
 /**
  * External dependencies
  */
 import { Player, Controls } from '@lottiefiles/react-lottie-player';
 import classnames from 'classnames';
+import { pencil, Icon } from '@wordpress/icons';
 
 /**
  * Wordpress dependencies
@@ -13,7 +15,10 @@ const {
 	TextControl,
 	Placeholder,
 	Button,
-	Notice
+	Notice,
+	ToolbarGroup,
+	ToolbarButton,
+	ExternalLink
 } = wp.components;
 
 const {
@@ -23,28 +28,66 @@ const {
 	useState
 } = wp.element;
 
-const { uniqueId } = lodash;
+import { v4 as uuidv4 } from 'uuid';
+
+const { BlockControls } = wp.blockEditor;
 
 /**
  * Internal dependencies
  */
 import Inspector from './inspector.js';
+import { LOOP_OPTIONS } from './constants.js';
 
-const LottiePlayer = props => {
-
-	const { attributes, setAttributes } = props;
-	const playerRef = useRef( null );
-	const [ src, setSrc ] = useState( attributes.src );
-	const [ error, setError ] = useState( false );
+const LottiePlayer = ({ attributes, setAttributes, isSelected }) => {
 
 	useEffect( () => {
-		setAttributes({ id: uniqueId( 'lottie_anim_' )});
+		setAttributes({ id: uuidv4()}); // TODO: change it to uuid
 	}, []);
+
+	const playerRef = useRef( null );
+	const [ src, setSrc ] = useState( attributes.src );
+	const [ showEdit, setShowEdit ] = useState( ! attributes.src );
+	const [ error, setError ] = useState( false );
+
+	const getLoop = () => {
+		switch ( attributes.loopType ) {
+		case LOOP_OPTIONS.NONE:
+			return false;
+		case LOOP_OPTIONS.CONTINUOUS:
+			return true;
+		case LOOP_OPTIONS.CONTINUOUS:
+			return attributes.loopCount;
+		}
+	};
+
+	const setLoopToPlayer = ()  => {
+
+		if ( ! playerRef.current.state.instance ) {
+			return;
+		}
+
+		const { instance } = playerRef.current.state;
+
+		switch ( attributes.loopType ) {
+		case LOOP_OPTIONS.NONE:
+			instance.loop = false;
+			break;
+		case LOOP_OPTIONS.CONTINUOUS:
+			instance.loop = true;
+			break;
+		case LOOP_OPTIONS.COUNTED:
+			instance.loop = attributes.loopCount - 1;
+			break;
+		}
+
+		playerRef.current.setState({ instance: instance });
+	};
 
 	useEffect( () => {
 		if ( playerRef.current ) {
 			playerRef.current.setPlayerDirection( attributes.direction );
 			playerRef.current.setPlayerSpeed( attributes.speed );
+			setLoopToPlayer( playerRef );
 		}
 
 		if ( playerRef.current ) {
@@ -58,62 +101,81 @@ const LottiePlayer = props => {
 		}
 	}, [ attributes ]);
 
+	useEffect( () => {
+		if ( playerRef.current ) {
+			if ( ! isSelected ) {
+				playerRef.current.stop();
+			}
+		}
+	}, [ isSelected ]);
+
+	const validateURL = url => {
+		const expression = /(http(s)?:\/\/.){1}(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)([-a-zA-Z0-9_]\.json)/;
+		const regex = new RegExp( expression );
+
+		return url.match( regex );
+	};
+
 	const setSrcToAttributes = ( ) => {
-		setAttributes({ src });
+
+		if ( validateURL( src ) ) {
+			setAttributes({ src });
+			setShowEdit( false );
+		} else {
+			setError( true );
+		}
 	};
 
 	const eventHandeler = event => {
 
 		if ( 'load' === event ) {
+
 			playerRef.current.setPlayerDirection( attributes.direction );
 			playerRef.current.setPlayerSpeed( attributes.speed );
+			setLoopToPlayer();
 			setError( false );
 		}
 	};
 
-	const play = () => {
-		if ( playerRef.current ) {
-			playerRef.current.play();
-		}
-	};
-
-	const pause = () => {
-		if ( playerRef.current ) {
-			playerRef.current.pause();
-		}
-	};
-
-	const stop = () => {
-		if ( playerRef.current ) {
-			playerRef.current.stop();
-		}
-	};
 
 	const renderPlayer = () => {
 
-		if ( ! attributes.src ) {
+		if ( ! attributes.src || showEdit ) {
 			return (
 				<Placeholder
 					label={ 'Lottie Animation URL' }
-					className="wp-block-embed"
+					className="wp-block-themeisle-block-embed"
 					instructions={ __(
 						'Paste a link to the content you want to display on your site.'
 					) }
 				>
-					<TextControl
-						className={ classnames( 'wp-block-themeisle-block-src', { 'error': error })}
-						help={ __( 'Ex: https://assets1.lottiefiles.com/datafiles/jEgAWaDrrm6qdJx/data.json' ) }
-						type='text'
-						value={ src }
-						onChange={ setSrc }
-					/>
+					<div className="wp-block-themeisle-block-embed-form">
+						<TextControl
+							className={ classnames( 'wp-block-themeisle-block-src', 'components-placeholder__input', { 'error': error })}
+							placeholder={ __( 'The URl must return a valid Lottie file. ' )}
+							help={ __( 'Ex: https://assets1.lottiefiles.com/datafiles/jEgAWaDrrm6qdJx/data.json' ) }
+							type='url'
+							value={ src }
+							onChange={ setSrc }
+						/>
 
-					<Button
-						isPrimary
-						onClick={ setSrcToAttributes }
-					>
-						Add Animation
-					</Button>
+						<Button
+							isPrimary
+							onClick={ setSrcToAttributes }
+						>
+							{ __( 'Add Animation' ) }
+						</Button>
+					</div>
+					<div >
+						<ExternalLink
+							href={ __(
+								'https://lottiefiles.com/what-is-lottie'
+							) }
+						>
+							{ __( 'Learn more about Lottie' ) }
+						</ExternalLink>
+					</div>
+
 				</Placeholder>
 			);
 		}
@@ -123,16 +185,18 @@ const LottiePlayer = props => {
 				ref= { playerRef }
 				src={ attributes.src }
 				style={{ height: `${ attributes.height }px`, width: `${ attributes.width }px` }}
-				background={ attributes.background }
-				loop={ attributes.loop }
+				background={ attributes.backgroundColor }
 				hover={ attributes.hover }
+				loop={ getLoop() }
 				direction={ attributes.direction }
 				controls={ attributes.controls }
 				autoplay={ attributes.autoplay }
 				renderer={ attributes.renderer }
 				onEvent={ eventHandeler }
 			>
-				<Controls visible={ true } buttons={[ 'play', 'frame', 'debug' ]} />
+				{ isSelected && (
+					<Controls visible={ true } buttons={[ 'play', 'stop', 'frame', 'debug' ]} />
+				)}
 			</Player>
 		);
 	};
@@ -143,10 +207,22 @@ const LottiePlayer = props => {
 				attributes={ attributes }
 				setAttributes={ setAttributes }
 				setSrc= { setSrc }
-				actions={{ play, pause, stop }}
 				playerRef={ playerRef }
 				error={ error }
 			/>
+
+			<BlockControls>
+				<ToolbarGroup>
+					{ ! showEdit && (
+						<ToolbarButton
+							label={ __( 'Edit URL' ) }
+							icon={ <Icon icon={ pencil } /> }
+							onClick={ setShowEdit }
+						/>
+					)}
+				</ToolbarGroup>
+			</BlockControls>
+
 			{ error && (
 				<Notice
 					isDismissible
