@@ -8,6 +8,11 @@ module.exports = {
 		build: './src/index.js',
 		animate: './src/frontend.js'
 	},
+	externals: {
+		'react': 'React',
+		'react-dom': 'ReactDOM',
+		'lodash': 'lodash'
+	},
 	output: {
 		path: __dirname,
 		filename: './build/[name].js',
@@ -68,6 +73,10 @@ module.exports = {
 	plugins: [
 		new webpack.DefinePlugin({
 			'process.env.NODE_ENV': JSON.stringify( NODE_ENV )
+		}),
+		new MiniCssExtractPlugin({
+			filename: 'style.css',
+			chunkFilename: 'editor.css'
 		})
 	]
 };

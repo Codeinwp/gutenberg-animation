@@ -56,7 +56,7 @@ const LottiePlayer = ({ attributes, setAttributes, isSelected }) => {
 		case LOOP_OPTIONS.CONTINUOUS:
 			return true;
 		case LOOP_OPTIONS.CONTINUOUS:
-			return attributes.loopCount;
+			return attributes.loopCount - 1;
 		}
 	};
 
@@ -67,19 +67,7 @@ const LottiePlayer = ({ attributes, setAttributes, isSelected }) => {
 		}
 
 		const { instance } = playerRef.current.state;
-
-		switch ( attributes.loopType ) {
-		case LOOP_OPTIONS.NONE:
-			instance.loop = false;
-			break;
-		case LOOP_OPTIONS.CONTINUOUS:
-			instance.loop = true;
-			break;
-		case LOOP_OPTIONS.COUNTED:
-			instance.loop = attributes.loopCount - 1;
-			break;
-		}
-
+		instance.loop = getLoop();
 		playerRef.current.setState({ instance: instance });
 	};
 
@@ -110,7 +98,7 @@ const LottiePlayer = ({ attributes, setAttributes, isSelected }) => {
 	}, [ isSelected ]);
 
 	const validateURL = url => {
-		const expression = /(http(s)?:\/\/.){1}(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)([-a-zA-Z0-9_]\.json)/;
+		const expression = /(http(s)?:\/\/.){1}(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/;
 		const regex = new RegExp( expression );
 
 		return url.match( regex );
@@ -134,6 +122,10 @@ const LottiePlayer = ({ attributes, setAttributes, isSelected }) => {
 			playerRef.current.setPlayerSpeed( attributes.speed );
 			setLoopToPlayer();
 			setError( false );
+		}
+
+		if ( 'error' === event ) {
+			setError( true );
 		}
 	};
 

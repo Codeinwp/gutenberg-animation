@@ -1,5 +1,4 @@
 const { Fragment } = wp.element;
-import  '@lottiefiles/lottie-player';
 
 import { playerProps } from './adaptor.js';
 
