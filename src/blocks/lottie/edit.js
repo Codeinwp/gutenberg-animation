@@ -30,7 +30,11 @@ const {
 
 import { v4 as uuidv4 } from 'uuid';
 
-const { BlockControls } = wp.blockEditor;
+const {
+	MediaUpload,
+	MediaUploadCheck,
+	BlockControls
+} = wp.blockEditor;
 
 /**
  * Internal dependencies
@@ -46,6 +50,7 @@ const LottiePlayer = ({ attributes, setAttributes, isSelected }) => {
 
 	const playerRef = useRef( null );
 	const [ src, setSrc ] = useState( attributes.src );
+	const [ anim, setAnim ] = useState({ id: null });
 	const [ showEdit, setShowEdit ] = useState( ! attributes.src );
 	const [ error, setError ] = useState( false );
 
@@ -129,6 +134,14 @@ const LottiePlayer = ({ attributes, setAttributes, isSelected }) => {
 		}
 	};
 
+	const selectAnim = anim => {
+		console.log( anim );
+		setAnim( anim );
+		setSrc( '' );
+		setAttributes({ src: anim.url });
+		setShowEdit( false );
+	};
+
 
 	const renderPlayer = () => {
 
@@ -158,6 +171,22 @@ const LottiePlayer = ({ attributes, setAttributes, isSelected }) => {
 							{ __( 'Add Animation' ) }
 						</Button>
 					</div>
+					<MediaUploadCheck>
+						<MediaUpload
+							onSelect={ selectAnim }
+							allowedTypes={ [ 'application/json' ] }
+							value={ anim.id }
+							render={ ({ open }) => (
+								<Button
+									className="animation-insert"
+									isPrimary
+									onClick={ open }
+								>
+									Media Library
+								</Button>
+							) }
+						/>
+					</MediaUploadCheck>
 					<div >
 						<ExternalLink
 							href={ __(
@@ -167,7 +196,6 @@ const LottiePlayer = ({ attributes, setAttributes, isSelected }) => {
 							{ __( 'Learn more about Lottie' ) }
 						</ExternalLink>
 					</div>
-
 				</Placeholder>
 			);
 		}
