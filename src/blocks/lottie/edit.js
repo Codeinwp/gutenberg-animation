@@ -18,7 +18,8 @@ const {
 	Notice,
 	ToolbarGroup,
 	ToolbarButton,
-	ExternalLink
+	ExternalLink,
+	FormFileUpload
 } = wp.components;
 
 const {
@@ -135,10 +136,16 @@ const LottiePlayer = ({ attributes, setAttributes, isSelected }) => {
 	};
 
 	const selectAnim = anim => {
-		console.log( anim );
 		setAnim( anim );
 		setSrc( '' );
 		setAttributes({ src: anim.url });
+		setShowEdit( false );
+	};
+
+	const uploadFromFiles = async event => {
+		const src = await event.target.files[0].text();
+		setSrc( '' );
+		setAttributes({ src: src });
 		setShowEdit( false );
 	};
 
@@ -171,22 +178,30 @@ const LottiePlayer = ({ attributes, setAttributes, isSelected }) => {
 							{ __( 'Add Animation' ) }
 						</Button>
 					</div>
-					<MediaUploadCheck>
-						<MediaUpload
-							onSelect={ selectAnim }
-							allowedTypes={ [ 'application/json' ] }
-							value={ anim.id }
-							render={ ({ open }) => (
-								<Button
-									className="animation-insert"
-									isPrimary
-									onClick={ open }
-								>
+					<div className="wp-block-themeisle-buttons-group">
+						<MediaUploadCheck>
+							<MediaUpload
+								onSelect={ selectAnim }
+								allowedTypes={ [ 'application/json' ] }
+								value={ anim.id }
+								render={ ({ open }) => (
+									<Button
+										className="animation-insert"
+										isPrimary
+										onClick={ open }
+									>
 									Media Library
-								</Button>
-							) }
-						/>
-					</MediaUploadCheck>
+									</Button>
+								) }
+							/>
+						</MediaUploadCheck>
+						<FormFileUpload
+							isLarge
+							onChange={ uploadFromFiles }
+						>
+							{__( 'Insert from computer' )}
+						</FormFileUpload>
+					</div>
 					<div >
 						<ExternalLink
 							href={ __(

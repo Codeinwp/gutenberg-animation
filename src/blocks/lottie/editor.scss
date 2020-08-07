@@ -13,10 +13,16 @@
             }
         }
 
-        .animation-insert {
-            width: max-content;
-            align-self: center;
+
+        .wp-block-themeisle-buttons-group {
+            display: flex;
+            flex-direction: row;
+            button {
+                margin-left: 10px;
+                width: max-content;
+            }
         }
+        
     }
 }
 

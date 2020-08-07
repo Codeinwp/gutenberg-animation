@@ -52,6 +52,10 @@ const attributes = {
 	width: {
 		type: 'number',
 		default: 400
+	},
+	mode: {
+		type: 'string',
+		default: 'normal'
 	}
 };
 
