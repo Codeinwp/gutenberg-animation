@@ -20,7 +20,6 @@ const { useState } = wp.element;
 /**
  * Internal dependencies
  */
-import ColorBaseControl from './../../components/color-base-control/index.js';
 import { LOOP_OPTIONS } from './constants.js';
 
 const Inspector = ({
