@@ -44,38 +44,9 @@ import Inspector from './inspector.js';
 import { LOOP_OPTIONS } from './constants.js';
 
 const LottiePlayer = ({ attributes, setAttributes, isSelected }) => {
-
 	useEffect( () => {
-		setAttributes({ id: uuidv4()}); // TODO: change it to uuid
+		setAttributes({ id: uuidv4()});
 	}, []);
-
-	const playerRef = useRef( null );
-	const [ src, setSrc ] = useState( attributes.src );
-	const [ anim, setAnim ] = useState({ id: null });
-	const [ showEdit, setShowEdit ] = useState( ! attributes.src );
-	const [ error, setError ] = useState( false );
-
-	const getLoop = () => {
-		switch ( attributes.loopType ) {
-		case LOOP_OPTIONS.NONE:
-			return false;
-		case LOOP_OPTIONS.CONTINUOUS:
-			return true;
-		case LOOP_OPTIONS.CONTINUOUS:
-			return attributes.loopCount - 1;
-		}
-	};
-
-	const setLoopToPlayer = ()  => {
-
-		if ( ! playerRef.current.state.instance ) {
-			return;
-		}
-
-		const { instance } = playerRef.current.state;
-		instance.loop = getLoop();
-		playerRef.current.setState({ instance: instance });
-	};
 
 	useEffect( () => {
 		if ( playerRef.current ) {
@@ -103,6 +74,33 @@ const LottiePlayer = ({ attributes, setAttributes, isSelected }) => {
 		}
 	}, [ isSelected ]);
 
+	const playerRef = useRef( null );
+	const [ src, setSrc ] = useState( attributes.src );
+	const [ anim, setAnim ] = useState({ id: null });
+	const [ showEdit, setShowEdit ] = useState( ! attributes.src );
+	const [ error, setError ] = useState( false );
+
+	const getLoop = () => {
+		switch ( attributes.loopType ) {
+		case LOOP_OPTIONS.NONE:
+			return false;
+		case LOOP_OPTIONS.CONTINUOUS:
+			return true;
+		case LOOP_OPTIONS.CONTINUOUS:
+			return attributes.loopCount - 1;
+		}
+	};
+
+	const setLoopToPlayer = ()  => {
+		if ( ! playerRef.current.state.instance ) {
+			return;
+		}
+
+		const { instance } = playerRef.current.state;
+		instance.loop = getLoop();
+		playerRef.current.setState({ instance: instance });
+	};
+
 	const validateURL = url => {
 		const expression = /(http(s)?:\/\/.){1}(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/;
 		const regex = new RegExp( expression );
@@ -111,7 +109,6 @@ const LottiePlayer = ({ attributes, setAttributes, isSelected }) => {
 	};
 
 	const setSrcToAttributes = ( ) => {
-
 		if ( validateURL( src ) ) {
 			setAttributes({ src });
 			setShowEdit( false );
@@ -121,9 +118,7 @@ const LottiePlayer = ({ attributes, setAttributes, isSelected }) => {
 	};
 
 	const eventHandeler = event => {
-
 		if ( 'load' === event ) {
-
 			playerRef.current.setPlayerDirection( attributes.direction );
 			playerRef.current.setPlayerSpeed( attributes.speed );
 			setLoopToPlayer();
@@ -149,9 +144,7 @@ const LottiePlayer = ({ attributes, setAttributes, isSelected }) => {
 		setShowEdit( false );
 	};
 
-
 	const renderPlayer = () => {
-
 		if ( ! attributes.src || showEdit ) {
 			return (
 				<Placeholder
@@ -238,13 +231,15 @@ const LottiePlayer = ({ attributes, setAttributes, isSelected }) => {
 
 	return (
 		<Fragment>
-			<Inspector
-				attributes={ attributes }
-				setAttributes={ setAttributes }
-				setSrc= { setSrc }
-				playerRef={ playerRef }
-				error={ error }
-			/>
+			{ attributes.src && (
+				<Inspector
+					attributes={ attributes }
+					setAttributes={ setAttributes }
+					setSrc= { setSrc }
+					playerRef={ playerRef }
+					error={ error }
+				/>
+			) }
 
 			<BlockControls>
 				<ToolbarGroup>

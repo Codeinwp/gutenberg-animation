@@ -9,7 +9,7 @@ const { PanelBody } = wp.components;
 
 const { createHigherOrderComponent } = wp.compose;
 
-const { InspectorControls } = wp.blockEditor || wp.editor;
+const { InspectorControls } = wp.blockEditor;
 
 const { Fragment } = wp.element;
 
@@ -18,6 +18,7 @@ const { addFilter } = wp.hooks;
 /**
  * Internal dependencies.
  */
+import './editor.scss';
 import AnimationControls from './editor.js';
 import './blocks/lottie/index.js';
 
@@ -27,17 +28,16 @@ const withInspectorControls = createHigherOrderComponent( ( BlockEdit ) => {
 		if ( hasCustomClassName && props.isSelected ) {
 			return (
 				<Fragment>
-					<BlockEdit {...props} />
+					<BlockEdit { ...props } />
 					<InspectorControls>
 						<PanelBody
 							title={__( 'Animations' )}
-							initialOpen={false}
+							initialOpen={ false }
 						>
 							<AnimationControls
-								clientId={props.clientId}
-								setAttributes={props.setAttributes}
-								attributes={props.attributes}
-
+								clientId={ props.clientId }
+								setAttributes={ props.setAttributes }
+								attributes={ props.attributes }
 							/>
 						</PanelBody>
 					</InspectorControls>
@@ -45,7 +45,7 @@ const withInspectorControls = createHigherOrderComponent( ( BlockEdit ) => {
 			);
 		}
 
-		return <BlockEdit {...props} />;
+		return <BlockEdit { ...props } />;
 	};
 }, 'withInspectorControl' );
 

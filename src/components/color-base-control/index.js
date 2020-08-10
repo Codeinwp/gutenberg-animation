@@ -8,11 +8,6 @@ import classnames from 'classnames';
  */
 const { ColorIndicator } = wp.components;
 
-/**
-* Internal dependencies
-*/
-import './editor.scss';
-
 function ColorBaseControl({
 	label,
 	colorValue,

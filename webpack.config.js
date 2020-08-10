@@ -1,7 +1,9 @@
 const webpack = require( 'webpack' );
 const NODE_ENV = process.env.NODE_ENV || 'development';
 const path = require( 'path' );
-const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
+const ExtractCssChunks = require( 'extract-css-chunks-webpack-plugin' );
+const ExtraneousFileCleanupPlugin = require( 'webpack-extraneous-file-cleanup-plugin' );
+const { CleanWebpackPlugin } = require( 'clean-webpack-plugin' );
 
 module.exports = {
 	mode: NODE_ENV,
@@ -42,9 +44,9 @@ module.exports = {
 				exclude: /node_modules/
 			},
 			{
-				test: /\.(css|scss)$/,
+				test: /\.scss$/,
 				use: [ {
-					loader: MiniCssExtractPlugin.loader
+					loader: ExtractCssChunks.loader
 				},
 				'css-loader',
 				{
@@ -75,9 +77,9 @@ module.exports = {
 		new webpack.DefinePlugin({
 			'process.env.NODE_ENV': JSON.stringify( NODE_ENV )
 		}),
-		new MiniCssExtractPlugin({
-			filename: 'style.css',
-			chunkFilename: 'editor.css'
-		})
+		new ExtractCssChunks({
+			filename: 'editor.css'
+		}),
+		new CleanWebpackPlugin()
 	]
 };

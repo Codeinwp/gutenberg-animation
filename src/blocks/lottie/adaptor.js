@@ -1,7 +1,6 @@
 const { omit } = lodash;
 import { LOOP_OPTIONS } from './constants.js';
 
-
 export const playerProps = props => {
 	const { loopType, loopCount, backgroundColor, height, width } = props;
 

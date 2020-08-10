@@ -93,15 +93,8 @@ class GutenbergAnimation {
 		);
 
 		wp_enqueue_style(
-			'themeisle-gutenberg-animation-style',
-			plugin_dir_url( $this->get_dir() ) . $this->slug . '/assets/css/style.css',
-			array(),
-			$version
-		);
-
-		wp_enqueue_style(
 			'themeisle-gutenberg-style',
-			plugin_dir_url( $this->get_dir() ) . $this->slug . '/build/style.css',
+			plugin_dir_url( $this->get_dir() ) . $this->slug . '/assets/css/style.css',
 			array(),
 			$version
 		);
