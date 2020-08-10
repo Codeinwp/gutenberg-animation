@@ -2,7 +2,6 @@ const webpack = require( 'webpack' );
 const NODE_ENV = process.env.NODE_ENV || 'development';
 const path = require( 'path' );
 const ExtractCssChunks = require( 'extract-css-chunks-webpack-plugin' );
-const ExtraneousFileCleanupPlugin = require( 'webpack-extraneous-file-cleanup-plugin' );
 const { CleanWebpackPlugin } = require( 'clean-webpack-plugin' );
 
 module.exports = {
