@@ -1,5 +1,6 @@
 const webpack = require( 'webpack' );
 const NODE_ENV = process.env.NODE_ENV || 'development';
+const path = require( 'path' );
 const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
 
 module.exports = {
@@ -14,9 +15,9 @@ module.exports = {
 		'lodash': 'lodash'
 	},
 	output: {
-		path: __dirname,
-		filename: './build/[name].js',
-		chunkFilename: './build/[name].js'
+		path: path.resolve( __dirname, 'build' ),
+		filename: '[name].js',
+		chunkFilename: '[name].js'
 	},
 	module: {
 		rules: [

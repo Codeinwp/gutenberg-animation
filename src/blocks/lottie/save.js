@@ -6,7 +6,7 @@ const Save = ({ attributes }) => {
 
 	return (
 		<Fragment>
-			<script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+			{/* <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script> */}
 			<lottie-player
 				{...playerProps( attributes )}
 			></lottie-player>
