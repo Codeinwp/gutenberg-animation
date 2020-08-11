@@ -3,10 +3,7 @@
  */
 const { __ } = wp.i18n;
 
-const {
-	__experimentalColorGradientControl: ColorGradientControl,
-	InspectorControls
-} = wp.blockEditor;
+const { InspectorControls } = wp.blockEditor;
 
 const {
 	PanelBody,
@@ -15,8 +12,6 @@ const {
 	ToggleControl
 } = wp.components;
 
-const { useState } = wp.element;
-
 /**
  * Internal dependencies
  */
@@ -24,10 +19,8 @@ import { LOOP_OPTIONS } from './constants.js';
 
 const Inspector = ({
 	attributes,
-	setAttributes,
-	playerRef
+	setAttributes
 }) => {
-
 	const setAutoplay = value => {
 		setAttributes({ autoplay: value });
 	};
@@ -53,12 +46,6 @@ const Inspector = ({
 
 	const setControls = value => {
 		setAttributes({ controls: value });
-	};
-
-	const setBackgroundColor = value => {
-		playerRef.current.setState({ background: value });
-
-		setAttributes({ backgroundColor: value });
 	};
 
 	const setHover = value => {
@@ -135,12 +122,6 @@ const Inspector = ({
 					onChange={ setWidth }
 					min={ 100 }
 					max={ 800 }
-				/>
-
-				<ColorGradientControl
-					label={ 'Background Color' }
-					colorValue={ attributes.backgroundColor }
-					onColorChange={ setBackgroundColor }
 				/>
 
 				<ToggleControl

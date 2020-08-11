@@ -2,8 +2,15 @@
 /**
  * External dependencies
  */
-import { Player, Controls } from '@lottiefiles/react-lottie-player';
+import { v4 as uuidv4 } from 'uuid';
+
+import {
+	Controls,
+	Player
+} from '@lottiefiles/react-lottie-player';
+
 import classnames from 'classnames';
+
 import { pencil, Icon } from '@wordpress/icons';
 
 /**
@@ -28,8 +35,6 @@ const {
 	useRef,
 	useState
 } = wp.element;
-
-import { v4 as uuidv4 } from 'uuid';
 
 const {
 	MediaUpload,
@@ -213,7 +218,6 @@ const LottiePlayer = ({ attributes, setAttributes, isSelected }) => {
 				ref= { playerRef }
 				src={ attributes.src }
 				style={{ height: `${ attributes.height }px`, width: `${ attributes.width }px` }}
-				background={ attributes.backgroundColor }
 				hover={ attributes.hover }
 				loop={ getLoop() }
 				direction={ attributes.direction }
@@ -236,7 +240,6 @@ const LottiePlayer = ({ attributes, setAttributes, isSelected }) => {
 					attributes={ attributes }
 					setAttributes={ setAttributes }
 					setSrc= { setSrc }
-					playerRef={ playerRef }
 					error={ error }
 				/>
 			) }

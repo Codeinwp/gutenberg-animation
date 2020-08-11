@@ -37,10 +37,6 @@ const attributes = {
 		type: 'boolean',
 		default: false
 	},
-	backgroundColor: {
-		type: 'string',
-		default: '#ffffff'
-	},
 	hover: {
 		type: 'boolean',
 		default: false
