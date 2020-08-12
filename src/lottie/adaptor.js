@@ -1,4 +1,11 @@
+/**
+ * WordPress dependencies
+ */
 const { omit } = lodash;
+
+/**
+ * Internal dependencies
+ */
 import { LOOP_OPTIONS } from './constants.js';
 
 export const playerProps = props => {
@@ -15,7 +22,6 @@ export const playerProps = props => {
 		}
 	};
 
-	// props that doesn't need aditional modifications
 	const pureProps = omit( props, [ 'loop', 'loopType', 'loopCount', 'height', 'width' ]);
 
 	return {

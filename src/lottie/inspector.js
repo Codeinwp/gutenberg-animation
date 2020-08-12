@@ -134,7 +134,7 @@ const Inspector = ({
 				<ToggleControl
 					label={ __( 'Hover' ) }
 					help={ __( 'Whether to play on mouse hover.' ) }
-					checked={ attributes.hover}
+					checked={ attributes.hover }
 					onChange={ setHover }
 				/>
 
