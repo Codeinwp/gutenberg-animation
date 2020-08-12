@@ -1,8 +1,6 @@
 /**
  * External dependencies
  */
-import { v4 as uuidv4 } from 'uuid';
-
 import {
 	Controls,
 	Player
@@ -47,9 +45,11 @@ const {
 import Inspector from './inspector.js';
 import { LOOP_OPTIONS } from './constants.js';
 
+const IDs = [];
+
 const LottiePlayer = ({ attributes, setAttributes, isSelected }) => {
 	useEffect( () => {
-		setAttributes({ id: uuidv4()});
+		initBlock();
 	}, []);
 
 	useEffect( () => {
@@ -83,6 +83,20 @@ const LottiePlayer = ({ attributes, setAttributes, isSelected }) => {
 	const [ anim, setAnim ] = useState({ id: null });
 	const [ showEdit, setShowEdit ] = useState( ! attributes.src );
 	const [ error, setError ] = useState( false );
+
+	const initBlock = () => {
+		if ( attributes.id === undefined ) {
+			const instanceId = `wp-block-themeisle-blocks-lottie-${ clientId.substr( 0, 8 ) }`;
+			setAttributes({ id: instanceId });
+			IDs.push( instanceId );
+		} else if ( IDs.includes( attributes.id ) ) {
+			const instanceId = `wp-block-themeisle-blocks-lottie-${ clientId.substr( 0, 8 ) }`;
+			setAttributes({ id: instanceId });
+			IDs.push( instanceId );
+		} else {
+			IDs.push( attributes.id );
+		}
+	};
 
 	const getLoop = () => {
 		switch ( attributes.loopType ) {

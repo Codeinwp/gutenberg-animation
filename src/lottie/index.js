@@ -1,4 +1,9 @@
 /**
+ * External dependencies
+ */
+import { video as icon } from '@wordpress/icons';
+
+/**
  * WordPress dependencies
  */
 const { __ } = wp.i18n;
@@ -13,9 +18,10 @@ import edit from './edit.js';
 import save from './save.js';
 import attributes from './attributes.js';
 
-registerBlockType( 'themeisle-blocks/lottie-animation', {
+registerBlockType( 'themeisle-blocks/lottie', {
 	title: __( 'Lottie' ),
 	description: __( 'Add Lottie animations to your WordPress.' ),
+	icon,
 	category: 'media',
 	keywords: [
 		'media',
