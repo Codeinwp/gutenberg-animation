@@ -6,38 +6,23 @@ import {
 	Player
 } from '@lottiefiles/react-lottie-player';
 
-import classnames from 'classnames';
-
-import { pencil, Icon } from '@wordpress/icons';
+import {
+	Icon,
+	video
+} from '@wordpress/icons';
 
 /**
  * Wordpress dependencies
  */
 const { __ } = wp.i18n;
 
-const {
-	TextControl,
-	Placeholder,
-	Button,
-	Notice,
-	ToolbarGroup,
-	ToolbarButton,
-	ExternalLink,
-	FormFileUpload
-} = wp.components;
+const { MediaPlaceholder } = wp.blockEditor;
 
 const {
 	Fragment,
 	useEffect,
-	useRef,
-	useState
+	useRef
 } = wp.element;
-
-const {
-	MediaUpload,
-	MediaUploadCheck,
-	BlockControls
-} = wp.blockEditor;
 
 /**
  * Internal dependencies
@@ -47,7 +32,12 @@ import { LOOP_OPTIONS } from './constants.js';
 
 const IDs = [];
 
-const LottiePlayer = ({ attributes, setAttributes, isSelected }) => {
+const LottiePlayer = ({
+	attributes,
+	setAttributes,
+	isSelected,
+	clientId
+}) => {
 	useEffect( () => {
 		initBlock();
 	}, []);
@@ -63,7 +53,7 @@ const LottiePlayer = ({ attributes, setAttributes, isSelected }) => {
 			const { playerState } = playerRef.current.state;
 			if ( playerState ) {
 				if ( 'error' === playerState ) {
-					setAttributes({ src: '' });
+					setAttributes({ src: undefined });
 					setError( true );
 				}
 			}
@@ -79,10 +69,6 @@ const LottiePlayer = ({ attributes, setAttributes, isSelected }) => {
 	}, [ isSelected ]);
 
 	const playerRef = useRef( null );
-	const [ src, setSrc ] = useState( attributes.src );
-	const [ anim, setAnim ] = useState({ id: null });
-	const [ showEdit, setShowEdit ] = useState( ! attributes.src );
-	const [ error, setError ] = useState( false );
 
 	const initBlock = () => {
 		if ( attributes.id === undefined ) {
@@ -96,6 +82,10 @@ const LottiePlayer = ({ attributes, setAttributes, isSelected }) => {
 		} else {
 			IDs.push( attributes.id );
 		}
+	};
+
+	const onChangeSrc = value => {
+		setAttributes({ src: value });
 	};
 
 	const getLoop = () => {
@@ -119,114 +109,42 @@ const LottiePlayer = ({ attributes, setAttributes, isSelected }) => {
 		playerRef.current.setState({ instance: instance });
 	};
 
-	const validateURL = url => {
-		const expression = /(http(s)?:\/\/.){1}(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/;
-		const regex = new RegExp( expression );
-
-		return url.match( regex );
-	};
-
-	const setSrcToAttributes = ( ) => {
-		if ( validateURL( src ) ) {
-			setAttributes({ src });
-			setShowEdit( false );
-		} else {
-			setError( true );
-		}
-	};
-
 	const eventHandeler = event => {
 		if ( 'load' === event ) {
 			playerRef.current.setPlayerDirection( attributes.direction );
 			playerRef.current.setPlayerSpeed( attributes.speed );
 			setLoopToPlayer();
-			setError( false );
 		}
 
 		if ( 'error' === event ) {
-			setError( true );
+			console.log( 'WiP: Error' );
 		}
 	};
 
-	const selectAnim = anim => {
-		setAnim( anim );
-		setSrc( '' );
-		setAttributes({ src: anim.url });
-		setShowEdit( false );
-	};
-
-	const uploadFromFiles = async event => {
-		const src = await event.target.files[0].text();
-		setSrc( '' );
-		setAttributes({ src: src });
-		setShowEdit( false );
-	};
-
-	const renderPlayer = () => {
-		if ( ! attributes.src || showEdit ) {
-			return (
-				<Placeholder
-					label={ 'Lottie Animation URL' }
-					className="wp-block-themeisle-block-embed"
-					instructions={ __(
-						'Paste a link to the content you want to display on your site.'
-					) }
-				>
-					<div className="wp-block-themeisle-block-embed-form">
-						<TextControl
-							className={ classnames( 'wp-block-themeisle-block-src', 'components-placeholder__input', { 'error': error })}
-							placeholder={ __( 'The URl must return a valid Lottie file. ' )}
-							help={ __( 'Ex: https://assets1.lottiefiles.com/datafiles/jEgAWaDrrm6qdJx/data.json' ) }
-							type='url'
-							value={ src }
-							onChange={ setSrc }
-						/>
-
-						<Button
-							isPrimary
-							onClick={ setSrcToAttributes }
-						>
-							{ __( 'Add Animation' ) }
-						</Button>
-					</div>
-					<div className="wp-block-themeisle-buttons-group">
-						<MediaUploadCheck>
-							<MediaUpload
-								onSelect={ selectAnim }
-								allowedTypes={ [ 'application/json' ] }
-								value={ anim.id }
-								render={ ({ open }) => (
-									<Button
-										className="animation-insert"
-										isPrimary
-										onClick={ open }
-									>
-									Media Library
-									</Button>
-								) }
-							/>
-						</MediaUploadCheck>
-						<FormFileUpload
-							isLarge
-							onChange={ uploadFromFiles }
-						>
-							{__( 'Insert from computer' )}
-						</FormFileUpload>
-					</div>
-					<div >
-						<ExternalLink
-							href={ __(
-								'https://lottiefiles.com/what-is-lottie'
-							) }
-						>
-							{ __( 'Learn more about Lottie' ) }
-						</ExternalLink>
-					</div>
-				</Placeholder>
-			);
-		}
-
+	if ( ! attributes.src ) {
 		return (
+			<MediaPlaceholder
+				labels={ {
+					title: __( 'Lottie' ),
+					instructions: __( 'Add Lottie animations and files to your website.' )
+				} }
+				icon={ <Icon icon={ video } />}
+				accept={ [ 'application/json' ] }
+				allowedTypes={ [ 'application/json' ] }
+				value={ { src: attributes.src } }
+				onSelectURL={ onChangeSrc }
+				onSelect={ ({ id, url }) => console.log( id, url ) }
+			/>
+		);
+	}
+
+	return (
+		<Fragment>
+			<Inspector
+				attributes={ attributes }
+				setAttributes={ setAttributes }
+			/>
+
 			<Player
 				ref= { playerRef }
 				src={ attributes.src }
@@ -243,43 +161,6 @@ const LottiePlayer = ({ attributes, setAttributes, isSelected }) => {
 					<Controls visible={ true } buttons={[ 'play', 'stop', 'frame', 'debug' ]} />
 				)}
 			</Player>
-		);
-	};
-
-	return (
-		<Fragment>
-			{ attributes.src && (
-				<Inspector
-					attributes={ attributes }
-					setAttributes={ setAttributes }
-					setSrc= { setSrc }
-					error={ error }
-				/>
-			) }
-
-			<BlockControls>
-				<ToolbarGroup>
-					{ ! showEdit && (
-						<ToolbarButton
-							label={ __( 'Edit URL' ) }
-							icon={ <Icon icon={ pencil } /> }
-							onClick={ setShowEdit }
-						/>
-					)}
-				</ToolbarGroup>
-			</BlockControls>
-
-			{ error && (
-				<Notice
-					isDismissible
-					status="error"
-					onRemove={ () => setError( false )}
-				>
-					<p>Invalid URL</p>
-				</Notice>
-			)}
-			{ renderPlayer() }
-
 		</Fragment>
 	);
 };

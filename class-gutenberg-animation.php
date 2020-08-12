@@ -53,7 +53,7 @@ class GutenbergAnimation {
 		wp_enqueue_script(
 			'themeisle-gutenberg-animation',
 			plugin_dir_url( $this->get_dir() ) . $this->slug . '/build/build.js',
-			array( 'wp-i18n', 'wp-blocks', 'wp-components', 'wp-compose', 'wp-editor', 'wp-element', 'wp-hooks' ),
+			array( 'wp-i18n', 'wp-blocks', 'wp-block-editor', 'wp-components', 'wp-compose', 'wp-editor', 'wp-element', 'wp-hooks' ),
 			$version,
 			true
 		);
