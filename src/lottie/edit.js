@@ -94,7 +94,7 @@ const LottiePlayer = ({
 			return false;
 		case LOOP_OPTIONS.CONTINUOUS:
 			return true;
-		case LOOP_OPTIONS.CONTINUOUS:
+		case LOOP_OPTIONS.COUNTED:
 			return attributes.loopCount - 1;
 		}
 	};
