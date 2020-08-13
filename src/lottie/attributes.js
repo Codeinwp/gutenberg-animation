@@ -2,8 +2,8 @@ const attributes = {
 	id: {
 		type: 'string'
 	},
-	src: {
-		type: 'string'
+	file: {
+		type: 'object'
 	},
 	autoplay: {
 		type: 'boolean',

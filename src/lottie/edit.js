@@ -16,6 +16,11 @@ import {
  */
 const { __ } = wp.i18n;
 
+const {
+	isEmpty,
+	pick
+} = lodash;
+
 const { MediaPlaceholder } = wp.blockEditor;
 
 const {
@@ -53,8 +58,8 @@ const LottiePlayer = ({
 			const { playerState } = playerRef.current.state;
 			if ( playerState ) {
 				if ( 'error' === playerState ) {
-					setAttributes({ src: undefined });
-					setError( true );
+					setAttributes({ file: undefined });
+					console.log( 'WiP: Error' );
 				}
 			}
 		}
@@ -84,8 +89,14 @@ const LottiePlayer = ({
 		}
 	};
 
-	const onChangeSrc = value => {
-		setAttributes({ src: value });
+	const onChangeFile = value => {
+		const obj = pick( value, [ 'id', 'url' ]);
+
+		if ( isEmpty( obj ) ) {
+			obj.url = value;
+		}
+
+		setAttributes({ file: { ...obj } });
 	};
 
 	const getLoop = () => {
@@ -121,7 +132,7 @@ const LottiePlayer = ({
 		}
 	};
 
-	if ( ! attributes.src ) {
+	if ( isEmpty( attributes.file ) ) {
 		return (
 			<MediaPlaceholder
 				labels={ {
@@ -131,9 +142,9 @@ const LottiePlayer = ({
 				icon={ <Icon icon={ video } />}
 				accept={ [ 'application/json' ] }
 				allowedTypes={ [ 'application/json' ] }
-				value={ { src: attributes.src } }
-				onSelectURL={ onChangeSrc }
-				onSelect={ ({ id, url }) => console.log( id, url ) }
+				value={ { ...attributes.file } }
+				onSelectURL={ onChangeFile }
+				onSelect={ onChangeFile }
 			/>
 		);
 	}
@@ -147,8 +158,11 @@ const LottiePlayer = ({
 
 			<Player
 				ref= { playerRef }
-				src={ attributes.src }
-				style={{ height: `${ attributes.height }px`, width: `${ attributes.width }px` }}
+				src={ attributes.file.url }
+				style={ {
+					height: `${ attributes.height }px`,
+					width: `${ attributes.width }px`
+				} }
 				hover={ attributes.hover }
 				loop={ getLoop() }
 				direction={ attributes.direction }
@@ -157,9 +171,10 @@ const LottiePlayer = ({
 				renderer={ attributes.renderer }
 				onEvent={ eventHandeler }
 			>
-				{ isSelected && (
-					<Controls visible={ true } buttons={[ 'play', 'stop', 'frame', 'debug' ]} />
-				)}
+				<Controls
+					visible={ isSelected }
+					buttons={ [ 'play', 'stop' ] }
+				/>
 			</Player>
 		</Fragment>
 	);
