@@ -171,7 +171,6 @@ window.onload = () => {
 				element.classList.remove( speedClass );
 			}
 		}
-		
 		element.classList.add( 'animated' );
 
 		outAnimation.forEach( i => {
