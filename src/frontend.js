@@ -137,6 +137,7 @@ const speed = [
 window.onload = () => {
 	const elements = document.querySelectorAll( '.animated' );
 	for ( const element of elements ) {
+		element.classList.remove( 'animated' );
 		classes = element.classList;
 		element.animationClasses = [];
 
@@ -170,6 +171,8 @@ window.onload = () => {
 				element.classList.remove( speedClass );
 			}
 		}
+		
+		element.classList.add( 'animated' );
 
 		outAnimation.forEach( i => {
 			const isOut = element.className.includes( i );
