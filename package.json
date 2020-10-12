@@ -33,6 +33,6 @@
 		"grunt": "^1.3.0",
 		"grunt-version": "^2.0.0",
 		"webpack": "^4.44.1",
-		"webpack-cli": "^3.3.12"
+		"webpack-cli": "^4.0.0"
 	}
 }
