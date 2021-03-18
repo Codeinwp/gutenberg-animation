@@ -172,7 +172,7 @@ window.onload = () => {
 		}
 
 		outAnimation.forEach( i => {
-			const isOut = element.className.includes( i );
+			const isOut = element.classList.contains( i );
 
 			if ( isOut ) {
 				element.addEventListener( 'animationend', () => {
