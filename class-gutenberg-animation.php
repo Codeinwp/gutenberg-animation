@@ -71,6 +71,10 @@ class GutenbergAnimation {
 			return;
 		}
 
+		if ( is_singular() && strpos( get_the_content(), '<!-- wp:' ) === false ) {
+			return;
+		}
+
 		if ( THEMEISLE_GUTENBERG_ANIMATION_DEV ) {
 			$version = time();
 		} else {

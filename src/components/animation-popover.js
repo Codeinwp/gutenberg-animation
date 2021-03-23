@@ -28,7 +28,8 @@ function AnimationPopover({
 	animationsList,
 	updateAnimation,
 	currentAnimationLabel,
-	setCurrentAnimationLabel
+	setCurrentAnimationLabel,
+	mostUsedAnimations
 }) {
 	const instanceId = useInstanceId( AnimationPopover );
 
@@ -36,6 +37,9 @@ function AnimationPopover({
 	const [ animationFound, setAnimationFound ] = useState( false );
 
 	const getAnimations = ( animation, onToggle ) => {
+		if ( ! currentInput && 'None' === animation.label ) {
+			return;
+		};
 		let match = true;
 
 		if ( currentInput ) {
@@ -56,7 +60,7 @@ function AnimationPopover({
 				className={ currentAnimationLabel === animation.label ? 'is-selected' : '' }
 				onClick={ () => {
 					setCurrentAnimationLabel( animation.label );
-					updateAnimation( animation.value );
+					updateAnimation( animation.value, animation.label );
 					onToggle();
 				} }
 			>
@@ -98,6 +102,39 @@ function AnimationPopover({
 						/>
 
 						<div className="components-popover__items">
+							{
+								'' === currentInput ?
+									<MenuItem
+										className={'None' === currentAnimationLabel ? 'is-selected' : ''}
+										onClick={() => {
+											setCurrentAnimationLabel( 'None' );
+											updateAnimation( 'none', 'None' );
+											onToggle();
+										}}
+									>
+										{__( 'None' )}
+									</MenuItem> : ''
+							}
+							{
+								mostUsedAnimations && '' === currentInput ?
+									<div className="themeisle-animations-control__category">
+										{__( 'Most used animations' )}
+									</div> : ''
+							}
+							{
+								mostUsedAnimations && '' === currentInput ?
+									mostUsedAnimations.map( animation=>{
+										return <MenuItem
+											onClick={() => {
+												setCurrentAnimationLabel( animation );
+												updateAnimation( null, animation );
+												onToggle();
+											}}
+										>
+											{animation}
+										</MenuItem>;
+									}) : ''
+							}
 							{ animationsList.map( animation => {
 								return (
 									<Fragment>

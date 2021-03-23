@@ -54,14 +54,57 @@ function AnimationControls({
 		}
 	}, []);
 
+	useEffect ( ()=>{
+		let animationCounter = {};
+
+		if ( ! localStorage.animationCounter ) {
+			animationsList.map ( animation => {
+				animationCounter[animation.label] = 0;
+			});
+			localStorage.setItem( 'animationCounter', JSON.stringify( animationCounter ) );
+
+		} else {
+			let newAnimationCounter = JSON.parse( localStorage.getItem( 'animationCounter' ) );
+			getMostUsedAnimations( newAnimationCounter );
+		}
+	}, []);
+
 	const [ animation, setAnimation ] = useState( 'none' );
 	const [ delay, setDelay ] = useState( 'default' );
 	const [ speed, setSpeed ] = useState( 'default' );
 	const [ currentAnimationLabel, setCurrentAnimationLabel ] = useState( 'none' );
+	const [ mostUsedAnimations, setMostUsedAnimations ] = useState( null );
 
-	const updateAnimation = e => {
+	const getMostUsedAnimations = animations =>{
+		let sortedAnimations = Object.keys( animations ).sort( ( a, b ) => {
+			return animations[b] - animations[a];
+		});
+		let mostUsed = [];
+		let animationIndex = 0;
+		for ( let index = 0; 5 > index; index++ ) {
+			if ( 'None' !== sortedAnimations[index] && 0 !== animations[sortedAnimations[index]]) {
+				mostUsed[animationIndex++] = sortedAnimations[index];
+			}
+		}
+		setMostUsedAnimations( mostUsed );
+	};
+
+	const updateAnimation = ( value, label ) => {
+		let newAnimationCounter = JSON.parse( localStorage.getItem( 'animationCounter' ) );
+		if ( ! value ) {
+			value = animationsList.filter( animation =>{
+				return animation.label === label;
+			});
+			value = value[0].value;
+		}
+
+		newAnimationCounter[label]++;
+		localStorage.animationCounter = JSON.stringify( newAnimationCounter );
+		getMostUsedAnimations( newAnimationCounter );
+
 		let classes;
-		let animationValue = 'none' !== e ? e : '';
+
+		let animationValue = 'none' !== value ? value : '';
 
 		if ( attributes.className ) {
 			classes = attributes.className;
@@ -83,7 +126,7 @@ function AnimationControls({
 			classes = `animated ${ animationValue }`;
 		}
 
-		if ( 'none' === e ) {
+		if ( 'none' === value ) {
 			classes = classes.replace( 'animated', '' ).replace( delay, '' ).replace( speed, '' );
 
 			setDelay( 'default' );
@@ -96,7 +139,7 @@ function AnimationControls({
 			classes = undefined;
 		}
 
-		setAnimation( e );
+		setAnimation( value );
 		setAttributes({ className: classes });
 
 		let block = document.querySelector( `#block-${ clientId } .animated` );
@@ -175,6 +218,7 @@ function AnimationControls({
 				updateAnimation={ updateAnimation }
 				currentAnimationLabel={ currentAnimationLabel }
 				setCurrentAnimationLabel={ setCurrentAnimationLabel }
+				mostUsedAnimations={ mostUsedAnimations }
 			/>
 			{
 				'none' !== animation && (
