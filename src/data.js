@@ -85,6 +85,22 @@ export const animationsList = [
 		value: 'fadeInUp'
 	},
 	{
+		label: __( 'Fade In Top Left' ),
+		value: 'fadeInTopLeft'
+	},
+	{
+		label: __( 'Fade In Top Right' ),
+		value: 'fadeInTopRight'
+	},
+	{
+		label: __( 'Fade In Bottom Left' ),
+		value: 'fadeInBottomLeft'
+	},
+	{
+		label: __( 'Fade In Bottom Right' ),
+		value: 'fadeInBottomRight'
+	},
+	{
 		label: __( 'Fade Out' ),
 		value: 'fadeOut'
 	},
@@ -119,6 +135,22 @@ export const animationsList = [
 	{
 		label: __( 'Fade Out Up Big' ),
 		value: 'fadeOutUpBig'
+	},
+	{
+		label: __( 'Fade Out Top Left' ),
+		value: 'fadeOutTopLeft'
+	},
+	{
+		label: __( 'Fade Out Top Right' ),
+		value: 'fadeOutTopRight'
+	},
+	{
+		label: __( 'Fade Out Bottom Right' ),
+		value: 'fadeOutBottomRight'
+	},
+	{
+		label: __( 'Fade Out Bottom Left' ),
+		value: 'fadeOutBottomLeft'
 	},
 	{
 		label: __( 'Flip' ),
@@ -265,8 +297,24 @@ export const animationsList = [
 		value: 'lightSpeedIn'
 	},
 	{
+		label: __( 'Light Speed In Right' ),
+		value: 'lightSpeedInRight'
+	},
+	{
+		label: __( 'Light Speed In Left' ),
+		value: 'lightSpeedInLeft'
+	},
+	{
 		label: __( 'Light Speed Out' ),
 		value: 'lightSpeedOut'
+	},
+	{
+		label: __( 'Light Speed Out Right' ),
+		value: 'lightSpeedOutRight'
+	},
+	{
+		label: __( 'Light Speed Out Left' ),
+		value: 'lightSpeedOutLeft'
 	},
 	{
 		label: __( 'Flash' ),
@@ -283,6 +331,10 @@ export const animationsList = [
 	{
 		label: __( 'Shake' ),
 		value: 'shake'
+	},
+	{
+		label: __( 'Shake Y' ),
+		value: 'shakeY'
 	},
 	{
 		label: __( 'Head Shake' ),
@@ -344,6 +396,10 @@ export const outAnimation = [
 	'fadeOutRightBig',
 	'fadeOutUp',
 	'fadeOutUpBig',
+	'fadeOutTopLeft',
+	'fadeOutTopRight',
+	'fadeOutBottomRight',
+	'fadeOutBottomLeft',
 	'flipOutX',
 	'flipOutY',
 	'lightSpeedOut',
