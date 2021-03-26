@@ -96,13 +96,6 @@ function AnimationControls({
 		localStorage.animationCounter = JSON.stringify( newAnimationCounter );
 		updateMostUsedAnimations( newAnimationCounter );
 
-		// if ( ! value ) {
-		// 	value = animationsList.filter( animation =>{
-		// 		return animation.label === label;
-		// 	});
-		// 	value = value[0].value;
-		// }
-
 		const animationCSSClass =  value || animationsList.find( animation =>{
 			return animation.label === label;
 		}).value;
@@ -111,7 +104,7 @@ function AnimationControls({
 
 		if ( attributes.className ) {
 
-			// get the current classe and remove the old animation
+			// get the current classes and remove the old animation
 			cssClassesList = attributes.className.split( ' ' ).filter( cssClass => cssClass !== animation );
 		}
 
@@ -133,18 +126,6 @@ function AnimationControls({
 			}
 		}
 
-		// if ( 'none' === animationCSSClass ) {
-		// 	cssClassesList = cssClassesList.replace( 'animated', '' ).replace( delay, '' ).replace( speed, '' );
-
-		// 	setDelay( 'default' );
-		// 	setSpeed( 'default' );
-		// }
-
-		// cssClassesList = cssClassesList.replace( /\s+/g, ' ' ).trim();
-
-		// if ( '' === cssClassesList ) {
-		// 	cssClassesList = undefined;
-		// }
 		const newCssClassName = cssClassesList.length ? cssClassesList.join( ' ' ) : undefined;
 		console.log( 'animationCSSClass', animationCSSClass );
 		console.log( 'Anim Class List', cssClassesList );
@@ -153,11 +134,11 @@ function AnimationControls({
 		setAnimation( animationCSSClass );
 		setAttributes({ className: newCssClassName });
 
-		const block = document.querySelector( `#block-${ clientId } .animated` );
+		const block = document.querySelector( `#block-${ clientId } .animate__animated` );
 
 		if ( block ) {
 			outAnimation.forEach( anim => {
-				const isOut = block.className.includes( anim );
+				const isOut =  Array.from( block.classList ).includes( anim );
 
 				if ( isOut ) {
 					block.addEventListener( 'animationend', () => {

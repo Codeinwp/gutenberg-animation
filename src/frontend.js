@@ -1,3 +1,5 @@
+import { updateHTMLClassListAnimVersion } from './utility';
+
 const animations = [
 	'none',
 	'bounce',
@@ -77,7 +79,7 @@ const animations = [
 	'zoomOutUp',
 	'rollIn',
 	'rollOut'
-];
+].map( anim => 'animate__' + anim );
 
 const outAnimation = [
 	'bounceOut',
@@ -112,7 +114,7 @@ const outAnimation = [
 	'zoomOutRight',
 	'zoomOutUp',
 	'rollOut'
-];
+].map( anim => 'animate__' + anim );
 
 const delay = [
 	'none',
@@ -124,7 +126,7 @@ const delay = [
 	'delay-3s',
 	'delay-4s',
 	'delay-5s'
-];
+].map( anim => 'animate__' + anim );
 
 const speed = [
 	'none',
@@ -132,25 +134,27 @@ const speed = [
 	'slower',
 	'fast',
 	'faster'
-];
+].map( anim => 'animate__' + anim );
 
 window.onload = () => {
-	const elements = document.querySelectorAll( '.animated' );
+	const elements = document.querySelectorAll( '.animate__animated' );
+	console.log( elements );
 	for ( const element of elements ) {
-		classes = element.classList;
+		updateHTMLClassListAnimVersion( element.classList );
+		const classes = Array.from( element.classList );
 		element.animationClasses = [];
 
 		if ( ! isElementInViewport( element ) ) {
-			const animationClass = animations.find( i => {
-				return Array.from( classes ).find( o => o === i );
+			const animationClass = animations.find( anim => {
+				return classes.find( cssClass => cssClass === anim );
 			});
 
-			const delayClass = delay.find( i => {
-				return Array.from( classes ).find( o => o === i );
+			const delayClass = delay.find( delay => {
+				return classes.find( cssClass => cssClass === delay );
 			});
 
-			const speedClass = speed.find( i => {
-				return Array.from( classes ).find( o => o === i );
+			const speedClass = speed.find( speed => {
+				return classes.find( cssClass => cssClass === speed );
 			});
 
 			element.classList.add( 'hidden-animated' );

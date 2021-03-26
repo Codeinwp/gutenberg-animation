@@ -329,8 +329,8 @@ export const animationsListOld = [
 		value: 'rubberBand'
 	},
 	{
-		label: __( 'Shake' ),
-		value: 'shake'
+		label: __( 'Shake X' ),
+		value: 'shakeX'
 	},
 	{
 		label: __( 'Shake Y' ),
