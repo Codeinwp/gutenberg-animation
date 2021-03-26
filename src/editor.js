@@ -29,22 +29,23 @@ function AnimationControls({
 	setAttributes
 }) {
 	useEffect( () => {
-		let classes;
 
+		/**
+		 * Extract the animation type, delay, and speed from the block className property
+		 */
 		if ( attributes.className ) {
-			classes = attributes.className;
-			classes = classes.split( ' ' );
+			const blockClasses = attributes.className.split( ' ' );
 
-			const animationClass = Array.from( animationsList ).find( i => {
-				return classes.find( o => o === i.value );
+			const animationClass = animationsList.find( ({value}) => {
+				return blockClasses.includes( value );
 			});
 
-			const delayClass = Array.from( delayList ).find( i => {
-				return classes.find( o => o === i.value );
+			const delayClass = delayList.find( ({value}) => {
+				return blockClasses.includes( value );
 			});
 
-			const speedClass = Array.from( speedList ).find( i => {
-				return classes.find( o => o === i.value );
+			const speedClass = speedList.find( ({value}) => {
+				return blockClasses.includes( value );
 			});
 
 			setAnimation( animationClass ? animationClass.value : 'none' );
@@ -55,17 +56,21 @@ function AnimationControls({
 	}, []);
 
 	useEffect ( ()=>{
-		let animationCounter = {};
 
+		/**
+		 * Save in local storage information about the most used animations.
+		 */
 		if ( ! localStorage.animationCounter ) {
-			animationsList.map ( animation => {
-				animationCounter[animation.label] = 0;
-			});
+			const animationCounter = animationsList.reduce( ( counter, { label }) => {
+				counter[label] = 0;
+				return counter;
+			}, {});
+
 			localStorage.setItem( 'animationCounter', JSON.stringify( animationCounter ) );
 
 		} else {
 			let newAnimationCounter = JSON.parse( localStorage.getItem( 'animationCounter' ) );
-			getMostUsedAnimations( newAnimationCounter );
+			updateMostUsedAnimations( newAnimationCounter );
 		}
 	}, []);
 
@@ -75,85 +80,91 @@ function AnimationControls({
 	const [ currentAnimationLabel, setCurrentAnimationLabel ] = useState( 'none' );
 	const [ mostUsedAnimations, setMostUsedAnimations ] = useState( null );
 
-	const getMostUsedAnimations = animations =>{
+	const updateMostUsedAnimations = animations =>{
 		let sortedAnimations = Object.keys( animations ).sort( ( a, b ) => {
 			return animations[b] - animations[a];
 		});
-		let mostUsed = [];
-		let animationIndex = 0;
-		for ( let index = 0; 5 > index; index++ ) {
-			if ( 'None' !== sortedAnimations[index] && 0 !== animations[sortedAnimations[index]]) {
-				mostUsed[animationIndex++] = sortedAnimations[index];
-			}
-		}
+		console.log( 'Sorted', sortedAnimations );
+		const mostUsed = sortedAnimations.filter( anim => 'None' !== anim && 0 < animations[anim]).slice( 0, 5 );
+		console.log( 'Most Used', mostUsed );
 		setMostUsedAnimations( mostUsed );
 	};
 
-	const updateAnimation = ( value, label ) => {
+	const updateAnimation = ( label, value ) => {
 		let newAnimationCounter = JSON.parse( localStorage.getItem( 'animationCounter' ) );
-		if ( ! value ) {
-			value = animationsList.filter( animation =>{
-				return animation.label === label;
-			});
-			value = value[0].value;
-		}
-
 		newAnimationCounter[label]++;
 		localStorage.animationCounter = JSON.stringify( newAnimationCounter );
-		getMostUsedAnimations( newAnimationCounter );
+		updateMostUsedAnimations( newAnimationCounter );
 
-		let classes;
+		// if ( ! value ) {
+		// 	value = animationsList.filter( animation =>{
+		// 		return animation.label === label;
+		// 	});
+		// 	value = value[0].value;
+		// }
 
-		let animationValue = 'none' !== value ? value : '';
+		const animationCSSClass =  value || animationsList.find( animation =>{
+			return animation.label === label;
+		}).value;
+
+		let cssClassesList = [];
 
 		if ( attributes.className ) {
-			classes = attributes.className;
-			classes = classes.split( ' ' );
-			const exists = classes.find( i => i === animation );
-			const animatedExists = classes.find( i => 'animated' === i );
 
-			if ( ! animatedExists ) {
-				classes.push( 'animated' );
-			}
-
-			if ( exists ) {
-				classes = classes.join( ' ' ).replace( animation, animationValue );
-			} else {
-				classes.push( animationValue );
-				classes = classes.join( ' ' );
-			}
-		} else {
-			classes = `animated ${ animationValue }`;
+			// get the current classe and remove the old animation
+			cssClassesList = attributes.className.split( ' ' ).filter( cssClass => cssClass !== animation );
 		}
 
-		if ( 'none' === value ) {
-			classes = classes.replace( 'animated', '' ).replace( delay, '' ).replace( speed, '' );
+		if ( 'none' === animationCSSClass ) {
 
+			// remove the animation attributes
+			cssClassesList = cssClassesList.filter( cssClass => 'animate__animated' !== cssClass || delay !== cssClass || speed !== cssClass );
 			setDelay( 'default' );
 			setSpeed( 'default' );
+		} else {
+
+			// add the animation attributes if it is the case
+			if ( ! cssClassesList.includes( 'animate__animated' ) ) {
+				cssClassesList.push( 'animate__animated' );
+			}
+
+			if ( ! cssClassesList.includes( animationCSSClass ) ) {
+				cssClassesList.push( animationCSSClass );
+			}
 		}
 
-		classes = classes.replace( /\s+/g, ' ' ).trim();
+		// if ( 'none' === animationCSSClass ) {
+		// 	cssClassesList = cssClassesList.replace( 'animated', '' ).replace( delay, '' ).replace( speed, '' );
 
-		if ( '' === classes ) {
-			classes = undefined;
-		}
+		// 	setDelay( 'default' );
+		// 	setSpeed( 'default' );
+		// }
 
-		setAnimation( value );
-		setAttributes({ className: classes });
+		// cssClassesList = cssClassesList.replace( /\s+/g, ' ' ).trim();
 
-		let block = document.querySelector( `#block-${ clientId } .animated` );
+		// if ( '' === cssClassesList ) {
+		// 	cssClassesList = undefined;
+		// }
+		const newCssClassName = cssClassesList.length ? cssClassesList.join( ' ' ) : undefined;
+		console.log( 'animationCSSClass', animationCSSClass );
+		console.log( 'Anim Class List', cssClassesList );
+		console.log( 'New CSS Class Name', newCssClassName );
+
+		setAnimation( animationCSSClass );
+		setAttributes({ className: newCssClassName });
+
+		const block = document.querySelector( `#block-${ clientId } .animated` );
 
 		if ( block ) {
-			outAnimation.forEach( i => {
-				const isOut = block.className.includes( i );
+			outAnimation.forEach( anim => {
+				const isOut = block.className.includes( anim );
 
 				if ( isOut ) {
 					block.addEventListener( 'animationend', () => {
-						block.classList.remove( i );
+						block.classList.remove( anim );
 
 						block.addEventListener( 'animationstart', () => {
-							block.classList.remove( i );
+							block.classList.remove( anim );
 						});
 					});
 				}
@@ -161,54 +172,26 @@ function AnimationControls({
 		}
 	};
 
-	const updateDelay = e => {
-		let classes;
-		let delayValue = 'none' !== e ? e : '';
+	const updateDelay = delayValue => {
+		const cssClassesList = attributes.className ? attributes.className.split( ' ' ).filter( cssClass => cssClass !== delay ) : [];
 
-		if ( attributes.className ) {
-			classes = attributes.className;
-			classes = classes.split( ' ' );
-			const exists = classes.find( i => i === delay );
-
-			if ( exists ) {
-				classes = classes.join( ' ' ).replace( delay, delayValue );
-			} else {
-				classes.push( delayValue );
-				classes = classes.join( ' ' );
-			}
-		} else {
-			classes = delayValue;
+		if ( 'none' !== delayValue ) {
+			cssClassesList.push( delayValue );
 		}
 
-		classes = classes.replace( /\s+/g, ' ' );
-
-		setDelay( e );
-		setAttributes({ className: classes });
+		setDelay( delayList );
+		setAttributes({ className: cssClassesList.join( ' ' ) });
 	};
 
-	const updateSpeed =  e  => {
-		let classes;
-		let speedValue = 'none' !== e ? e : '';
+	const updateSpeed = speedValue  => {
+		const cssClassesList = attributes.className ? attributes.className.split( ' ' ).filter( cssClass => cssClass !== speed ) : [];
 
-		if ( attributes.className ) {
-			classes = attributes.className;
-			classes = classes.split( ' ' );
-			const exists = classes.find( i => i === speed );
-
-			if ( exists ) {
-				classes = classes.join( ' ' ).replace( speed, speedValue );
-			} else {
-				classes.push( speedValue );
-				classes = classes.join( ' ' );
-			}
-		} else {
-			classes = speedValue;
+		if ( 'none' !== speedValue ) {
+			cssClassesList.push( speedValue );
 		}
 
-		classes = classes.replace( /\s+/g, ' ' );
-
-		setSpeed( e );
-		setAttributes({ className: classes });
+		setSpeed( speedValue );
+		setAttributes({ className: cssClassesList.join( ' ' ) });
 	};
 
 	return (

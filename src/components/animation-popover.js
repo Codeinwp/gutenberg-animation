@@ -60,7 +60,7 @@ function AnimationPopover({
 				className={ currentAnimationLabel === animation.label ? 'is-selected' : '' }
 				onClick={ () => {
 					setCurrentAnimationLabel( animation.label );
-					updateAnimation( animation.value, animation.label );
+					updateAnimation( animation.label, animation.value );
 					onToggle();
 				} }
 			>
@@ -108,7 +108,7 @@ function AnimationPopover({
 										className={'None' === currentAnimationLabel ? 'is-selected' : ''}
 										onClick={() => {
 											setCurrentAnimationLabel( 'None' );
-											updateAnimation( 'none', 'None' );
+											updateAnimation( 'None', 'none' );
 											onToggle();
 										}}
 									>
@@ -127,7 +127,7 @@ function AnimationPopover({
 										return <MenuItem
 											onClick={() => {
 												setCurrentAnimationLabel( animation );
-												updateAnimation( null, animation );
+												updateAnimation( animation );
 												onToggle();
 											}}
 										>

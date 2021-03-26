@@ -3,7 +3,7 @@
  */
 const { __ } = wp.i18n;
 
-export const animationsList = [
+export const animationsListOld = [
 	{
 		label: __( 'None' ),
 		value: 'none'
@@ -370,7 +370,12 @@ export const animationsList = [
 	}
 ];
 
-export const categories = [
+export const animationsList = animationsListOld.map( animOption => {
+	animOption.value = 'animate__' + animOption.value;
+	return animOption;
+});
+
+export const categoriesOld = [
 	{ label: 'Bouncing', value: 'bounce' },
 	{ label: 'Fading', value: 'fadeIn' },
 	{ label: 'Flipping', value: 'flip' },
@@ -381,7 +386,12 @@ export const categories = [
 	{ label: 'Other', value: 'lightSpeedIn' }
 ];
 
-export const outAnimation = [
+export const categories = categoriesOld.map( animOption => {
+	animOption.value = 'animate__' + animOption.value;
+	return animOption;
+});
+
+export const outAnimationOld = [
 	'bounceOut',
 	'bounceOutDown',
 	'bounceOutLeft',
@@ -420,7 +430,9 @@ export const outAnimation = [
 	'rollOut'
 ];
 
-export const delayList = [
+export const outAnimation = outAnimationOld.map( anim => 'animate__' + anim );
+
+export const delayListOld = [
 	{
 		label: __( 'None' ),
 		value: 'none'
@@ -458,8 +470,12 @@ export const delayList = [
 		value: 'delay-5s'
 	}
 ];
+export const delayList = delayListOld.map( animOption => {
+	animOption.value = 'animate__' + animOption.value;
+	return animOption;
+});
 
-export const speedList = [
+export const speedListOld = [
 	{
 		label: __( 'Default' ),
 		value: 'none'
@@ -481,3 +497,8 @@ export const speedList = [
 		value: 'faster'
 	}
 ];
+
+export const speedList = speedListOld.map( animOption => {
+	animOption.value = 'animate__' + animOption.value;
+	return animOption;
+});
