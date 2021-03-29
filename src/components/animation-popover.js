@@ -28,7 +28,6 @@ function AnimationPopover({
 	animationsList,
 	updateAnimation,
 	currentAnimationLabel,
-	setCurrentAnimationLabel,
 	mostUsedAnimations
 }) {
 	const instanceId = useInstanceId( AnimationPopover );
@@ -59,7 +58,6 @@ function AnimationPopover({
 			<MenuItem
 				className={ currentAnimationLabel === animation.label ? 'is-selected' : '' }
 				onClick={ () => {
-					setCurrentAnimationLabel( animation.label );
 					updateAnimation( animation.label, animation.value );
 					onToggle();
 				} }
@@ -107,7 +105,6 @@ function AnimationPopover({
 									<MenuItem
 										className={'None' === currentAnimationLabel ? 'is-selected' : ''}
 										onClick={() => {
-											setCurrentAnimationLabel( 'None' );
 											updateAnimation( 'None', 'none' );
 											onToggle();
 										}}
@@ -126,7 +123,6 @@ function AnimationPopover({
 									mostUsedAnimations.map( animation=>{
 										return <MenuItem
 											onClick={() => {
-												setCurrentAnimationLabel( animation );
 												updateAnimation( animation );
 												onToggle();
 											}}

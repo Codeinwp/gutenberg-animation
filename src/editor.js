@@ -8,7 +8,8 @@ const { SelectControl } = wp.components;
 const {
 	Fragment,
 	useState,
-	useEffect
+	useEffect,
+	useReducer
 } = wp.element;
 
 /**
@@ -17,42 +18,115 @@ const {
 import {
 	animationsList,
 	delayList,
-	speedList,
-	outAnimation
+	speedList
 } from './data.js';
 
 import AnimationPopover from './components/animation-popover';
+import { extractAnimationFrom, removeAllAnimations, removeAnimationFrom, incrementAnimUsage, filterMostUsedAnim, getAnimUsageFromStorage } from './utility.js';
+
+const initialState = {
+	animation: null,
+	delay: null,
+	speed: null,
+	animationLabel: undefined,
+	mostUsedAnimations: {},
+	build: null,
+	className: null
+};
+
+const actionType = {
+	INIT: 'INIT',
+	UPDATE: 'UPDATE',
+	BUILD: 'BUILD',
+	CONSUME_BUILD: 'CONSUME_BUILD',
+	UPDATE_USAGE: 'UPDATE_USAGE',
+	ADD_CLASSNAME: 'ADD_CLASSNAME',
+	CLEAR_ON_END: 'CLEAR_ON_END'
+};
+
+const reducer = ( state, action ) => {
+	console.log( action, state );
+	switch ( action.type ) {
+	case actionType.INIT:
+		const blockClassList = action.className?.split( ' ' ) || [];
+		const animation = extractAnimationFrom( blockClassList, 'animation' );
+		console.log( 'INIT', blockClassList, animation, animationsList.find( ({ value }) => {
+			return value === animation;
+		}) );
+		return {
+			animation: animation,
+			delay: extractAnimationFrom( blockClassList, 'delay' ),
+			speed: extractAnimationFrom( blockClassList, 'speed' ),
+			animationLabel: animationsList.find( ({ value }) => {
+				return value === animation;
+			})?.label || 'None'
+		};
+	case actionType.UPDATE:
+		if ( 'animation' === action.name ) {
+			state.animationLabel = action.label;
+		}
+		state[action.name] = action.value;
+		return {...state};
+	case actionType.BUILD:
+		const cleanedClassList = removeAnimationFrom( state.className?.split( ' ' ) || []);
+		if ( 'none' !== state.animation ) {
+			cleanedClassList.push( 'animate__animated' );
+			cleanedClassList.push( state.animation );
+			if ( 'none' !== state.delay ) {
+				cleanedClassList.push( state.delay );
+			}
+			if ( 'none' !== state.speed ) {
+				cleanedClassList.push( state.speed );
+			}
+		}
+		return {
+			...state,
+			build: cleanedClassList.join( ' ' )
+		};
+	case actionType.CONSUME_BUILD:
+		return {
+			...state,
+			build: null
+		};
+	case actionType.UPDATE_USAGE:
+		return {
+			...state,
+			mostUsedAnimations: filterMostUsedAnim( getAnimUsageFromStorage() )
+		};
+	case actionType.ADD_CLASSNAME:
+		return {
+			...state,
+			className: action.className
+		};
+	case actionType.CLEAR_ON_END:
+		break;
+	}
+};
 
 function AnimationControls({
 	attributes,
 	clientId,
 	setAttributes
 }) {
+
+
+	// const [ animation, setAnimation ] = useState( 'none' );
+	// const [ delay, setDelay ] = useState( 'default' );
+	// const [ speed, setSpeed ] = useState( 'default' );
+	// const [ currentAnimationLabel, setCurrentAnimationLabel ] = useState( 'none' );
+	// const [ mostUsedAnimations, setMostUsedAnimations ] = useState( null );
+	const [ animationSettings, dispatch ] = useReducer( reducer, initialState );
+
+
 	useEffect( () => {
 
 		/**
 		 * Extract the animation type, delay, and speed from the block className property
 		 */
-		if ( attributes.className ) {
-			const blockClasses = attributes.className.split( ' ' );
-
-			const animationClass = animationsList.find( ({value}) => {
-				return blockClasses.includes( value );
-			});
-
-			const delayClass = delayList.find( ({value}) => {
-				return blockClasses.includes( value );
-			});
-
-			const speedClass = speedList.find( ({value}) => {
-				return blockClasses.includes( value );
-			});
-
-			setAnimation( animationClass ? animationClass.value : 'none' );
-			setDelay( delayClass ? delayClass.value : 'default' );
-			setSpeed( speedClass ? speedClass.value : 'default' );
-			setCurrentAnimationLabel( animationClass ? animationClass.label : 'none' );
-		}
+		dispatch({
+			type: actionType.INIT,
+			className: attributes.className
+		});
 	}, []);
 
 	useEffect ( ()=>{
@@ -60,119 +134,108 @@ function AnimationControls({
 		/**
 		 * Save in local storage information about the most used animations.
 		 */
-		if ( ! localStorage.animationCounter ) {
+		if ( ! localStorage.themeisleAnimationUsage ) {
 			const animationCounter = animationsList.reduce( ( counter, { label }) => {
 				counter[label] = 0;
 				return counter;
 			}, {});
 
-			localStorage.setItem( 'animationCounter', JSON.stringify( animationCounter ) );
-
-		} else {
-			let newAnimationCounter = JSON.parse( localStorage.getItem( 'animationCounter' ) );
-			updateMostUsedAnimations( newAnimationCounter );
+			localStorage.setItem( 'themeisleAnimationUsage', JSON.stringify( animationCounter ) );
+			dispatch({
+				type: actionType.UPDATE_USAGE
+			});
 		}
 	}, []);
 
-	const [ animation, setAnimation ] = useState( 'none' );
-	const [ delay, setDelay ] = useState( 'default' );
-	const [ speed, setSpeed ] = useState( 'default' );
-	const [ currentAnimationLabel, setCurrentAnimationLabel ] = useState( 'none' );
-	const [ mostUsedAnimations, setMostUsedAnimations ] = useState( null );
-
-	const updateMostUsedAnimations = animations =>{
-		let sortedAnimations = Object.keys( animations ).sort( ( a, b ) => {
-			return animations[b] - animations[a];
-		});
-		console.log( 'Sorted', sortedAnimations );
-		const mostUsed = sortedAnimations.filter( anim => 'None' !== anim && 0 < animations[anim]).slice( 0, 5 );
-		console.log( 'Most Used', mostUsed );
-		setMostUsedAnimations( mostUsed );
-	};
-
-	const updateAnimation = ( label, value ) => {
-		let newAnimationCounter = JSON.parse( localStorage.getItem( 'animationCounter' ) );
-		newAnimationCounter[label]++;
-		localStorage.animationCounter = JSON.stringify( newAnimationCounter );
-		updateMostUsedAnimations( newAnimationCounter );
-
-		const animationCSSClass =  value || animationsList.find( animation =>{
-			return animation.label === label;
-		}).value;
-
-		let cssClassesList = [];
-
-		if ( attributes.className ) {
-
-			// get the current classes and remove the old animation
-			cssClassesList = attributes.className.split( ' ' ).filter( cssClass => cssClass !== animation );
-		}
-
-		if ( 'none' === animationCSSClass ) {
-
-			// remove the animation attributes
-			cssClassesList = cssClassesList.filter( cssClass => 'animate__animated' !== cssClass || delay !== cssClass || speed !== cssClass );
-			setDelay( 'default' );
-			setSpeed( 'default' );
-		} else {
-
-			// add the animation attributes if it is the case
-			if ( ! cssClassesList.includes( 'animate__animated' ) ) {
-				cssClassesList.push( 'animate__animated' );
-			}
-
-			if ( ! cssClassesList.includes( animationCSSClass ) ) {
-				cssClassesList.push( animationCSSClass );
-			}
-		}
-
-		const newCssClassName = cssClassesList.length ? cssClassesList.join( ' ' ) : undefined;
-		console.log( 'animationCSSClass', animationCSSClass );
-		console.log( 'Anim Class List', cssClassesList );
-		console.log( 'New CSS Class Name', newCssClassName );
-
-		setAnimation( animationCSSClass );
-		setAttributes({ className: newCssClassName });
-
-		const block = document.querySelector( `#block-${ clientId } .animate__animated` );
-
-		if ( block ) {
-			outAnimation.forEach( anim => {
-				const isOut =  Array.from( block.classList ).includes( anim );
-
-				if ( isOut ) {
-					block.addEventListener( 'animationend', () => {
-						block.classList.remove( anim );
-
-						block.addEventListener( 'animationstart', () => {
-							block.classList.remove( anim );
-						});
-					});
-				}
+	useEffect( () => {
+		if ( animationSettings.animation ) {
+			incrementAnimUsage( animationSettings.animationLabel );
+			dispatch({
+				type: actionType.UPDATE_USAGE
 			});
 		}
+	}, [ animationSettings.animation ]);
+
+	useEffect( () => {
+		if ( animationSettings.className !== attributes.className ) {
+			dispatch({
+				type: actionType.ADD_CLASSNAME,
+				className: attributes.className
+			});
+		};
+	}, [ attributes.className, animationSettings.className ]);
+
+	useEffect( () => {
+		dispatch({
+			type: actionType.BUILD
+		});
+		const block = document.querySelector( `#block-${clientId} .animate__animated` );
+		block?.addEventListener(
+			'animationend',
+			() => {
+				block?.classList.remove( 'animate__animated' );
+				block?.classList.remove( animationSettings.animation );
+				block?.classList.remove( animationSettings.delay );
+				block?.classList.remove( animationSettings.speed );
+			}
+		);
+	}, [ animationSettings.animation, animationSettings.delay, animationSettings.speed ]);
+
+	useEffect( () => {
+
+		// console.log( animationSettings.build );
+		if ( animationSettings.build || ( ! animationSettings.build && 'none' === animationSettings.animation )  ) {
+			setAttributes({
+				className: animationSettings.build
+			});
+			dispatch({
+				type: actionType.CONSUME_BUILD
+			});
+		}
+	}, [ animationSettings.build, animationSettings.animation ]);
+
+	/**
+	 * Set the new animation for the block
+	 * @param {string} label
+	 * @param {string} value
+	 */
+	const updateAnimation = ( label, value ) => {
+		dispatch({
+			type: actionType.UPDATE,
+			name: 'animation',
+			label: label,
+			value: value || animationsList.find( animation =>{
+				return animation.label === label;
+			}).value
+		});
+
+		// const block = document.querySelector( `#block-${clientId} .animate__animated` );
+		// if ( block ) {
+
+		// 	// console.log( block );
+		// 	block.addEventListener( 'animationend', () => {
+		// 		console.log( 'Remove', animationCSSClass );
+		// 		block.classList.remove( animationCSSClass, 'animate__animated' );
+		// 	});
+		// } else {
+		// 	console.log( block );
+		// }
 	};
 
 	const updateDelay = delayValue => {
-		const cssClassesList = attributes.className ? attributes.className.split( ' ' ).filter( cssClass => cssClass !== delay ) : [];
-
-		if ( 'none' !== delayValue ) {
-			cssClassesList.push( delayValue );
-		}
-
-		setDelay( delayList );
-		setAttributes({ className: cssClassesList.join( ' ' ) });
+		dispatch({
+			type: actionType.UPDATE,
+			name: 'delay',
+			value: delayValue
+		});
 	};
 
 	const updateSpeed = speedValue  => {
-		const cssClassesList = attributes.className ? attributes.className.split( ' ' ).filter( cssClass => cssClass !== speed ) : [];
-
-		if ( 'none' !== speedValue ) {
-			cssClassesList.push( speedValue );
-		}
-
-		setSpeed( speedValue );
-		setAttributes({ className: cssClassesList.join( ' ' ) });
+		dispatch({
+			type: actionType.UPDATE,
+			name: 'speed',
+			value: speedValue
+		});
 	};
 
 	return (
@@ -180,23 +243,22 @@ function AnimationControls({
 			<AnimationPopover
 				animationsList={ animationsList }
 				updateAnimation={ updateAnimation }
-				currentAnimationLabel={ currentAnimationLabel }
-				setCurrentAnimationLabel={ setCurrentAnimationLabel }
-				mostUsedAnimations={ mostUsedAnimations }
+				currentAnimationLabel={ animationSettings.animationLabel }
+				mostUsedAnimations={ animationSettings.mostUsedAnimations }
 			/>
 			{
-				'none' !== animation && (
+				'none' !== animationSettings.animation && (
 					<Fragment>
 						<SelectControl
 							label={ __( 'Delay' ) }
-							value={ delay || 'default' }
+							value={ animationSettings.delay || 'none' }
 							options={ delayList }
 							onChange={ updateDelay }
 						/>
 
 						<SelectControl
 							label={ __( 'Speed' ) }
-							value={ speed || 'default' }
+							value={ animationSettings.speed || 'none' }
 							options={ speedList }
 							onChange={ updateSpeed }
 						/>

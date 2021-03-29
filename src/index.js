@@ -15,14 +15,30 @@ const { Fragment } = wp.element;
 
 const { addFilter } = wp.hooks;
 
+const domReady = wp.domReady;
+
 /**
  * Internal dependencies.
  */
 import AnimationControls from './editor.js';
+import { removeAnimationFrom } from './utility.js';
 
 const withInspectorControls = createHigherOrderComponent( ( BlockEdit ) => {
 	return ( props ) => {
 		const hasCustomClassName = hasBlockSupport( props.name, 'customClassName', true );
+
+		// TODO: remove animation on load
+		/* This will remove the animation when is selected */
+		if ( hasCustomClassName ) {
+			domReady( () => {
+				const block = document.querySelector( `#block-${props.clientId} .animate__animated` );
+				if ( block ) {
+					block.className = removeAnimationFrom( Array.from( block?.classList ) );
+				}
+			});
+
+		}
+
 		if ( hasCustomClassName && props.isSelected ) {
 			return (
 				<Fragment>
