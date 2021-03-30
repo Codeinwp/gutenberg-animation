@@ -6,7 +6,8 @@ const animations = [
 	'flash',
 	'pulse',
 	'rubberBand',
-	'shake',
+	'shakeX',
+	'shakeY',
 	'headShake',
 	'swing',
 	'tada',
@@ -25,6 +26,10 @@ const animations = [
 	'bounceOutLeft',
 	'bounceOutRight',
 	'bounceOutUp',
+	'backOutDown',
+	'backOutLeft',
+	'backOutRight',
+	'backOutUp',
 	'fadeIn',
 	'fadeInDown',
 	'fadeInDownBig',
@@ -42,6 +47,14 @@ const animations = [
 	'fadeOutRightBig',
 	'fadeOutUp',
 	'fadeOutUpBig',
+	'fadeInTopLeft',
+	'fadeInTopRight',
+	'fadeInBottomLeft',
+	'fadeInBottomRight',
+	'fadeOutTopLeft',
+	'fadeOutTopRight',
+	'fadeOutBottomRight',
+	'fadeOutBottomLeft',
 	'flip',
 	'flipInX',
 	'flipInY',
@@ -78,43 +91,47 @@ const animations = [
 	'zoomOutRight',
 	'zoomOutUp',
 	'rollIn',
-	'rollOut'
+	'rollOut',
+	'lightSpeedInRight',
+	'lightSpeedInLeft',
+	'lightSpeedOutRight',
+	'lightSpeedOutLeft'
 ].map( anim => 'animate__' + anim );
 
-const outAnimation = [
-	'bounceOut',
-	'bounceOutDown',
-	'bounceOutLeft',
-	'bounceOutRight',
-	'bounceOutUp',
-	'fadeOut',
-	'fadeOutDown',
-	'fadeOutDownBig',
-	'fadeOutLeft',
-	'fadeOutLeftBig',
-	'fadeOutRight',
-	'fadeOutRightBig',
-	'fadeOutUp',
-	'fadeOutUpBig',
-	'flipOutX',
-	'flipOutY',
-	'lightSpeedOut',
-	'rotateOut',
-	'rotateOutDownLeft',
-	'rotateOutDownRight',
-	'rotateOutUpLeft',
-	'rotateOutUpRight',
-	'slideOutDown',
-	'slideOutLeft',
-	'slideOutRight',
-	'slideOutUp',
-	'zoomOut',
-	'zoomOutDown',
-	'zoomOutLeft',
-	'zoomOutRight',
-	'zoomOutUp',
-	'rollOut'
-].map( anim => 'animate__' + anim );
+// const outAnimation = [
+// 	'bounceOut',
+// 	'bounceOutDown',
+// 	'bounceOutLeft',
+// 	'bounceOutRight',
+// 	'bounceOutUp',
+// 	'fadeOut',
+// 	'fadeOutDown',
+// 	'fadeOutDownBig',
+// 	'fadeOutLeft',
+// 	'fadeOutLeftBig',
+// 	'fadeOutRight',
+// 	'fadeOutRightBig',
+// 	'fadeOutUp',
+// 	'fadeOutUpBig',
+// 	'flipOutX',
+// 	'flipOutY',
+// 	'lightSpeedOut',
+// 	'rotateOut',
+// 	'rotateOutDownLeft',
+// 	'rotateOutDownRight',
+// 	'rotateOutUpLeft',
+// 	'rotateOutUpRight',
+// 	'slideOutDown',
+// 	'slideOutLeft',
+// 	'slideOutRight',
+// 	'slideOutUp',
+// 	'zoomOut',
+// 	'zoomOutDown',
+// 	'zoomOutLeft',
+// 	'zoomOutRight',
+// 	'zoomOutUp',
+// 	'rollOut'
+// ].map( anim => 'animate__' + anim );
 
 const delay = [
 	'none',
@@ -178,15 +195,15 @@ window.onload = () => {
 			element.animationClasses.push( 'animate__animated' );
 		}
 
-		outAnimation.forEach( i => {
-			const isOut = element.classList.contains( i );
+		// outAnimation.forEach( i => {
+		// 	const isOut = element.classList.contains( i );
 
-			if ( isOut ) {
-				element.addEventListener( 'animationend', () => {
-					element.classList.remove( i );
-				});
-			}
-		});
+		// 	if ( isOut ) {
+		// 		element.addEventListener( 'animationend', () => {
+		// 			element.classList.remove( i );
+		// 		});
+		// 	}
+		// });
 	}
 
 	window.onscroll = () => {
