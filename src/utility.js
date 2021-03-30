@@ -44,18 +44,18 @@ export const updateAnimationVersion = ( classList ) => {
 	});
 };
 
-export const updateHTMLClassListAnimVersion = ( htmlClassList ) => {
-	Array.from( htmlClassList ).forEach( classAnim => {
-		if ( 'animated' === classAnim || animationsListOld.includes( classAnim ) || delayListOld.includes( classAnim ) || speedList.includes( classAnim ) ) {
-			htmlClassList.remove( classAnim );
-			htmlClassList.add( 'animate__' + classAnim );
-		} else if ( 'shake' === classAnim ) {
-			htmlClassList.remove( classAnim );
-			htmlClassList.add( 'animate__shakeX' );
-		}
-	});
+// export const updateHTMLClassListAnimVersion = ( htmlClassList ) => {
+// 	Array.from( htmlClassList ).forEach( classAnim => {
+// 		if ( 'animated' === classAnim || animationsListOld.includes( classAnim ) || delayListOld.includes( classAnim ) || speedList.includes( classAnim ) ) {
+// 			htmlClassList.remove( classAnim );
+// 			htmlClassList.add( 'animate__' + classAnim );
+// 		} else if ( 'shake' === classAnim ) {
+// 			htmlClassList.remove( classAnim );
+// 			htmlClassList.add( 'animate__shakeX' );
+// 		}
+// 	});
 
-};
+// };
 
 /* Utlity functions for working with the storage */
 export const getAnimUsageFromStorage = () => JSON.parse( localStorage.getItem( 'themeisleAnimationUsage' ) );

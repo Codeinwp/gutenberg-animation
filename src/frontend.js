@@ -1,6 +1,5 @@
-import { updateHTMLClassListAnimVersion } from './utility';
 
-const animations = [
+const animationsOld = [
 	'none',
 	'bounce',
 	'flash',
@@ -96,7 +95,9 @@ const animations = [
 	'lightSpeedInLeft',
 	'lightSpeedOutRight',
 	'lightSpeedOutLeft'
-].map( anim => 'animate__' + anim );
+];
+
+const animations = animationsOld.map( anim => 'animate__' + anim );
 
 // const outAnimation = [
 // 	'bounceOut',
@@ -133,7 +134,7 @@ const animations = [
 // 	'rollOut'
 // ].map( anim => 'animate__' + anim );
 
-const delay = [
+const delayOld = [
 	'none',
 	'delay-100ms',
 	'delay-200ms',
@@ -143,15 +144,32 @@ const delay = [
 	'delay-3s',
 	'delay-4s',
 	'delay-5s'
-].map( anim => 'animate__' + anim );
+];
 
-const speed = [
+const delay = delayOld.map( anim => 'animate__' + anim );
+
+const speedOld = [
 	'none',
 	'slow',
 	'slower',
 	'fast',
 	'faster'
-].map( anim => 'animate__' + anim );
+];
+
+const speed = speedOld.map( anim => 'animate__' + anim );
+
+const updateHTMLClassListAnimVersion = ( htmlClassList ) => {
+	Array.from( htmlClassList ).forEach( classAnim => {
+		if ( 'animated' === classAnim || animationsOld.includes( classAnim ) || delayOld.includes( classAnim ) || speedOld.includes( classAnim ) ) {
+			htmlClassList.remove( classAnim );
+			htmlClassList.add( 'animate__' + classAnim );
+		} else if ( 'shake' === classAnim ) {
+			htmlClassList.remove( classAnim );
+			htmlClassList.add( 'animate__shakeX' );
+		}
+	});
+
+};
 
 window.onload = () => {
 	const elements = [ ...document.querySelectorAll( '.animate__animated' ), ...document.querySelectorAll( '.animated' ) ];
