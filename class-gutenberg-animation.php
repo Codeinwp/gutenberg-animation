@@ -102,7 +102,7 @@ class GutenbergAnimation {
 		wp_enqueue_script(
 			'themeisle-gutenberg-animation-frontend',
 			plugin_dir_url( $this->get_dir() ) . $this->slug . '/build/animate.js',
-			array('wp-i18n'),
+			array( 'wp-i18n' ),
 			$version,
 			true
 		);
