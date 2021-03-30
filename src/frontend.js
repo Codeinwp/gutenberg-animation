@@ -137,24 +137,24 @@ const speed = [
 ].map( anim => 'animate__' + anim );
 
 window.onload = () => {
-	const elements = document.querySelectorAll( '.animate__animated' );
+	const elements = [ ...document.querySelectorAll( '.animate__animated' ), ...document.querySelectorAll( '.animated' ) ];
 	console.log( elements );
 	for ( const element of elements ) {
 		updateHTMLClassListAnimVersion( element.classList );
-		const classes = Array.from( element.classList );
+		const elementCSSClasses = Array.from( element.classList );
 		element.animationClasses = [];
 
 		if ( ! isElementInViewport( element ) ) {
 			const animationClass = animations.find( anim => {
-				return classes.find( cssClass => cssClass === anim );
+				return elementCSSClasses.find( cssClass => cssClass === anim );
 			});
 
 			const delayClass = delay.find( delay => {
-				return classes.find( cssClass => cssClass === delay );
+				return elementCSSClasses.find( cssClass => cssClass === delay );
 			});
 
 			const speedClass = speed.find( speed => {
-				return classes.find( cssClass => cssClass === speed );
+				return elementCSSClasses.find( cssClass => cssClass === speed );
 			});
 
 			element.classList.add( 'hidden-animated' );
@@ -173,6 +173,9 @@ window.onload = () => {
 				element.animationClasses.push( speedClass );
 				element.classList.remove( speedClass );
 			}
+
+			element.classList.remove( 'animate__animated' );
+			element.animationClasses.push( 'animate__animated' );
 		}
 
 		outAnimation.forEach( i => {
@@ -191,7 +194,7 @@ window.onload = () => {
 			if ( element.getBoundingClientRect().top <= window.innerHeight * 0.75 && 0 < element.getBoundingClientRect().top ) {
 				if ( element.animationClasses && 0 < element.animationClasses.length ) {
 					const classes = element.animationClasses;
-					classes.forEach( i => element.classList.add( i ) );
+					classes.forEach( animClass => element.classList.add( animClass ) );
 					element.classList.remove( 'hidden-animated' );
 					delete element.animationClasses;
 				}

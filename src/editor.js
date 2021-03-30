@@ -31,6 +31,7 @@ const initialState = {
 	animationLabel: undefined,
 	mostUsedAnimations: {},
 	build: null,
+	buildWasUsed: true,
 	className: null
 };
 
@@ -81,20 +82,22 @@ const reducer = ( state, action ) => {
 	case actionType.BUILD:
 
 		// remove the past animation values from the className
-		const cleanedClassList = removeAnimationFrom( state.className?.split( ' ' ) || []);
-		if ( 'none' !== state.animation ) {
+		const cleanedClassList = removeAnimationFrom( state.className?.split( ' ' ) || []).filter( cssClass => cssClass );
+		if ( state.animation && 'none' !== state.animation ) {
 			cleanedClassList.push( 'animate__animated' );
 			cleanedClassList.push( state.animation );
-			if ( 'none' !== state.delay ) {
+			if (  state.delay && 'none' !== state.delay ) {
 				cleanedClassList.push( state.delay );
 			}
-			if ( 'none' !== state.speed ) {
+			if ( state.speed && 'none' !== state.speed ) {
 				cleanedClassList.push( state.speed );
 			}
 		}
+
 		return {
 			...state,
-			build: cleanedClassList.join( ' ' )
+			build: cleanedClassList.join( ' ' ),
+			buildWasUsed: false
 		};
 
 	/**
@@ -103,7 +106,7 @@ const reducer = ( state, action ) => {
 	case actionType.CONSUME_BUILD:
 		return {
 			...state,
-			build: null
+			buildWasUsed: true
 		};
 
 	/**
@@ -218,15 +221,15 @@ function AnimationControls({
 	useEffect( () => {
 
 		// console.log( animationSettings.build );
-		if ( animationSettings.build || ( ! animationSettings.build && 'none' === animationSettings.animation )  ) {
+		if ( ! animationSettings.buildWasUsed ) {
 			setAttributes({
-				className: animationSettings.build
+				className: [ ...animationSettings.build ].join( '' )
 			});
 			dispatch({
 				type: actionType.CONSUME_BUILD
 			});
 		}
-	}, [ animationSettings.build, animationSettings.animation ]);
+	}, [ animationSettings.build, animationSettings.buildWasUsed ]);
 
 	/**
 	 * Set the new animation for the block
