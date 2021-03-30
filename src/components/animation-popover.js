@@ -32,29 +32,33 @@ function AnimationPopover({
 }) {
 	const instanceId = useInstanceId( AnimationPopover );
 
-	const [ currentInput, setCurrentInput ] = useState( '' );
+	const [ searchInput, setSearchInput ] = useState( '' );
 	const [ animationFound, setAnimationFound ] = useState( false );
 
-	const getAnimations = ( animation, onToggle ) => {
-		if ( ! currentInput && 'None' === animation.label ) {
+	const getAnimationWithSearch = ( animation, onToggle ) => {
+		if ( ! searchInput && 'None' === animation.label ) {
 			return;
-		};
-		let match = true;
-
-		if ( currentInput ) {
-			const inputWords = currentInput.toLowerCase().split( ' ' );
-			inputWords.forEach( word => {
-				if ( ! animation.label.toLowerCase().includes( word ) ) {
-					match = false;
-				}
-			});
+		} else if ( '' === searchInput ) {
+			return (
+				<MenuItem
+					className={ currentAnimationLabel === animation.label ? 'is-selected' : '' }
+					onClick={ () => {
+						updateAnimation( animation.label, animation.value );
+						onToggle();
+					} }
+				>
+					{ animation.label }
+				</MenuItem>
+			);
 		}
 
-		if ( match && ! animationFound ) {
+		const isMatchWithSearch = animation.label.toLowerCase().startsWith( searchInput.toLowerCase().trim() );
+
+		if ( isMatchWithSearch && ! animationFound ) {
 			setAnimationFound( true );
 		}
 
-		return match && (
+		return isMatchWithSearch && (
 			<MenuItem
 				className={ currentAnimationLabel === animation.label ? 'is-selected' : '' }
 				onClick={ () => {
@@ -92,16 +96,16 @@ function AnimationPopover({
 					<MenuGroup label={ __( 'Animations' ) }>
 						<TextControl
 							placeholder={ __( 'Search' ) }
-							value={ currentInput }
+							value={ searchInput }
 							onChange={ e => {
-								setCurrentInput( e );
+								setSearchInput( e );
 								setAnimationFound( false );
 							}}
 						/>
 
 						<div className="components-popover__items">
 							{
-								'' === currentInput ?
+								'' === searchInput ?
 									<MenuItem
 										className={'None' === currentAnimationLabel ? 'is-selected' : ''}
 										onClick={() => {
@@ -113,13 +117,13 @@ function AnimationPopover({
 									</MenuItem> : ''
 							}
 							{
-								mostUsedAnimations && '' === currentInput ?
+								mostUsedAnimations && '' === searchInput ?
 									<div className="themeisle-animations-control__category">
 										{__( 'Most used animations' )}
 									</div> : ''
 							}
 							{
-								mostUsedAnimations && '' === currentInput ?
+								mostUsedAnimations && '' === searchInput ?
 									mostUsedAnimations.map( animation=>{
 										return <MenuItem
 											onClick={() => {
@@ -134,7 +138,7 @@ function AnimationPopover({
 							{ animationsList.map( animation => {
 								return (
 									<Fragment>
-										{ '' === currentInput &&
+										{ '' === searchInput &&
 											categories.map( category => {
 												return category.value === animation.value ?
 													<div className="themeisle-animations-control__category">
@@ -143,7 +147,7 @@ function AnimationPopover({
 											})
 										}
 
-										{ getAnimations( animation, onToggle ) }
+										{ getAnimationWithSearch( animation, onToggle ) }
 									</Fragment>
 								);
 							}) }

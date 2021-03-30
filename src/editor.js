@@ -40,13 +40,16 @@ const actionType = {
 	BUILD: 'BUILD',
 	CONSUME_BUILD: 'CONSUME_BUILD',
 	UPDATE_USAGE: 'UPDATE_USAGE',
-	ADD_CLASSNAME: 'ADD_CLASSNAME',
-	CLEAR_ON_END: 'CLEAR_ON_END'
+	ADD_CLASSNAME: 'ADD_CLASSNAME'
 };
 
 const reducer = ( state, action ) => {
 	console.log( action, state );
 	switch ( action.type ) {
+
+	/**
+	* Extract the current settings from block's className
+	*/
 	case actionType.INIT:
 		const blockClassList = action.className?.split( ' ' ) || [];
 		const animation = extractAnimationFrom( blockClassList, 'animation' );
@@ -61,13 +64,23 @@ const reducer = ( state, action ) => {
 				return value === animation;
 			})?.label || 'None'
 		};
+
+	/**
+	 * Update one of the state's setting
+	 */
 	case actionType.UPDATE:
 		if ( 'animation' === action.name ) {
 			state.animationLabel = action.label;
 		}
 		state[action.name] = action.value;
 		return {...state};
+
+	/**
+	 * Create the build's value based on the current state settings and the outside values of the className
+	 */
 	case actionType.BUILD:
+
+		// remove the past animation values from the className
 		const cleanedClassList = removeAnimationFrom( state.className?.split( ' ' ) || []);
 		if ( 'none' !== state.animation ) {
 			cleanedClassList.push( 'animate__animated' );
@@ -83,24 +96,34 @@ const reducer = ( state, action ) => {
 			...state,
 			build: cleanedClassList.join( ' ' )
 		};
+
+	/**
+	 * Reset the buid value to null, this indicate that the build's value has been send to the block.
+	 */
 	case actionType.CONSUME_BUILD:
 		return {
 			...state,
 			build: null
 		};
+
+	/**
+	 * Update the list with the most used animations based on the value from the storage
+	 */
 	case actionType.UPDATE_USAGE:
 		return {
 			...state,
 			mostUsedAnimations: filterMostUsedAnim( getAnimUsageFromStorage() )
 		};
+
+	/**
+	 * Add the value of the block's className to the current state
+	 */
 	case actionType.ADD_CLASSNAME:
 		return {
 			...state,
 			className: action.className
 		};
-	case actionType.CLEAR_ON_END:
-		break;
-	}
+	};
 };
 
 function AnimationControls({
@@ -109,31 +132,23 @@ function AnimationControls({
 	setAttributes
 }) {
 
-
-	// const [ animation, setAnimation ] = useState( 'none' );
-	// const [ delay, setDelay ] = useState( 'default' );
-	// const [ speed, setSpeed ] = useState( 'default' );
-	// const [ currentAnimationLabel, setCurrentAnimationLabel ] = useState( 'none' );
-	// const [ mostUsedAnimations, setMostUsedAnimations ] = useState( null );
 	const [ animationSettings, dispatch ] = useReducer( reducer, initialState );
 
-
+	/**
+	 * Extract the animation type, delay, and speed from the block's className property on initialization
+	 */
 	useEffect( () => {
-
-		/**
-		 * Extract the animation type, delay, and speed from the block className property
-		 */
 		dispatch({
 			type: actionType.INIT,
 			className: attributes.className
 		});
 	}, []);
 
+	/**
+	 * Notify the reducer to get informations about the most used animation.
+	 * If none, initialize it.
+	 */
 	useEffect ( ()=>{
-
-		/**
-		 * Save in local storage information about the most used animations.
-		 */
 		if ( ! localStorage.themeisleAnimationUsage ) {
 			const animationCounter = animationsList.reduce( ( counter, { label }) => {
 				counter[label] = 0;
@@ -141,12 +156,16 @@ function AnimationControls({
 			}, {});
 
 			localStorage.setItem( 'themeisleAnimationUsage', JSON.stringify( animationCounter ) );
-			dispatch({
-				type: actionType.UPDATE_USAGE
-			});
 		}
+		dispatch({
+			type: actionType.UPDATE_USAGE
+		});
 	}, []);
 
+	/**
+	 * Update the usage of the current animation.
+	 * Notify the reducer to update the usage.
+	 */
 	useEffect( () => {
 		if ( animationSettings.animation ) {
 			incrementAnimUsage( animationSettings.animationLabel );
@@ -156,6 +175,11 @@ function AnimationControls({
 		}
 	}, [ animationSettings.animation ]);
 
+	/**
+	 * Send the new value of the block's className when it is changed internally or externally.
+	 * Also, attach an event listener to the HTML element to revemove the animation after it ends its effect.
+	 * In this way, the element will remain in the page in case of the animation with out effect.
+	 */
 	useEffect( () => {
 		if ( animationSettings.className !== attributes.className ) {
 			dispatch({
@@ -163,12 +187,6 @@ function AnimationControls({
 				className: attributes.className
 			});
 		};
-	}, [ attributes.className, animationSettings.className ]);
-
-	useEffect( () => {
-		dispatch({
-			type: actionType.BUILD
-		});
 		const block = document.querySelector( `#block-${clientId} .animate__animated` );
 		block?.addEventListener(
 			'animationend',
@@ -179,8 +197,24 @@ function AnimationControls({
 				block?.classList.remove( animationSettings.speed );
 			}
 		);
+	}, [ attributes.className, animationSettings.className ]);
+
+	/**
+	 * When one settings is changed, notify the reducer to create a new build.
+	 */
+	useEffect( () => {
+		dispatch({
+			type: actionType.BUILD
+		});
 	}, [ animationSettings.animation, animationSettings.delay, animationSettings.speed ]);
 
+	/**
+	 * After the build created, send it to the block as a new value for the className attribute.
+	 * Prevent this if the build is `null` - it means that the value has been already send.
+	 * Exception when the build is null AND the animation option is `none` meaning that
+	 * in the className was no other values besides the ones specific to the animations
+	 * and to the initial className was `null`.
+	 */
 	useEffect( () => {
 
 		// console.log( animationSettings.build );
@@ -208,18 +242,6 @@ function AnimationControls({
 				return animation.label === label;
 			}).value
 		});
-
-		// const block = document.querySelector( `#block-${clientId} .animate__animated` );
-		// if ( block ) {
-
-		// 	// console.log( block );
-		// 	block.addEventListener( 'animationend', () => {
-		// 		console.log( 'Remove', animationCSSClass );
-		// 		block.classList.remove( animationCSSClass, 'animate__animated' );
-		// 	});
-		// } else {
-		// 	console.log( block );
-		// }
 	};
 
 	const updateDelay = delayValue => {
