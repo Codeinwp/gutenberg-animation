@@ -222,7 +222,7 @@ function AnimationControls({
 		// console.log( animationSettings.build );
 		if ( ! animationSettings.buildWasUsed ) {
 			setAttributes({
-				className: [ ...animationSettings.build ].join( ' ' )
+				className: animationSettings.build
 			});
 			dispatch({
 				type: actionType.CONSUME_BUILD
@@ -279,7 +279,7 @@ function AnimationControls({
 				mostUsedAnimations={ animationSettings.mostUsedAnimations }
 			/>
 			{
-				'none' !== animationSettings.animation && (
+				'none' !== animationSettings.animation && animationSettings.animation && (
 					<Fragment>
 						<SelectControl
 							label={ __( 'Delay' ) }
