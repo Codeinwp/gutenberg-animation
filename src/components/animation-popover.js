@@ -35,6 +35,12 @@ function AnimationPopover({
 	const [ searchInput, setSearchInput ] = useState( '' );
 	const [ animationFound, setAnimationFound ] = useState( false );
 
+	/**
+	 * Render the animation option if the name match the value from the search field
+	 * @param {Object} animation Object with animation label and value
+	 * @param {Function} onToggle Function that toggle the dropdown component
+	 * @returns JSX Component with the animation as option for selection.
+	 */
 	const getAnimationWithSearch = ( animation, onToggle ) => {
 		if ( ! searchInput && 'None' === animation.label ) {
 			return;
