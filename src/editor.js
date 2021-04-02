@@ -222,7 +222,7 @@ function AnimationControls({
 		// console.log( animationSettings.build );
 		if ( ! animationSettings.buildWasUsed ) {
 			setAttributes({
-				className: [ ...animationSettings.build ].join( '' )
+				className: [ ...animationSettings.build ].join( ' ' )
 			});
 			dispatch({
 				type: actionType.CONSUME_BUILD
