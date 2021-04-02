@@ -99,41 +99,6 @@ const animationsOld = [
 
 const animations = animationsOld.map( anim => 'animate__' + anim );
 
-// const outAnimation = [
-// 	'bounceOut',
-// 	'bounceOutDown',
-// 	'bounceOutLeft',
-// 	'bounceOutRight',
-// 	'bounceOutUp',
-// 	'fadeOut',
-// 	'fadeOutDown',
-// 	'fadeOutDownBig',
-// 	'fadeOutLeft',
-// 	'fadeOutLeftBig',
-// 	'fadeOutRight',
-// 	'fadeOutRightBig',
-// 	'fadeOutUp',
-// 	'fadeOutUpBig',
-// 	'flipOutX',
-// 	'flipOutY',
-// 	'lightSpeedOut',
-// 	'rotateOut',
-// 	'rotateOutDownLeft',
-// 	'rotateOutDownRight',
-// 	'rotateOutUpLeft',
-// 	'rotateOutUpRight',
-// 	'slideOutDown',
-// 	'slideOutLeft',
-// 	'slideOutRight',
-// 	'slideOutUp',
-// 	'zoomOut',
-// 	'zoomOutDown',
-// 	'zoomOutLeft',
-// 	'zoomOutRight',
-// 	'zoomOutUp',
-// 	'rollOut'
-// ].map( anim => 'animate__' + anim );
-
 const delayOld = [
 	'none',
 	'delay-100ms',
@@ -158,6 +123,10 @@ const speedOld = [
 
 const speed = speedOld.map( anim => 'animate__' + anim );
 
+/**
+ * Convert the old names of the animate.js version 3.7.2 in the element to the current version.
+ * @param {string[]} htmlClassList The current list of CSS classes' names of the element to be converted.
+ */
 const updateHTMLClassListAnimVersion = ( htmlClassList ) => {
 	Array.from( htmlClassList ).forEach( classAnim => {
 		if ( 'animated' === classAnim || animationsOld.includes( classAnim ) || delayOld.includes( classAnim ) || speedOld.includes( classAnim ) ) {
@@ -212,16 +181,6 @@ window.onload = () => {
 			element.classList.remove( 'animate__animated' );
 			element.animationClasses.push( 'animate__animated' );
 		}
-
-		// outAnimation.forEach( i => {
-		// 	const isOut = element.classList.contains( i );
-
-		// 	if ( isOut ) {
-		// 		element.addEventListener( 'animationend', () => {
-		// 			element.classList.remove( i );
-		// 		});
-		// 	}
-		// });
 	}
 
 	window.onscroll = () => {
@@ -238,6 +197,11 @@ window.onload = () => {
 	};
 };
 
+/**
+ * Check if the element is in the viewport
+ * @param {HTMLElement} el The HTML element
+ * @returns True if the element is in the viewport, false otherwise.
+ */
 const isElementInViewport = el => {
 	const scroll = window.scrollY || window.pageYOffset;
 	const boundsTop = el.getBoundingClientRect().top + scroll;
@@ -254,3 +218,39 @@ const isElementInViewport = el => {
 
 	return ( bounds.bottom >= viewport.top && bounds.bottom <= viewport.bottom ) || ( bounds.top <= viewport.bottom && bounds.top >= viewport.top );
 };
+
+// May come in the handy in the future
+// const outAnimation = [
+// 	'bounceOut',
+// 	'bounceOutDown',
+// 	'bounceOutLeft',
+// 	'bounceOutRight',
+// 	'bounceOutUp',
+// 	'fadeOut',
+// 	'fadeOutDown',
+// 	'fadeOutDownBig',
+// 	'fadeOutLeft',
+// 	'fadeOutLeftBig',
+// 	'fadeOutRight',
+// 	'fadeOutRightBig',
+// 	'fadeOutUp',
+// 	'fadeOutUpBig',
+// 	'flipOutX',
+// 	'flipOutY',
+// 	'lightSpeedOut',
+// 	'rotateOut',
+// 	'rotateOutDownLeft',
+// 	'rotateOutDownRight',
+// 	'rotateOutUpLeft',
+// 	'rotateOutUpRight',
+// 	'slideOutDown',
+// 	'slideOutLeft',
+// 	'slideOutRight',
+// 	'slideOutUp',
+// 	'zoomOut',
+// 	'zoomOutDown',
+// 	'zoomOutLeft',
+// 	'zoomOutRight',
+// 	'zoomOutUp',
+// 	'rollOut'
+// ].map( anim => 'animate__' + anim );
