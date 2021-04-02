@@ -1,17 +1,5 @@
 import { animationsList, animationsListOld, delayList, delayListOld, speedList, speedListOld } from './data';
 
-export const removeAllAnimations = ( classList ) => {
-	return classList.filter( classAnim => ! animationsList.includes( classAnim ) || ! animationsListOld.includes( classAnim ) );
-};
-
-export const removeAllDelays = ( classList ) => {
-	return classList.filter( classAnim => ! delayList.includes( classAnim ) || ! delayListOld.includes( classAnim ) );
-};
-
-export const removeAllSpeed = ( classList ) => {
-	return classList.filter( classAnim => ! speedList.includes( classAnim ) || ! speedListOld.includes( classAnim ) );
-};
-
 export const extractAnimationFrom = ( classList, type ) => {
 	switch ( type ) {
 	case 'animation':
@@ -33,6 +21,15 @@ export const removeAnimationFrom = ( classList ) => {
 		.filter( classCSS => 'animate__animated' !== classCSS );
 };
 
+export const removeOldAnimationFrom = ( classList ) => {
+	return classList
+		.filter( classCSS => ! animationsListOld.find( ({ value }) => value === classCSS ) )
+		.filter( classCSS => ! delayListOld.find( ({ value }) => value === classCSS ) )
+		.filter( classCSS => ! speedListOld.find( ({ value }) => value === classCSS ) )
+		.filter( classCSS => 'animated' !== classCSS );
+};
+
+
 export const updateAnimationVersion = ( classList ) => {
 	return classList.map( classAnim => {
 		if ( 'animated' === classAnim || animationsListOld.includes( classAnim ) || delayListOld.includes( classAnim ) || speedList.includes( classAnim ) ) {
@@ -44,18 +41,6 @@ export const updateAnimationVersion = ( classList ) => {
 	});
 };
 
-// export const updateHTMLClassListAnimVersion = ( htmlClassList ) => {
-// 	Array.from( htmlClassList ).forEach( classAnim => {
-// 		if ( 'animated' === classAnim || animationsListOld.includes( classAnim ) || delayListOld.includes( classAnim ) || speedList.includes( classAnim ) ) {
-// 			htmlClassList.remove( classAnim );
-// 			htmlClassList.add( 'animate__' + classAnim );
-// 		} else if ( 'shake' === classAnim ) {
-// 			htmlClassList.remove( classAnim );
-// 			htmlClassList.add( 'animate__shakeX' );
-// 		}
-// 	});
-
-// };
 
 /* Utlity functions for working with the storage */
 export const getAnimUsageFromStorage = () => JSON.parse( localStorage.getItem( 'themeisleAnimationUsage' ) );

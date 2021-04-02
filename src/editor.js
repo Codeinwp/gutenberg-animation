@@ -7,7 +7,6 @@ const { SelectControl } = wp.components;
 
 const {
 	Fragment,
-	useState,
 	useEffect,
 	useReducer
 } = wp.element;
@@ -22,7 +21,7 @@ import {
 } from './data.js';
 
 import AnimationPopover from './components/animation-popover';
-import { extractAnimationFrom, removeAllAnimations, removeAnimationFrom, incrementAnimUsage, filterMostUsedAnim, getAnimUsageFromStorage } from './utility.js';
+import { extractAnimationFrom, removeAnimationFrom, incrementAnimUsage, filterMostUsedAnim, getAnimUsageFromStorage } from './utility.js';
 
 const initialState = {
 	animation: null,
@@ -247,6 +246,10 @@ function AnimationControls({
 		});
 	};
 
+	/**
+	 * Set the new delay value
+	 * @param {string} delayValue
+	 */
 	const updateDelay = delayValue => {
 		dispatch({
 			type: actionType.UPDATE,
@@ -255,6 +258,10 @@ function AnimationControls({
 		});
 	};
 
+	/**
+	 * Set the new speed value
+	 * @param {string} speedValue
+	 */
 	const updateSpeed = speedValue  => {
 		dispatch({
 			type: actionType.UPDATE,
