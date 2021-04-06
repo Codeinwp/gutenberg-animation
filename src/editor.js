@@ -21,7 +21,7 @@ import {
 } from './data.js';
 
 import AnimationPopover from './components/animation-popover';
-import { extractAnimationFrom, removeAnimationFrom, incrementAnimUsage, filterMostUsedAnim, getAnimUsageFromStorage } from './utility.js';
+import { extractAnimationFrom, completRemoveAnimationFrom, incrementAnimUsage, filterMostUsedAnim, getAnimUsageFromStorage } from './utility.js';
 
 const initialState = {
 	animation: null,
@@ -81,7 +81,7 @@ const reducer = ( state, action ) => {
 	case actionType.BUILD:
 
 		// remove the past animation values from the className
-		const cleanedClassList = removeAnimationFrom( state.className?.split( ' ' ) || []).filter( cssClass => cssClass );
+		const cleanedClassList = completRemoveAnimationFrom( state.className?.split( ' ' ) || []).filter( cssClass => cssClass );
 		if ( state.animation && 'none' !== state.animation ) {
 			cleanedClassList.push( 'animate__animated' );
 			cleanedClassList.push( state.animation );

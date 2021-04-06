@@ -45,6 +45,10 @@ export const removeOldAnimationFrom = ( classList ) => {
 		.filter( classCSS => 'animated' !== classCSS );
 };
 
+export const completRemoveAnimationFrom = ( classList ) => {
+	return removeAnimationFrom( removeOldAnimationFrom( classList ) );
+};
+
 /**
  * Transform the old CSS classes of the animotion.js v3.7.2 to the current version.
  * @param {string[]} classList An array with current CSS classes
