@@ -45,6 +45,11 @@ export const removeOldAnimationFrom = ( classList ) => {
 		.filter( classCSS => 'animated' !== classCSS );
 };
 
+/**
+ * Remove old and new versions of the anime.js for the animation name
+ * @param {string[]} classList An array with current CSS classes
+ * @returns Return the array without the new and the old classes of the animate.js classes for animation name
+ */
 export const completRemoveAnimationFrom = ( classList ) => {
 	return removeAnimationFrom( removeOldAnimationFrom( classList ) );
 };
