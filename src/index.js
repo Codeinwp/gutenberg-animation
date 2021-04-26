@@ -31,6 +31,12 @@ const withInspectorControls = createHigherOrderComponent( ( BlockEdit ) => {
 			window.addEventListener( 'load', () => {
 				const block = document.querySelector( `#block-${props.clientId}.animate__animated` );
 				if ( block ) {
+					block.addEventListener(
+						'animationend',
+						() => {
+							block?.classList.remove( 'animate__animated' );
+						}
+					);
 					block.className = removeAnimationFrom( Array.from( block?.classList ) ).join( ' ' );
 				}
 			});
