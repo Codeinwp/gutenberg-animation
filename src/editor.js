@@ -83,8 +83,7 @@ const reducer = ( state, action ) => {
 		// remove the past animation values from the className
 		const cleanedClassList = completRemoveAnimationFrom( state.className?.split( ' ' ) || []).filter( cssClass => cssClass );
 		if ( state.animation && 'none' !== state.animation ) {
-			cleanedClassList.push( 'animate__animated' );
-			cleanedClassList.push( state.animation );
+			cleanedClassList.push( 'animate__animated', state.animation );
 			if (  state.delay && 'none' !== state.delay ) {
 				cleanedClassList.push( state.delay );
 			}
@@ -189,14 +188,11 @@ function AnimationControls({
 				className: attributes.className
 			});
 		};
-		const block = document.querySelector( `#block-${clientId} .animate__animated` );
+		const block = document.querySelector( `#block-${clientId}.animate__animated` );
 		block?.addEventListener(
 			'animationend',
 			() => {
-				block?.classList.remove( 'animate__animated' );
-				block?.classList.remove( animationSettings.animation );
-				block?.classList.remove( animationSettings.delay );
-				block?.classList.remove( animationSettings.speed );
+				block?.classList.remove( 'animate__animated',  animationSettings.animation, animationSettings.delay, animationSettings.speed );
 			}
 		);
 	}, [ attributes.className, animationSettings.className ]);

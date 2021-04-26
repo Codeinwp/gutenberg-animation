@@ -15,8 +15,6 @@ const { Fragment } = wp.element;
 
 const { addFilter } = wp.hooks;
 
-const domReady = wp.domReady;
-
 /**
  * Internal dependencies.
  */
@@ -30,13 +28,12 @@ const withInspectorControls = createHigherOrderComponent( ( BlockEdit ) => {
 		// TODO: remove animation on load
 		/* This will remove the animation when is selected */
 		if ( hasCustomClassName ) {
-			domReady( () => {
-				const block = document.querySelector( `#block-${props.clientId} .animate__animated` );
+			window.addEventListener( 'load', () => {
+				const block = document.querySelector( `#block-${props.clientId}.animate__animated` );
 				if ( block ) {
 					block.className = removeAnimationFrom( Array.from( block?.classList ) ).join( ' ' );
 				}
 			});
-
 		}
 
 		if ( hasCustomClassName && props.isSelected ) {
