@@ -29,7 +29,7 @@ const withInspectorControls = createHigherOrderComponent( ( BlockEdit ) => {
 		/* This will remove the animation when is selected */
 		if ( hasCustomClassName ) {
 			window.addEventListener( 'load', () => {
-				const block = document.querySelector( `#block-${props.clientId} .animate__animated` );
+				const block = props.name.startsWith( 'core/' ) ? document.querySelector( `#block-${props.clientId}.animate__animated` ) : document.querySelector( `#block-${props.clientId} .animate__animated` );
 				if ( block ) {
 					block.addEventListener(
 						'animationend',
@@ -52,6 +52,7 @@ const withInspectorControls = createHigherOrderComponent( ( BlockEdit ) => {
 							initialOpen={false}
 						>
 							<AnimationControls
+								name={props.name}
 								clientId={props.clientId}
 								setAttributes={props.setAttributes}
 								attributes={props.attributes}

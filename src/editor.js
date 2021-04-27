@@ -130,6 +130,7 @@ const reducer = ( state, action ) => {
 function AnimationControls({
 	attributes,
 	clientId,
+	name,
 	setAttributes
 }) {
 
@@ -182,7 +183,7 @@ function AnimationControls({
 	 * In this way, the element will remain in the page in case of the animation with out effect.
 	 */
 	useEffect( () => {
-		const block = document.querySelector( `#block-${clientId} .animate__animated` );
+		const block = name.startsWith( 'core/' ) ? document.querySelector( `#block-${clientId}.animate__animated` ) : document.querySelector( `#block-${clientId} .animate__animated` );
 		console.log( 'BLOCK', block );
 		block?.addEventListener(
 			'animationend',
