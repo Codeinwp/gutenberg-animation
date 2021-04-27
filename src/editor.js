@@ -182,19 +182,22 @@ function AnimationControls({
 	 * In this way, the element will remain in the page in case of the animation with out effect.
 	 */
 	useEffect( () => {
-		if ( animationSettings.className !== attributes.className ) {
-			dispatch({
-				type: actionType.ADD_CLASSNAME,
-				className: attributes.className
-			});
-		};
-		const block = document.querySelector( `#block-${clientId}.animate__animated` );
+		const block = document.querySelector( `#block-${clientId} .animate__animated` );
+		console.log( 'BLOCK', block );
 		block?.addEventListener(
 			'animationend',
 			() => {
 				block?.classList.remove( 'animate__animated',  animationSettings.animation, animationSettings.delay, animationSettings.speed );
 			}
 		);
+
+		if ( animationSettings.className !== attributes.className ) {
+			dispatch({
+				type: actionType.ADD_CLASSNAME,
+				className: attributes.className
+			});
+		};
+
 	}, [ attributes.className, animationSettings.className ]);
 
 	/**
