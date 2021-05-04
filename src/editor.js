@@ -185,11 +185,13 @@ function AnimationControls({
 	useEffect( () => {
 		const block = name.startsWith( 'core/' ) ? document.querySelector( `#block-${clientId}.animate__animated` ) : document.querySelector( `#block-${clientId} .animate__animated` );
 		console.log( 'BLOCK', block );
+		const removeAnimHandler = () => {
+			block?.classList.remove( 'animate__animated',  animationSettings.animation, animationSettings.delay, animationSettings.speed );
+			block?.removeEventListener( 'animationend', removeAnimHandler );
+		};
 		block?.addEventListener(
 			'animationend',
-			() => {
-				block?.classList.remove( 'animate__animated',  animationSettings.animation, animationSettings.delay, animationSettings.speed );
-			}
+			removeAnimHandler
 		);
 
 		if ( animationSettings.className !== attributes.className ) {

@@ -25,21 +25,11 @@ const withInspectorControls = createHigherOrderComponent( ( BlockEdit ) => {
 	return ( props ) => {
 		const hasCustomClassName = hasBlockSupport( props.name, 'customClassName', true );
 
-		// TODO: remove animation on load
-		/* This will remove the animation when is selected */
 		if ( hasCustomClassName ) {
-			window.addEventListener( 'load', () => {
-				const block = props.name.startsWith( 'core/' ) ? document.querySelector( `#block-${props.clientId}.animate__animated` ) : document.querySelector( `#block-${props.clientId} .animate__animated` );
-				if ( block ) {
-					block.addEventListener(
-						'animationend',
-						() => {
-							block?.classList.remove( 'animate__animated' );
-						}
-					);
-					block.className = removeAnimationFrom( Array.from( block?.classList ) ).join( ' ' );
-				}
-			});
+			const block = props.name.startsWith( 'core/' ) ? document.querySelector( `#block-${props.clientId}.animate__animated` ) : document.querySelector( `#block-${props.clientId} .animate__animated` );
+			if ( block ) {
+				block.className = removeAnimationFrom( Array.from( block?.classList ) ).join( ' ' );
+			}
 		}
 
 		if ( hasCustomClassName && props.isSelected ) {
