@@ -43,21 +43,17 @@ class GutenbergAnimation {
 	 * @access  public
 	 */
 	public function enqueue_editor_assets() {
-		if ( THEMEISLE_GUTENBERG_ANIMATION_DEV ) {
-			$version = time();
-		} else {
-			$version = THEMEISLE_GUTENBERG_ANIMATION_VERSION;
-		}
+		$asset_file = include plugin_dir_path( __FILE__ ) . 'build/index.asset.php';
 
 		wp_enqueue_script(
 			'themeisle-gutenberg-animation',
-			plugin_dir_url( $this->get_dir() ) . $this->slug . '/build/build.js',
-			array( 'wp-i18n', 'wp-blocks', 'wp-components', 'wp-compose', 'wp-editor', 'wp-element', 'wp-hooks' ),
-			$version,
+			plugin_dir_url( $this->get_dir() ) . $this->slug . '/build/index.js',
+			$asset_file['dependencies'],
+			$asset_file['version'],
 			true
 		);
 
-		wp_set_script_translations( 'themeisle-gutenberg-animation', 'textdomain' );
+		wp_set_script_translations( 'themeisle-gutenberg-animation', 'otter-blocks' );
 	}
 
 	/**
@@ -71,24 +67,25 @@ class GutenbergAnimation {
 			return;
 		}
 
-		if ( THEMEISLE_GUTENBERG_ANIMATION_DEV ) {
-			$version = time();
-		} else {
-			$version = THEMEISLE_GUTENBERG_ANIMATION_DEV;
+		if ( is_singular() && strpos( get_the_content(), '<!-- wp:' ) === false ) {
+			return;
 		}
+
+		
+		$asset_file = include plugin_dir_path( __FILE__ ) . 'build/frontend.asset.php';
 
 		wp_enqueue_style(
 			'animate-css',
 			plugin_dir_url( $this->get_dir() ) . $this->slug . '/assets/css/animate.min.css',
 			array(),
-			$version
+			$asset_file['version']
 		);
 
 		wp_enqueue_style(
 			'themeisle-gutenberg-animation-style',
 			plugin_dir_url( $this->get_dir() ) . $this->slug . '/assets/css/style.css',
 			array(),
-			$version
+			$asset_file['version']
 		);
 
 		if ( is_admin() ) {
@@ -97,9 +94,9 @@ class GutenbergAnimation {
 
 		wp_enqueue_script(
 			'themeisle-gutenberg-animation-frontend',
-			plugin_dir_url( $this->get_dir() ) . $this->slug . '/build/animate.js',
-			array(),
-			$version,
+			plugin_dir_url( $this->get_dir() ) . $this->slug . '/build/frontend.js',
+			$asset_file['dependencies'],
+			$asset_file['version'],
 			true
 		);
 	}
@@ -145,7 +142,7 @@ class GutenbergAnimation {
 	 */
 	public function __clone() {
 		// Cloning instances of the class is forbidden.
-		_doing_it_wrong( __FUNCTION__, esc_html__( 'Cheatin&#8217; huh?', 'textdomain' ), '1.0.0' );
+		_doing_it_wrong( __FUNCTION__, esc_html__( 'Cheatin&#8217; huh?', 'otter-blocks' ), '1.0.0' );
 	}
 
 	/**
@@ -157,6 +154,6 @@ class GutenbergAnimation {
 	 */
 	public function __wakeup() {
 		// Unserializing instances of the class is forbidden.
-		_doing_it_wrong( __FUNCTION__, esc_html__( 'Cheatin&#8217; huh?', 'textdomain' ), '1.0.0' );
+		_doing_it_wrong( __FUNCTION__, esc_html__( 'Cheatin&#8217; huh?', 'otter-blocks' ), '1.0.0' );
 	}
 }
