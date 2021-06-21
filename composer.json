@@ -2,7 +2,7 @@
 	"name": "codeinwp/gutenberg-animation",
 	"description": "CSS Animations for Gutenberg Blocks",
 	"type": "library",
-	"version": "1.0.7",
+	"version": "1.0.8",
 	"license": "GPL-3.0-or-later",
 	"homepage": "https://github.com/Codeinwp/gutenberg-animation",
 	"authors": [

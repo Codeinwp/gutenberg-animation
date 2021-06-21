@@ -1,6 +1,6 @@
 {
 	"name": "themeisle-gutenberg-animation",
-	"version": "1.0.7",
+	"version": "1.0.8",
 	"description": "CSS Animations for Gutenberg Blocks",
 	"scripts": {
 		"build": "wp-scripts build src/index.js src/frontend.js --output-path=build",

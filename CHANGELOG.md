@@ -1,3 +1,7 @@
+##### [Version 1.0.8](https://github.com/Codeinwp/gutenberg-animation/compare/v1.0.7...v1.0.8) (2021-06-21)
+
+- Redo with @wp/scripts
+
 ##### [Version 1.0.7](https://github.com/Codeinwp/gutenberg-animation/compare/v1.0.6...v1.0.7) (2020-08-03)
 
 - Improve Animation picker.
