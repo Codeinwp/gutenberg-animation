@@ -1,23 +1,20 @@
 /**
  * WordPress dependencies.
  */
-const { __ } = wp.i18n;
+import { __ } from '@wordpress/i18n';
 
-const {
+import {
 	BaseControl,
 	Button,
 	Dropdown,
 	MenuGroup,
 	MenuItem,
 	TextControl
-} = wp.components;
+} from '@wordpress/components';
 
-const { useInstanceId } = wp.compose;
+import { useInstanceId } from '@wordpress/compose';
 
-const {
-	Fragment,
-	useState
-} = wp.element;
+import { Fragment, useState } from '@wordpress/element';
 
 /**
  * Internal dependencies.
@@ -40,7 +37,7 @@ function AnimationPopover({
 
 		if ( currentInput ) {
 			const inputWords = currentInput.toLowerCase().split( ' ' );
-			inputWords.forEach( word => {
+			inputWords.forEach( ( word ) => {
 				if ( ! animation.label.toLowerCase().includes( word ) ) {
 					match = false;
 				}
@@ -51,27 +48,30 @@ function AnimationPopover({
 			setAnimationFound( true );
 		}
 
-		return match && (
-			<MenuItem
-				className={ currentAnimationLabel === animation.label ? 'is-selected' : '' }
-				onClick={ () => {
-					setCurrentAnimationLabel( animation.label );
-					updateAnimation( animation.value );
-					onToggle();
-				} }
-			>
-				{ animation.label }
-			</MenuItem>
+		return (
+			match && (
+				<MenuItem
+					className={
+						currentAnimationLabel === animation.label ?
+							'is-selected' :
+							''
+					}
+					onClick={ () => {
+						setCurrentAnimationLabel( animation.label );
+						updateAnimation( animation.value );
+						onToggle();
+					} }
+				>
+					{ animation.label }
+				</MenuItem>
+			)
 		);
 	};
 
 	const id = `inspector-themeisle-animations-control-${ instanceId }`;
 
 	return (
-		<BaseControl
-			label={ __( 'Animation' ) }
-			id={ id }
-		>
+		<BaseControl label={ __( 'Animation', 'otter-blocks' ) } id={ id }>
 			<Dropdown
 				contentClassName="themeisle-animations-control__popover"
 				position="bottom center"
@@ -87,35 +87,45 @@ function AnimationPopover({
 					</Button>
 				) }
 				renderContent={ ({ onToggle }) => (
-					<MenuGroup label={ __( 'Animations' ) }>
+					<MenuGroup label={ __( 'Animations', 'otter-blocks' ) }>
 						<TextControl
-							placeholder={ __( 'Search' ) }
+							placeholder={ __( 'Search', 'otter-blocks' ) }
 							value={ currentInput }
-							onChange={ e => {
+							onChange={ ( e ) => {
 								setCurrentInput( e );
 								setAnimationFound( false );
-							}}
+							} }
 						/>
 
 						<div className="components-popover__items">
-							{ animationsList.map( animation => {
+							{ animationsList.map( ( animation ) => {
 								return (
 									<Fragment>
 										{ '' === currentInput &&
-											categories.map( category => {
-												return category.value === animation.value ?
-													<div className="themeisle-animations-control__category">
-														{ category.label }
-													</div> : '';
-											})
-										}
+											categories.map( ( category ) => {
+												return category.value ===
+													animation.value ? (
+														<div className="themeisle-animations-control__category">
+															{ category.label }
+														</div>
+													) : (
+														''
+													);
+											}) }
 
 										{ getAnimations( animation, onToggle ) }
 									</Fragment>
 								);
 							}) }
 
-							{ ! animationFound && <div>{ __( 'Nothing found. Try searching for something else!' ) }</div> }
+							{ ! animationFound && (
+								<div>
+									{ __(
+										'Nothing found. Try searching for something else!',
+										'otter-blocks'
+									) }
+								</div>
+							) }
 						</div>
 					</MenuGroup>
 				) }

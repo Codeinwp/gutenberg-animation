@@ -126,13 +126,7 @@ const delay = [
 	'delay-5s'
 ];
 
-const speed = [
-	'none',
-	'slow',
-	'slower',
-	'fast',
-	'faster'
-];
+const speed = [ 'none', 'slow', 'slower', 'fast', 'faster' ];
 
 window.onload = () => {
 	const elements = document.querySelectorAll( '.animated' );
@@ -141,16 +135,16 @@ window.onload = () => {
 		element.animationClasses = [];
 
 		if ( ! isElementInViewport( element ) ) {
-			const animationClass = animations.find( i => {
-				return Array.from( classes ).find( o => o === i );
+			const animationClass = animations.find( ( i ) => {
+				return Array.from( classes ).find( ( o ) => o === i );
 			});
 
-			const delayClass = delay.find( i => {
-				return Array.from( classes ).find( o => o === i );
+			const delayClass = delay.find( ( i ) => {
+				return Array.from( classes ).find( ( o ) => o === i );
 			});
 
-			const speedClass = speed.find( i => {
-				return Array.from( classes ).find( o => o === i );
+			const speedClass = speed.find( ( i ) => {
+				return Array.from( classes ).find( ( o ) => o === i );
 			});
 
 			element.classList.add( 'hidden-animated' );
@@ -171,7 +165,7 @@ window.onload = () => {
 			}
 		}
 
-		outAnimation.forEach( i => {
+		outAnimation.forEach( ( i ) => {
 			const isOut = element.className.includes( i );
 
 			if ( isOut ) {
@@ -184,10 +178,17 @@ window.onload = () => {
 
 	window.onscroll = () => {
 		for ( const element of elements ) {
-			if ( element.getBoundingClientRect().top <= window.innerHeight * 0.75 && 0 < element.getBoundingClientRect().top ) {
-				if ( element.animationClasses && 0 < element.animationClasses.length ) {
+			if (
+				element.getBoundingClientRect().top <=
+					window.innerHeight * 0.75 &&
+				0 < element.getBoundingClientRect().top
+			) {
+				if (
+					element.animationClasses &&
+					0 < element.animationClasses.length
+				) {
 					const classes = element.animationClasses;
-					classes.forEach( i => element.classList.add( i ) );
+					classes.forEach( ( i ) => element.classList.add( i ) );
 					element.classList.remove( 'hidden-animated' );
 					delete element.animationClasses;
 				}
@@ -196,7 +197,7 @@ window.onload = () => {
 	};
 };
 
-const isElementInViewport = el => {
+const isElementInViewport = ( el ) => {
 	const scroll = window.scrollY || window.pageYOffset;
 	const boundsTop = el.getBoundingClientRect().top + scroll;
 
@@ -210,5 +211,8 @@ const isElementInViewport = el => {
 		bottom: boundsTop + el.clientHeight
 	};
 
-	return ( bounds.bottom >= viewport.top && bounds.bottom <= viewport.bottom ) || ( bounds.top <= viewport.bottom && bounds.top >= viewport.top );
+	return (
+		( bounds.bottom >= viewport.top && bounds.bottom <= viewport.bottom ) ||
+		( bounds.top <= viewport.bottom && bounds.top >= viewport.top )
+	);
 };

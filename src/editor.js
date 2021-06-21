@@ -1,33 +1,20 @@
 /**
  * WordPress dependencies.
  */
-const { __ } = wp.i18n;
+import { __ } from '@wordpress/i18n';
 
-const { SelectControl } = wp.components;
+import { SelectControl } from '@wordpress/components';
 
-const {
-	Fragment,
-	useState,
-	useEffect
-} = wp.element;
+import { Fragment, useState, useEffect } from '@wordpress/element';
 
 /**
  * Internal dependencies.
  */
-import {
-	animationsList,
-	delayList,
-	speedList,
-	outAnimation
-} from './data.js';
+import { animationsList, delayList, speedList, outAnimation } from './data.js';
 
 import AnimationPopover from './components/animation-popover';
 
-function AnimationControls({
-	attributes,
-	clientId,
-	setAttributes
-}) {
+function AnimationControls({ attributes, clientId, setAttributes }) {
 	useEffect( () => {
 		let classes;
 
@@ -35,46 +22,52 @@ function AnimationControls({
 			classes = attributes.className;
 			classes = classes.split( ' ' );
 
-			const animationClass = Array.from( animationsList ).find( i => {
-				return classes.find( o => o === i.value );
+			const animationClass = Array.from( animationsList ).find( ( i ) => {
+				return classes.find( ( o ) => o === i.value );
 			});
 
-			const delayClass = Array.from( delayList ).find( i => {
-				return classes.find( o => o === i.value );
+			const delayClass = Array.from( delayList ).find( ( i ) => {
+				return classes.find( ( o ) => o === i.value );
 			});
 
-			const speedClass = Array.from( speedList ).find( i => {
-				return classes.find( o => o === i.value );
+			const speedClass = Array.from( speedList ).find( ( i ) => {
+				return classes.find( ( o ) => o === i.value );
 			});
 
 			setAnimation( animationClass ? animationClass.value : 'none' );
 			setDelay( delayClass ? delayClass.value : 'default' );
 			setSpeed( speedClass ? speedClass.value : 'default' );
-			setCurrentAnimationLabel( animationClass ? animationClass.label : 'none' );
+			setCurrentAnimationLabel(
+				animationClass ? animationClass.label : 'none'
+			);
 		}
 	}, []);
 
 	const [ animation, setAnimation ] = useState( 'none' );
 	const [ delay, setDelay ] = useState( 'default' );
 	const [ speed, setSpeed ] = useState( 'default' );
-	const [ currentAnimationLabel, setCurrentAnimationLabel ] = useState( 'none' );
+	const [ currentAnimationLabel, setCurrentAnimationLabel ] = useState(
+		'none'
+	);
 
-	const updateAnimation = e => {
+	const updateAnimation = ( e ) => {
 		let classes;
 		let animationValue = 'none' !== e ? e : '';
 
 		if ( attributes.className ) {
 			classes = attributes.className;
 			classes = classes.split( ' ' );
-			const exists = classes.find( i => i === animation );
-			const animatedExists = classes.find( i => 'animated' === i );
+			const exists = classes.find( ( i ) => i === animation );
+			const animatedExists = classes.find( ( i ) => 'animated' === i );
 
 			if ( ! animatedExists ) {
 				classes.push( 'animated' );
 			}
 
 			if ( exists ) {
-				classes = classes.join( ' ' ).replace( animation, animationValue );
+				classes = classes
+					.join( ' ' )
+					.replace( animation, animationValue );
 			} else {
 				classes.push( animationValue );
 				classes = classes.join( ' ' );
@@ -84,7 +77,10 @@ function AnimationControls({
 		}
 
 		if ( 'none' === e ) {
-			classes = classes.replace( 'animated', '' ).replace( delay, '' ).replace( speed, '' );
+			classes = classes
+				.replace( 'animated', '' )
+				.replace( delay, '' )
+				.replace( speed, '' );
 
 			setDelay( 'default' );
 			setSpeed( 'default' );
@@ -102,7 +98,7 @@ function AnimationControls({
 		let block = document.querySelector( `#block-${ clientId } .animated` );
 
 		if ( block ) {
-			outAnimation.forEach( i => {
+			outAnimation.forEach( ( i ) => {
 				const isOut = block.className.includes( i );
 
 				if ( isOut ) {
@@ -118,14 +114,14 @@ function AnimationControls({
 		}
 	};
 
-	const updateDelay = e => {
+	const updateDelay = ( e ) => {
 		let classes;
 		let delayValue = 'none' !== e ? e : '';
 
 		if ( attributes.className ) {
 			classes = attributes.className;
 			classes = classes.split( ' ' );
-			const exists = classes.find( i => i === delay );
+			const exists = classes.find( ( i ) => i === delay );
 
 			if ( exists ) {
 				classes = classes.join( ' ' ).replace( delay, delayValue );
@@ -143,14 +139,14 @@ function AnimationControls({
 		setAttributes({ className: classes });
 	};
 
-	const updateSpeed =  e  => {
+	const updateSpeed = ( e ) => {
 		let classes;
 		let speedValue = 'none' !== e ? e : '';
 
 		if ( attributes.className ) {
 			classes = attributes.className;
 			classes = classes.split( ' ' );
-			const exists = classes.find( i => i === speed );
+			const exists = classes.find( ( i ) => i === speed );
 
 			if ( exists ) {
 				classes = classes.join( ' ' ).replace( speed, speedValue );
@@ -176,26 +172,24 @@ function AnimationControls({
 				currentAnimationLabel={ currentAnimationLabel }
 				setCurrentAnimationLabel={ setCurrentAnimationLabel }
 			/>
-			{
-				'none' !== animation && (
-					<Fragment>
-						<SelectControl
-							label={ __( 'Delay' ) }
-							value={ delay || 'default' }
-							options={ delayList }
-							onChange={ updateDelay }
-						/>
+			{ 'none' !== animation && (
+				<Fragment>
+					<SelectControl
+						label={ __( 'Delay', 'otter-blocks' ) }
+						value={ delay || 'default' }
+						options={ delayList }
+						onChange={ updateDelay }
+					/>
 
-						<SelectControl
-							label={ __( 'Speed' ) }
-							value={ speed || 'default' }
-							options={ speedList }
-							onChange={ updateSpeed }
-						/>
-					</Fragment>
-				)
-			}
-		</div >
+					<SelectControl
+						label={ __( 'Speed', 'otter-blocks' ) }
+						value={ speed || 'default' }
+						options={ speedList }
+						onChange={ updateSpeed }
+					/>
+				</Fragment>
+			) }
+		</div>
 	);
 }
 
